@@ -1,0 +1,8 @@
+Crear el archivo CMakeLists.txt bajo las indicaciones de "CREAR CMAKELISTS.TXT" en el archivo https://docs.google.com/document/d/1HAURA4dC128KWltF-I8FSoCPFByf6yMymopup7tXXJ4/edit
+en la carpeta raiz del proyecto.
+
+Esto crearía la carpeta "cmake-build-debug" de igual forma en la carpeta raiz.
+
+Una vez que se hayan creado tanto el archivo "CMakeLists.txt" como la carpeta "cmake-build-debug" (esta última de manera automatica al crear CMakeLists.txt)
+se procede a revisar que las líneas de código del archivo "config_CMakeLists.txt" presente en esta carpeta con "###" al final 
+sean iguales a las del archivo "CMakeLists.txt" creado localmente
