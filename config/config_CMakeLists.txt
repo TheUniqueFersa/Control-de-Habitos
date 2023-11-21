@@ -7,5 +7,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
 include_directories("C:/allegro/include") ###
 link_directories("C:/allegro/lib") ###
 
-add_executable(Control-Habitos ./src/main.c) ###
-target_link_libraries(Control-Habitos PUBLIC allegro_monolith) ###
+add_executable(Control-de-Habitos ./src/main.c) ###
+target_link_libraries(Control-de-Habitos PUBLIC allegro_monolith) ###
