@@ -2,3 +2,4 @@
 **/cmake-build-debug/
 *.exe
 .idea/
+tests/p-test*

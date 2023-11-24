@@ -59,6 +59,7 @@ al_draw_filled_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0));
 al_draw_rounded_rectangle(30, 300, 300, 350, 4, 4, al_map_rgb(0, 0, 255), 2);
 al_draw_filled_rounded_rectangle(30, 300, 300, 350, 4, 4, al_map_rgb(0, 0, 255));
 
+
 //Elipse
 al_draw_filled_ellipse(400, 300, 100, 200, al_map_rgb(200,0, 200));
 //Circulo
