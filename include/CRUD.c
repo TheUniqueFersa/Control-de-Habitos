@@ -26,7 +26,7 @@ int contadorBytesArch(char *ruta){
     }
     return retorno;
 }
-int moverNLastId(FILE *arch){
+int moverNLastId(FILE *arch){ //requiere de la apertura en el modo: rb ||
     int *varDestino, retorno;
     fseek(arch, 0, SEEK_SET);
     fread(&varDestino, sizeof(int), 1, arch);
@@ -39,9 +39,11 @@ int SELECT(char *, void *, size_t, size_t);
 int UPDATE(char *, void *, size_t, size_t);
 int DELETE(char *, void *, size_t, size_t);
 
-void manejarNLasId(char *ruta){
-
-    //if()
+void manejarNLastId(char *ruta){
+    FILE *archivo = fopen(ruta, "rb");  //requiere de la apertura en el modo: rb ||
+    if(contadorBytesArch(ruta)==0){
+        printf("\nEl archivo esta vacío\n");
+    }
 }
 int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     FILE *arch = fopen(ruta, "rb");

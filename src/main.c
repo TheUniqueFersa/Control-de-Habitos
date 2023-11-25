@@ -12,6 +12,7 @@
 #include <allegro5/allegro_acodec.h>
 //#include "../include/structs.c"
 #include "../include/CRUD.c"
+#include "../tests/p-test_fontsload.c"
 /* ---->  <---- */
 /* ----> Prototipos <---- */
 int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIONÉ
@@ -38,6 +39,7 @@ ALLEGRO_BITMAP *BITMAP;
 ALLEGRO_TIMER *timer_0_01;
 //COLORES
 ALLEGRO_FONT *fuente1;
+
 
 
 
@@ -95,8 +97,7 @@ void main_habitus(int verif_iniciador_primera_vez){
             contadorBytesArch("./data/app.dat");
             FILE *archh = fopen("./data/app.dat", "rb");
             moverNLastId(archh);
-
-
+            manejarNLastId("./data/app.dat");
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){//Evento de que retomaste el foco de la ventana
             printf("RECUPERASTE EL FOCO\n");
@@ -179,5 +180,6 @@ int inicializar_allegro(){
         printf("No se pudo cargar el complemento de fuentes");
         verif_todo_ok = 0;
     }
+    load();
     return verif_todo_ok;
 }

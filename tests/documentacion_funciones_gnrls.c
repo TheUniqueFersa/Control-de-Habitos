@@ -16,6 +16,7 @@ al_load_bitmap("Imagenes/.PNG"); //carga una imagen para  un bitmap
 
 //FUENTES
 al_load_font("fuentes/Pixeled.ttf", 16, 0); //carga una fuenta
+al_draw_text(fuente2, al_map_rgb(0, 0, 0), x, y, ALLEGRO_ALIGN_CENTER, TEXTO);
 
 
 // VENTANA
@@ -75,3 +76,5 @@ al_draw_pieslice(600, 600, 100, 1, 2, al_map_rgb(255, 255, 255), 1);
 float puntos[8] = {40, 200, 200, 100, 300, 411, 40, 300};
 
 al_draw_polygon(puntos, 4, ALLEGRO_LINE_JOIN_ROUND, al_map_rgb(0, 0, 255), 5, 2);
+
+al_get_errno() = //2: archivo no encontrado, 24: caracteristicas no soportadas
