@@ -69,7 +69,8 @@ void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
     al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
-    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 0, 0));
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+    al_draw_text(lexend_regular[50], texto_black, 1100, 300, ALLEGRO_ALIGN_CENTER, "Lorem Ipsum");
     al_flip_display();
 }
 
