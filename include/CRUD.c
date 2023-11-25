@@ -39,8 +39,12 @@ int SELECT(char *, void *, size_t, size_t);
 int UPDATE(char *, void *, size_t, size_t);
 int DELETE(char *, void *, size_t, size_t);
 
+void manejarNLasId(char *ruta){
+
+    //if()
+}
 int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
-    FILE *arch;/* = fopen(ruta, "")*/
+    FILE *arch = fopen(ruta, "rb");
     int retorno;
 
     if(arch!=NULL){

@@ -23,9 +23,6 @@ void actualizar_display();
 // Displays
 ALLEGRO_DISPLAY *disp;
 
-// Colores
-ALLEGRO_COLOR color_fondo;
-
 // Eventos
 ALLEGRO_EVENT_QUEUE *cola_eventos;
 ALLEGRO_EVENT evento;
@@ -67,14 +64,17 @@ char N_T_DIFICULTAD[100] = {"./../data/"};
 //termina;
 
 void actualizar_display(){
-
+    //FIGURAS PRIMITAVAS
+    //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
+    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 0, 0));
     al_flip_display();
 }
 
 
 void main_habitus(int verif_iniciador_primera_vez){
     int pantalla_requiere_actualizacion=1;
-    momento=verif_iniciador_primera_vez;
+    momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             pantalla_requiere_actualizacion=0;
@@ -95,12 +95,19 @@ void main_habitus(int verif_iniciador_primera_vez){
             contadorBytesArch("./data/app.dat");
             FILE *archh = fopen("./data/app.dat", "rb");
             moverNLastId(archh);
+
+
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){//Evento de que retomaste el foco de la ventana
             printf("RECUPERASTE EL FOCO\n");
         }
         else{//Si no fueron eventos generales de la ventana:
             switch (momento) {
+                case 0:
+                    switch (evento.type) {
+
+                    }
+                    break;
                 case 1:
                     switch (evento.type) {
 
@@ -117,8 +124,6 @@ void main_habitus(int verif_iniciador_primera_vez){
             }
         }
     }
-
-
 }
 int main() {
     int acceso;
