@@ -10,7 +10,8 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-#include "../include/structs.c"
+//#include "../include/structs.c"
+#include "../include/CRUD.c"
 /* ---->  <---- */
 /* ----> Prototipos <---- */
 int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIONÉ
@@ -55,8 +56,15 @@ int momento=0; /*0: Inicio primera vez
  *
  *
  *              */
+/* ----> Nombres de archivos que manejar <---- */
+
+
+char N_T_DIFICULTAD[100] = {"./../data/"};
 //termina;
 
+
+/* ----> ARCHIVOS <---- */
+//termina;
 
 void actualizar_display(){
 
@@ -84,6 +92,9 @@ void main_habitus(int verif_iniciador_primera_vez){
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){//Evento de que perdiste el foco de la ventana
             printf("PERDISTE EL FOCO\n");
+            contadorBytesArch("./data/app.dat");
+            FILE *archh = fopen("./data/app.dat", "rb");
+            moverNLastId(archh);
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){//Evento de que retomaste el foco de la ventana
             printf("RECUPERASTE EL FOCO\n");
