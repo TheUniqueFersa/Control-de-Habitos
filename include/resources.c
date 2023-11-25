@@ -4,6 +4,7 @@ ALLEGRO_COLOR secundario_pastel_magenta;
 ALLEGRO_COLOR neutro1_tinta_de_pulpo;
 ALLEGRO_COLOR neutro2_african_violet;
 ALLEGRO_COLOR neutro3_french_lilac;
+ALLEGRO_COLOR texto_black;
 ALLEGRO_FONT * lexend_regular[100];
 ALLEGRO_FONT * lexend_bold[100];
 ALLEGRO_FONT * lexend_thin[100];
@@ -19,6 +20,7 @@ int init_resources(){
     neutro1_tinta_de_pulpo = al_map_rgb(47,50,58);
     neutro2_african_violet = al_map_rgb(222, 186, 192);
     neutro3_french_lilac = al_map_rgb(222, 186, 192);
+    texto_black = al_map_rgb(0,0,0);
     for(int i; i<60; i++) {
         lexend_regular[i] = al_load_font("./media/fuentes/lexend/Lexend-Regular.ttf", i, 0);
         lexend_bold[i] = al_load_font("./media/fuentes/lexend/Lexend-Bold.ttf", i, 0);
