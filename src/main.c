@@ -12,12 +12,13 @@
 #include <allegro5/allegro_acodec.h>
 //#include "../include/structs.c"
 #include "../include/CRUD.c"
+#include "../include/resources.c"
 /* ---->  <---- */
 /* ----> Prototipos <---- */
 int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIONÉ
 void main_habitus(int);
 void actualizar_display();
-
+int init_resources();
 //termina;
 /* ----> ALLEGRO {TIPO DE DATOS} <---- */
 // Displays
@@ -122,7 +123,9 @@ void main_habitus(int verif_iniciador_primera_vez){
 }
 int main() {
     int acceso;
+
     if(inicializar_allegro()){
+
         disp = al_create_display(1200, 700);
         al_set_window_title(disp, "Hábitus");
         //al_set_display_icon(disp, n); // --TODO
@@ -174,5 +177,11 @@ int inicializar_allegro(){
         printf("No se pudo cargar el complemento de fuentes");
         verif_todo_ok = 0;
     }
+    if(!init_resources()){
+        printf("Error al iniciar las fuentes");
+        verif_todo_ok = 0;
+    }
     return verif_todo_ok;
+
 }
+
