@@ -12,7 +12,18 @@ al_reserve_samples(n);
 theme = al_load_sample("sonidos/theme.mp3"); // Carga un audio
 
 //IMAGENES
-al_load_bitmap("Imagenes/.PNG"); //carga una imagen para  un bitmap
+ALLEGRO_BITMAP *PISO;
+al_load_bitmap("./media/img/.jpg"); //carga una imagen para  un bitmap
+if( !SPRITES_CLOVERY_sin_mov || !PISO || !SPRITES_CLOVERY_agachada)
+{
+    printf("No se cargo la imagen");
+    fin = 1;
+}
+al_draw_scaled_bitmap(SPRITE_CLOVY_caida, 0, 0, 750, 1200, SPRITES_posicion_personaje_COORDENADAS_X - 15,
+SPRITES_posicion_personaje_COORDENADAS_Y - 10, 75, 120, FLIP_horizontal);
+
+al_draw_scaled_bitmap(SPRITE_CLOVY_caida, 0, 0, 750, 1200, SPRITES_posicion_personaje_COORDENADAS_X - 15,SPRITES_posicion_personaje_COORDENADAS_Y - 10, 75, 120, FLIP_horizontal);
+
 
 //FUENTES
 al_load_font("fuentes/Pixeled.ttf", 16, 0); //carga una fuenta
