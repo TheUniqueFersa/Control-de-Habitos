@@ -37,7 +37,7 @@ int desplazarAUTOINCREMENT(FILE *arch){ //requiere de la apertura en el modo: rb
 int INSERT(char *, void *, size_t, size_t);
 int SELECT(char *, void *, size_t, size_t, int id);
 int UPDATE(char *, void *, size_t, size_t, int id);
-int DELETE(char *, void *, size_t, size_t);
+int DELETE(char *, void *, size_t, size_t, int id);
 
 int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
     int AUTO_INCREMENT=0;
@@ -104,32 +104,29 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
 }
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int id){
 
-    FILE *ptrCF;
-    ptrCF= fopen(ruta, "rb+");
+    FILE *archivo = fopen(ruta, "rb+");
     HABITO hab;/**/
-    if(ptrCF!=NULL ){
+    if(archivo!=NULL ){
 //      fseek(ptrCF, 0, SEEK_END);
-        rewind(ptrCF);
-        desplazarAUTOINCREMENT(ptrCF);
-        fseek(ptrCF, (id-1)*((long)tam_elem), SEEK_CUR);
-        printf("\nUPDATE: %li\t", ftell(ptrCF));
-        fwrite(registro_act, tam_elem, num_elem, ptrCF);
+        rewind(archivo);
+        desplazarAUTOINCREMENT(archivo);
+        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
+        printf("\nUPDATE: %li\t", ftell(archivo));
+        fwrite(registro_act, tam_elem, num_elem, archivo);
 
-        rewind(ptrCF);
-        desplazarAUTOINCREMENT(ptrCF);
-        fseek(ptrCF, (id-1)*((long)tam_elem), SEEK_CUR);
-        if (fread(&hab, tam_elem, num_elem, ptrCF) == 1) {
-            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal, hab.racha);
+        rewind(archivo);
+        desplazarAUTOINCREMENT(archivo);
+        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
+        if (fread(&hab, tam_elem, num_elem, archivo) == 1) {
+            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
+                   hab.racha);
         }
-        fclose(ptrCF);
 
     }else{
         printf("Hubo un error al abrir el archivo");
     }
-    fclose(ptrCF);
+    fclose(archivo);
 
-
-    ptrCF= fopen(ruta, "rb");
     EJEMPLO ej2;
 /*
     if (ptrCF != NULL) {
@@ -142,8 +139,29 @@ int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int
 
 
 
-int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem){
+int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, int id){
+    FILE *archivo = fopen(ruta, "rb+");
+    HABITO hab, habNULL={'\0'};/*SE CREA habNULL PARA SOBRESCRIBIR EL REGISTRO QUE INDIQUE EL id*/
+    if(archivo!=NULL ){
+//      fseek(ptrCF, 0, SEEK_END);
+        rewind(archivo);
+        desplazarAUTOINCREMENT(archivo);
+        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
+        printf("\nUPDATE: %li\t", ftell(archivo));
+        fwrite(&habNULL, tam_elem, num_elem, archivo);
 
+        rewind(archivo);
+        desplazarAUTOINCREMENT(archivo);
+        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
+        if (fread(&hab, tam_elem, num_elem, archivo) == 1) {
+            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
+                   hab.racha);
+        }
+
+    }else{
+        printf("Hubo un error al abrir el archivo");
+    }
+    fclose(archivo);
 }
 
 //INSERT INTO tabla VALUES (1,1,1,1); ** SOLO SE PUEDEN METER REGISTROS COMPLETOS
