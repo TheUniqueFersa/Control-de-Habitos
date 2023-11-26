@@ -200,25 +200,14 @@ void main_habitus(int verif_iniciador_primera_vez){
 
                                     printf("\n\n----\n");
                                     //printf("ID: %i\n\n", usuario.ID_usuario);
-                                    /*
-                                    int SUPER_INSERT(int * ID, char *ruta, void *registro, size_t tam_elem, size_t num_elem){
-                                        *ID = manejarAUTOINCREMENT(ruta);
-                                        int nuevoID = *ID;
-                                        //USUARIO *hola = registro;
-                                        //printf("IDDDDDDDDDDDD: %i\n", hola->ID_usuario);
-                                        //printf("IDDDDDDDDDDDD: %s\n", hola->nombre);
-                                        //printf("DDD %lli\n", sizeof(USUARIO));
-                                        INSERT(ruta, registro, tam_elem, num_elem);
-                                        return nuevoID;
-                                    }*/
-                                    usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
-                                    //SUPER_INSERT(&usuario.ID_usuario, "./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
+                                    //usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
+                                    SUPER_INSERT(&usuario.ID_usuario, "./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
                                     //printf("ID: %i\n\n", usuario.ID_usuario);
-                                    INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
+                                    //INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
 
                                     obtenerTamanioEstructura(sizeof(USUARIO), "USUARIO");
                                     obtenerTamanioEstructura(sizeof(int), "int");
-                                    SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 2);
+                                    SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 12);
                                     printf("IDd: %i USERNAME: %s\n", usuarioprueba.ID_usuario, usuarioprueba.nombre);
 
                                     //contadorBytesArch("./data/usuarios.dat");

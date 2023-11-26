@@ -54,16 +54,18 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
             fwrite(&AUTO_INCREMENT, sizeof(int), 1, arch);
         }
         else{
+            fclose(arch);
+            FILE *archi2 = fopen(ruta, "rb+");
             //rewind(arch),
-            AUTO_INCREMENT = desplazarAUTOINCREMENT(arch);
+            AUTO_INCREMENT = desplazarAUTOINCREMENT(archi2);
             if(AUTO_INCREMENT > 0){
                 AUTO_INCREMENT++;
-                rewind(arch);
+                rewind(archi2);
                 //fseek(arch, 0, SEEK_SET);
-                printf("Posicion: %li\n", ftell(arch));
+                printf("Posicion: %li\n", ftell(archi2));
                 //printf("INT LOL %lli", sizeof(AUTO_INCREMENT));
                 fwrite(&AUTO_INCREMENT, sizeof(int), 1, arch);
-                printf("DESPUESlectura: %li\n", ftell(arch));
+                printf("DESPUESlectura: %li\n", ftell(archi2));
             }
             else{
                 printf("Ocurrio un error en la devolucion, AUTOINCREM: %i: \n", AUTO_INCREMENT);
@@ -77,7 +79,16 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
     printf("VALOR QUE REGRESO XD: %i\n", AUTO_INCREMENT);
     return AUTO_INCREMENT;
 }
-
+int SUPER_INSERT(int * ID, char *ruta, void *registro, size_t tam_elem, size_t num_elem){
+    *ID = manejarAUTOINCREMENT(ruta);
+    int nuevoID = *ID;
+    //USUARIO *hola = registro;
+    //printf("IDDDDDDDDDDDD: %i\n", hola->ID_usuario);
+    //printf("IDDDDDDDDDDDD: %s\n", hola->nombre);
+    //printf("DDD %lli\n", sizeof(USUARIO));
+    INSERT(ruta, registro, tam_elem, num_elem);
+    return nuevoID;
+}
 int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     int retorno;
     if(strcmp("./data/app.dat", ruta)==0){
