@@ -60,7 +60,28 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
 }
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem){
 
+    FILE *ptrCF;
+    ptrCF= fopen(ruta, "wb");
+    if(ptrCF!=NULL ){
+//      fseek(ptrCF, 0, SEEK_END);
+        fwrite(registro_act, tam_elem, num_elem, ptrCF);
+    }
+    fclose(ptrCF);
+
+
+    ptrCF= fopen(ruta, "rb");
+    EJEMPLO ej2;
+    HABITO hab;
+    if (ptrCF != NULL) {
+        while (fread(&hab, tam_elem, 1, ptrCF) == 1) {
+            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal, hab.racha);
+        }
+        fclose(ptrCF);
+    }
 }
+
+
+
 int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem){
 
 }

@@ -63,3 +63,8 @@ typedef struct {
     int habit;
     int racord;
 } PRODUCTIVIDAD;
+
+typedef struct {
+    char ejemplo[20];
+    int intej;
+} EJEMPLO;

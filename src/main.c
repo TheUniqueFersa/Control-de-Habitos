@@ -168,6 +168,14 @@ int main() {
         al_register_event_source(cola_eventos, al_get_display_event_source(disp)); // FUENTE: eventos de la ventana
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
+        //Prueba función UPDATE
+        HABITO habit1 ={1, "HabitoUWUOWOWO", "NotitaYAUUWUWadasdasU", "2", 1, '\0', '\0', 5, '\0', '\0'};
+        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1);
+        EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
+//        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
+
+
+
         //ACCEDE AL ARCHIVO QUE TIENE LA INFORMACION DE INICIO DE APP POR PRIMERA VEZ
         // = acceso --TODO
         al_start_timer(AFK);
