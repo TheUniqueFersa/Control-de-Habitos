@@ -82,6 +82,7 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     return retorno;
 }
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
+    printf("\nFuncionSELECT\n");
     FILE *archivo = fopen(ruta, "rb");  //requiere de la apertura en el modo: rb ||
     HABITO hab;                  /*añadido para la lectura de los registros*/
     if(archivo != NULL){
@@ -103,7 +104,7 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
     return 0;
 }
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int id){
-
+    printf("\nFuncion UPDATE\n");
     FILE *archivo = fopen(ruta, "rb+");
     HABITO hab;/**/
     if(archivo!=NULL ){
@@ -118,7 +119,7 @@ int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int
         desplazarAUTOINCREMENT(archivo);
         fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
         if (fread(&hab, tam_elem, num_elem, archivo) == 1) {
-            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
+            printf("nombre: %s nota:%s repeticion:%s racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
                    hab.racha);
         }
 
@@ -140,6 +141,7 @@ int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int
 
 
 int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, int id){
+    printf("\nFuncionDELETE\n");
     FILE *archivo = fopen(ruta, "rb+");
     HABITO hab, habNULL={'\0'};/*SE CREA habNULL PARA SOBRESCRIBIR EL REGISTRO QUE INDIQUE EL id*/
     if(archivo!=NULL ){

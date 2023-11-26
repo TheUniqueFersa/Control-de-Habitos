@@ -20,7 +20,10 @@ void main_habitus(int);
 void actualizar_display();
 int init_resources();
 void IUSD();
-void llamarDELETE(int);
+void llamarINSERT();
+void llamarUPDATE();
+void llamarSELECT();
+void llamarDELETE();
 //termina;
 /* ----> ALLEGRO {TIPO DE DATOS} <---- */
 // Displays
@@ -219,7 +222,7 @@ void main_habitus(int verif_iniciador_primera_vez){
                 case 4:
                     break;
                 default:
-
+                    break;
             }
         }
     }
@@ -228,23 +231,167 @@ void IUSD(){
     int opcion;
     printf("1.Insert.\n2.Update\n3.Select\n4.Delete.");
     scanf("%i", &opcion);
-    if (opcion==4){
-        llamarDELETE(opcion);
+    switch (opcion) {
+        case 1:
+            llamarINSERT();
+            break;
+        case 2:
+            llamarUPDATE();
+            break;
+        case 3:
+            llamarSELECT();
+            break;
+        case 4:
+            llamarDELETE();
+            break;
+        default:
+            break;
     }
 }
+void llamarINSERT(){}
 
-void llamarDELETE(int funcLlamar){
+void pedirDatosUPDATE(int opcion, int id){
+    /*HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
+    habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");*/
+    HABITO newHab={0};
+    newHab.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
+    switch (opcion) {
+        case 1:
+            getchar();
+            printf("NOMBRE DEL HABITO:");
+            fgets(newHab.nombre, sizeof(newHab.nombre), stdin);
+            printf("Nota del habito:");
+            fgets(newHab.nota, sizeof(newHab.nota), stdin);
+            printf("Repeticion semanal:");
+            fgets(newHab.repeticion_semanal, sizeof(newHab.repeticion_semanal), stdin);
+
+            printf("Racha:");
+            char racha[2];
+            sprintf(racha,"%c", newHab.racha);
+            fgets(racha, sizeof(newHab.racha), stdin);
+            newHab.racha = atoi(racha);
+
+            UPDATE("./data/usuarios/1/habito.dat", &newHab, sizeof(HABITO), 1, id);
+
+
+    }
+
+}
+void llamarUPDATE(){
     HABITO habNULL={0};
     USUARIO usuNULL={0};
     HORARIO  horNULL={0};
     RECORDATORIOS recNULL={0};
+    int opcion, id;
+    char *ruta[] ={};
 
-    int opcion;
-    printf("Estructura:\n1.Habito\n2.Usuario\n3.Horario\n4.Recordatorio");
+
+    printf("Estructura:\n1.Habito\n2.Usuario\n3.Horario\n4.Recordatorio\n");
     scanf("%i", &opcion);
+
+    printf("ID: ");
+    scanf("%i", &id);
     switch (opcion) {
         case 1:
-            //DELETE();
+//            *ruta = "./data/usuarios/1/habito.dat";
+//          DELETE("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+//            SELECT("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+            pedirDatosUPDATE(opcion, id);
+
+
+            break;
+        case 2:
+            *ruta = "./data/usuarios/1/usuario.dat";
+
+            break;
+
+        case 3:
+            *ruta = "./data/usuarios/1/horario.dat";
+            break;
+
+        case 4:
+            *ruta = "./data/usuarios/1/recordatorio.dat";
+            break;
+
+        default:
+            break;
+    }
+
+}
+void llamarSELECT(){
+    HABITO habNULL={0};
+    USUARIO usuNULL={0};
+    HORARIO  horNULL={0};
+    RECORDATORIOS recNULL={0};
+    int opcion, id;
+    char *ruta[] ={};
+
+    printf("Estructura:\n1.Habito\n2.Usuario\n3.Horario\n4.Recordatorio\n");
+    scanf("%i", &opcion);
+
+    printf("ID: ");
+    scanf("%i", &id);
+    switch (opcion) {
+        case 1:
+//            *ruta = "./data/usuarios/1/habito.dat";
+//            DELETE("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+            SELECT("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+            break;
+        case 2:
+            *ruta = "./data/usuarios/1/usuario.dat";
+
+            break;
+
+        case 3:
+            *ruta = "./data/usuarios/1/horario.dat";
+            break;
+
+        case 4:
+            *ruta = "./data/usuarios/1/recordatorio.dat";
+            break;
+
+        default:
+            break;
+    }
+
+
+}
+
+
+void llamarDELETE(){
+    HABITO habNULL={0};
+    USUARIO usuNULL={0};
+    HORARIO  horNULL={0};
+    RECORDATORIOS recNULL={0};
+    int opcion, id;
+    char *ruta[] ={};
+
+
+    printf("Estructura:\n1.Habito\n2.Usuario\n3.Horario\n4.Recordatorio\n");
+    scanf("%i", &opcion);
+
+    printf("ID: ");
+    scanf("%i", &id);
+    switch (opcion) {
+        case 1:
+//            *ruta = "./data/usuarios/1/habito.dat";
+            DELETE("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+//            SELECT("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+            break;
+        case 2:
+            *ruta = "./data/usuarios/1/usuario.dat";
+
+            break;
+
+        case 3:
+            *ruta = "./data/usuarios/1/horario.dat";
+            break;
+
+        case 4:
+            *ruta = "./data/usuarios/1/recordatorio.dat";
+            break;
+
+        default:
             break;
     }
 
@@ -268,13 +415,15 @@ int main() {
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
         //Prueba función UPDATE
-        HABITO habit1 ={1, "HABITO PARA REGISTRO 1 ", "NOTITA 1 WOW", "2", 5, '\0', '\0', 85, '\0', '\0'};
+        HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
         habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
-        //UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-        //DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-        SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 2);
-        //HABITO habit1 ={1, "HabitoUWUOWOWO", "NotitaYAUUWUWadasdasU", "2", 1, '\0', '\0', 5, '\0', '\0'};
-      //  UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1);
+//        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
+//      DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
+
+//      SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
+        IUSD();
+
+
         EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
