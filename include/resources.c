@@ -5,6 +5,7 @@ ALLEGRO_COLOR neutro1_tinta_de_pulpo;
 ALLEGRO_COLOR neutro2_african_violet;
 ALLEGRO_COLOR neutro3_french_lilac;
 ALLEGRO_COLOR texto_black;
+ALLEGRO_COLOR fondo_gris1;
 ALLEGRO_FONT * lexend_regular[100];
 ALLEGRO_FONT * lexend_bold[100];
 ALLEGRO_FONT * lexend_thin[100];
@@ -13,13 +14,15 @@ ALLEGRO_FONT * roboto_italic[100];
 ALLEGRO_FONT * roboto_regular[100];
 ALLEGRO_FONT * roboto_thin[100];
 ALLEGRO_FONT * roboto_black[100];
+
 int init_resources(){
     int inicializado_correctamente=1;
+    fondo_gris1 = al_map_rgb(143,143,143);
     principal_pale_chestnut = al_map_rgb(222, 186, 192);
     secundario_pastel_magenta = al_map_rgb(227,158,193);
     neutro1_tinta_de_pulpo = al_map_rgb(47,50,58);
     neutro2_african_violet = al_map_rgb(222, 186, 192);
-    neutro3_french_lilac = al_map_rgb(222, 186, 192);
+    neutro3_french_lilac = al_map_rgb(56, 38, 56);
     texto_black = al_map_rgb(0,0,0);
     for(int i; i<60; i++) {
         lexend_regular[i] = al_load_font("./media/fuentes/lexend/Lexend-Regular.ttf", i, 0);

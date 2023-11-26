@@ -65,12 +65,66 @@ char N_T_DIFICULTAD[100] = {"./../data/"};
 /* ----> ARCHIVOS <---- */
 //termina;
 void Dia(int dia){
-
+    al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Lu Ma Mi  Ju  Vi  Sa  Do");
     for (int i = 0; i < 7; ++i) {
         if (i == dia-1) {
-            al_draw_filled_rectangle(1015 + i * 25, 375, 1035 + i * 25, 395, principal_pale_chestnut);
+            al_draw_filled_rectangle(1015 + i * 25, 395, 1035 + i * 25, 415, secundario_pastel_magenta);
         } else {
-            al_draw_filled_rectangle(1015 + i * 25, 375, 1035 + i * 25, 395, texto_black);
+            al_draw_filled_rectangle(1015 + i * 25, 395, 1035 + i * 25, 415, fondo_gris1);
+        }
+    }
+}
+void Pendientes(){
+    //-ALLEGRO_PI/2.0 SE UTILIZA PARA INICIAR EN LA PARTE SUPERIOR DE LA CIRCUNFERENCIA
+    //theta se trabaja en radianes
+    //PasoHabitos=(-2*ALLEGRO_PI)/CantHabitosHoy
+    char CantHabitosHoy[2]="05";
+    //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
+    al_draw_arc(1100,75, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,principal_pale_chestnut,15.0);
+    al_draw_text(lexend_regular[30],texto_black,1100,55,ALLEGRO_ALIGN_CENTER,CantHabitosHoy);
+    al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
+    al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
+}
+void calendario(int dia, int dia_mes, int mes){
+    int FILAS = 6;
+    int COLUMNAS = 7;
+    int CELDA=25;
+    int tipomes=mes%2;
+    int dias_en_mes;
+    if(mes==2){
+        dias_en_mes=28;
+    }else if(tipomes==0){
+        dias_en_mes=31;
+    }else if(tipomes==1){
+        dias_en_mes=30;
+    }
+    float transparencia;
+    for (int fila = 0; fila < FILAS; ++fila) {
+        for (int columna = 0; columna < COLUMNAS; ++columna) {
+            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_mes;
+            //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
+            if(dia_calendario%4==0)transparencia=0;
+            else if(dia_calendario%4==1)transparencia=255/2;
+            else if(dia_calendario%4==2)transparencia=255*3/4;
+            else if(dia_calendario%4==3)transparencia=255*4/5;
+            if (dia_calendario >= 1 && dia_calendario <= dias_en_mes) {
+                // Dibujar calendario
+                    al_draw_filled_rectangle(1012 + columna * CELDA+3, 500 + 3 + fila * CELDA,
+                                             1012 + (columna + 1) * CELDA, 500 + (fila + 1) * CELDA,
+                                             fondo_gris1);
+                if (transparencia != 0) {
+                    al_draw_filled_rectangle(1012 + columna * CELDA+3, 500+ 3 + fila * CELDA,
+                                             1012 + (columna + 1) * CELDA, 500 + (fila + 1) * CELDA,
+                                             al_map_rgba(248,107,234,transparencia));
+                }
+
+                // Puedes agregar el número del día del mes
+                char texto_dia[3];
+                snprintf(texto_dia, sizeof(texto_dia), "%d", dia_calendario);
+                al_draw_text(roboto_black[10], texto_black,
+                             1012 + 3 + columna * CELDA + CELDA / 2, 495 + fila * CELDA + CELDA / 2,
+                             ALLEGRO_ALIGN_CENTER, texto_dia);
+            }
         }
     }
 }
@@ -85,9 +139,11 @@ void ObtenerHora(){
     int mes = info_tiempo->tm_mon + 1;  // tm_mon es 0-indexado, por lo que se suma 1
     int anio = info_tiempo->tm_year + 1900;
     sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
+    Pendientes();
     Dia(dia_semana);
-    al_draw_text(lexend_regular[59], texto_black, 1100, 300, ALLEGRO_ALIGN_CENTER, hora_formateada);
-    al_draw_text(lexend_regular[20], texto_black, 1100, 400, ALLEGRO_ALIGN_CENTER, dia_formateado);
+    calendario(dia, dia_semana,mes);
+    al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
+    al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 
 }
 
