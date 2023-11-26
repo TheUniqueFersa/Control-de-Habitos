@@ -65,16 +65,28 @@ char N_T_DIFICULTAD[100] = {"./../data/"};
 /* ----> ARCHIVOS <---- */
 //termina;
 
+char ObtenerHora(){
+    char hora_formateada[9];
+    time_t HoraActual = time(NULL);
+    char dia_formateado[60];
+    struct tm *info_tiempo = localtime(&HoraActual);
+    strftime(hora_formateada, sizeof(hora_formateada), "%H:%M", info_tiempo);
+    int dia = info_tiempo->tm_mday;
+    int mes = info_tiempo->tm_mon + 1;  // tm_mon es 0-indexado, por lo que se suma 1
+    int anio = info_tiempo->tm_year + 1900;
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+    al_draw_text(lexend_regular[59], texto_black, 1100, 300, ALLEGRO_ALIGN_CENTER, hora_formateada);
+    al_draw_text(lexend_regular[20], texto_black, 1100, 400, ALLEGRO_ALIGN_CENTER, "%02d/%02/");
+    al_flip_display();
+}
+
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
     al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
-    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
-    al_draw_text(lexend_regular[50], texto_black, 1100, 300, ALLEGRO_ALIGN_CENTER, "Lorem Ipsum");
     al_flip_display();
+    ObtenerHora();
 }
-
-
 void main_habitus(int verif_iniciador_primera_vez){
     int pantalla_requiere_actualizacion=1;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
