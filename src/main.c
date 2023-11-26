@@ -94,13 +94,22 @@ void main_habitus(int verif_iniciador_primera_vez){
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){//Evento de que perdiste el foco de la ventana
             printf("PERDISTE EL FOCO\n");
-            contadorBytesArch("./data/app.dat");
-            FILE *archh = fopen("./data/app.dat", "rb");
-            moverNLastId(archh);
-            manejarNLastId("./data/app.dat");
+            USUARIO usuario = {98, "FERSA"}, usuarioprueba = {0};
+
+            usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
+            INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
+
+            printf("ID: %i\n\n", usuario.ID_usuario);
+            //printf("\nEl tamaño al final fue de: %i", contadorBytesArch("./data/usuarios.dat"));
+            printf("Apoco %lli \n", sizeof(USUARIO));
+            SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 12);
+            printf("\nIDd: %i USERNAME: %s", usuarioprueba.ID_usuario, usuarioprueba.nombre);
+            //contadorBytesArch("./data/app.dat");
+            //FILE *archh = fopen("./data/app.dat", "rb");
+            //manejarAUTOINCREMENT("./data/app.dat");
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){//Evento de que retomaste el foco de la ventana
-            printf("RECUPERASTE EL FOCO\n");
+            //printf("RECUPERASTE EL FOCO\n");
         }
         else{//Si no fueron eventos generales de la ventana:
             switch (momento) {
