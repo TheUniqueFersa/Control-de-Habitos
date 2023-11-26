@@ -234,8 +234,10 @@ int main() {
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
         //Prueba función UPDATE
-        HABITO habit1 ={1, "HabitoUWUOWOWO", "NotitaYAUUWUWadasdasU", "2", 1, '\0', '\0', 5, '\0', '\0'};
-        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1);
+        HABITO habit1 ={1, "NUEVO HABITO PARA ID5 WWWWPPPPWW", "SOY UNA NUEVA NOTA PARA ID5 OWO", "2", 5, '\0', '\0', 85, '\0', '\0'};
+        habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
+        //UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 5);
+        SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 5);
         EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
