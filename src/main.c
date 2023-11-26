@@ -10,7 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-#include "../include/structs.c"
+//#include "../include/structs.c"
 #include "../include/CRUD.c"
 #include "../include/resources.c"
 /* ---->  <---- */
@@ -36,7 +36,7 @@ ALLEGRO_SAMPLE *SAMPLE;
 ALLEGRO_BITMAP *BITMAP;
 
 //TIMERS
-ALLEGRO_TIMER *timer_0_01;
+ALLEGRO_TIMER *AFK;
 //COLORES
 ALLEGRO_FONT *fuente1;
 
@@ -64,16 +64,41 @@ char N_T_DIFICULTAD[100] = {"./../data/"};
 
 /* ----> ARCHIVOS <---- */
 //termina;
+void Dia(int dia){
+
+    for (int i = 0; i < 7; ++i) {
+        if (i == dia-1) {
+            al_draw_filled_rectangle(1015 + i * 25, 375, 1035 + i * 25, 395, principal_pale_chestnut);
+        } else {
+            al_draw_filled_rectangle(1015 + i * 25, 375, 1035 + i * 25, 395, texto_black);
+        }
+    }
+}
+void ObtenerHora(){
+    char hora_formateada[9];
+    time_t HoraActual = time(NULL);
+    struct tm *info_tiempo = localtime(&HoraActual);
+    char dia_formateado[60];
+    strftime(hora_formateada, sizeof(hora_formateada), "%H:%M", info_tiempo);
+    int dia = info_tiempo->tm_mday;
+    int dia_semana = info_tiempo->tm_wday;
+    int mes = info_tiempo->tm_mon + 1;  // tm_mon es 0-indexado, por lo que se suma 1
+    int anio = info_tiempo->tm_year + 1900;
+    sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
+    Dia(dia_semana);
+    al_draw_text(lexend_regular[59], texto_black, 1100, 300, ALLEGRO_ALIGN_CENTER, hora_formateada);
+    al_draw_text(lexend_regular[20], texto_black, 1100, 400, ALLEGRO_ALIGN_CENTER, dia_formateado);
+
+}
 
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
     al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
-    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 0, 0));
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+    ObtenerHora();
     al_flip_display();
 }
-
-
 void main_habitus(int verif_iniciador_primera_vez){
     int pantalla_requiere_actualizacion=1;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
@@ -91,11 +116,13 @@ void main_habitus(int verif_iniciador_primera_vez){
         if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
             //funcion de confirmacion() --TODO
             fin = 1;
+        }else if(evento.type == ALLEGRO_EVENT_TIMER){
+            actualizar_display();
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){//Evento de que perdiste el foco de la ventana
             printf("PERDISTE EL FOCO\n");
             contadorBytesArch("./data/app.dat");
-            FILE *archh = fopen("./data/app.dat", "rb+");
+            FILE *archh = fopen("./data/app.dat", "rb");
             moverNLastId(archh);
             manejarNLastId("./data/app.dat");
         }
@@ -121,8 +148,6 @@ void main_habitus(int verif_iniciador_primera_vez){
                 case 4:
                     break;
                 default:
-                    break;
-
 
             }
         }
@@ -134,22 +159,22 @@ int main() {
     if(inicializar_allegro()){
 
         disp = al_create_display(1200, 700);
+        AFK= al_create_timer(30);
         al_set_window_title(disp, "Hábitus");
         //al_set_display_icon(disp, n); // --TODO
         cola_eventos = al_create_event_queue();
 
+        al_register_event_source(cola_eventos,al_get_timer_event_source(AFK)); // FUENTE: eventos de tipo temporizador
         al_register_event_source(cola_eventos, al_get_display_event_source(disp)); // FUENTE: eventos de la ventana
-        al_register_event_source(cola_eventos, al_get_keyboard_event_source()); // FUENTE: eventos del teclado
-        //al_register_event_source(cola_eventos, al_get_timer_event_source(timer_0_01)); // FUENTE: eventos de tipo temporizador
+        al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
         //ACCEDE AL ARCHIVO QUE TIENE LA INFORMACION DE INICIO DE APP POR PRIMERA VEZ
         // = acceso --TODO
+        al_start_timer(AFK);
         main_habitus(0);
-
-//
-        //al_destroy_timer( n );
         al_destroy_event_queue(cola_eventos);
         al_destroy_display(disp);
+        al_destroy_timer(AFK);
     }
     else{
         printf("\nOcurrio un error");// --TODO hacer un archivo txt que registre todos los errores
