@@ -71,9 +71,9 @@ char N_T_DIFICULTAD[100] = {"./../data/"};
 /* ----> ARCHIVOS <---- */
 //termina;
 void Dia(int dia){
-    al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Lu Ma Mi  Ju  Vi  Sa  Do");
+    al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Do Lu  Ma Mi  Ju  Vi  Sa");
     for (int i = 0; i < 7; ++i) {
-        if (i == dia-1) {
+        if (i == dia) {
             al_draw_filled_rectangle(1015 + i * 25, 395, 1035 + i * 25, 415, secundario_pastel_magenta);
         } else {
             al_draw_filled_rectangle(1015 + i * 25, 395, 1035 + i * 25, 415, fondo_gris1);
@@ -91,12 +91,14 @@ void Pendientes(){
     al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
     al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
 }
-void calendario(int dia, int dia_mes, int mes){
+void calendario(int dia_semana, int mes,int primero){
+    printf("dia del mes: %d",primero);
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
     int tipomes=mes%2;
     int dias_en_mes;
+    int primerafila=0;
     if(mes==2){
         dias_en_mes=28;
     }else if(tipomes==0){
@@ -107,7 +109,11 @@ void calendario(int dia, int dia_mes, int mes){
     float transparencia;
     for (int fila = 0; fila < FILAS; ++fila) {
         for (int columna = 0; columna < COLUMNAS; ++columna) {
-            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_mes;
+            if(primerafila==0){
+                columna=primero;
+                primerafila=1;
+            }
+            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_semana-primero;
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
             if(dia_calendario%4==0)transparencia=0;
             else if(dia_calendario%4==1)transparencia=255/2;
@@ -115,6 +121,7 @@ void calendario(int dia, int dia_mes, int mes){
             else if(dia_calendario%4==3)transparencia=255*4/5;
             if (dia_calendario >= 1 && dia_calendario <= dias_en_mes) {
                 // Dibujar calendario
+
                     al_draw_filled_rectangle(1012 + columna * CELDA+3, 500 + 3 + fila * CELDA,
                                              1012 + (columna + 1) * CELDA, 500 + (fila + 1) * CELDA,
                                              fondo_gris1);
@@ -136,30 +143,62 @@ void calendario(int dia, int dia_mes, int mes){
 }
 void ObtenerHora(){
     char hora_formateada[9];
+    time_t Hora=time(NULL);
+    struct tm *primerdia= localtime(&Hora);
+    primerdia->tm_mday = 1;
+    primerdia->tm_hour = 0;
+    primerdia->tm_min = 0;
+    primerdia->tm_sec = 0;
+    mktime(primerdia);
+    int primero=primerdia->tm_wday;
     time_t HoraActual = time(NULL);
     struct tm *info_tiempo = localtime(&HoraActual);
     char dia_formateado[60];
     strftime(hora_formateada, sizeof(hora_formateada), "%H:%M", info_tiempo);
     int dia = info_tiempo->tm_mday;
     int dia_semana = info_tiempo->tm_wday;
-    int mes = info_tiempo->tm_mon + 1;  // tm_mon es 0-indexado, por lo que se suma 1
+    int mes = info_tiempo->tm_mon + 1;
     int anio = info_tiempo->tm_year + 1900;
     sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
     Pendientes();
     Dia(dia_semana);
-    calendario(dia, dia_semana,mes);
+    calendario(dia_semana,mes,(primero));
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
-
+void ventanaActual(int momento){
+    switch (momento) {
+        case 1:
+            al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 300, 0, 0,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+            break;
+        case 2:
+            al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIOROSA, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+            break;
+        case 3:
+            al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(RECORDSROSA, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+            break;
+        case 4:
+            al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
+            break;
+        default:
+    }
+}
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
-    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
-    al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
-    al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 175, 0, 175,100, 175, 0);
-    al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 175, 0, 350,100, 175, 0);
-    al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 175, 0, 525,100, 175, 0);
+    ventanaActual(momento);
     al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
     ObtenerHora();
     al_flip_display();
@@ -207,7 +246,7 @@ void main_habitus(int verif_iniciador_primera_vez){
             switch (momento) {
                 case 0:
                     switch (evento.type) {
-
+                        
                     }
                     break;
                 case 1:
