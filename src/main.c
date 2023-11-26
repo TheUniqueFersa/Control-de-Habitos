@@ -13,6 +13,7 @@
 //#include "../include/structs.c"
 #include "../include/CRUD.c"
 #include "../include/resources.c"
+#include "../tests/depuracion.c"
 /* ---->  <---- */
 /* ----> Prototipos <---- */
 int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIONÉ
@@ -206,6 +207,8 @@ void actualizar_display(){
 void main_habitus(int verif_iniciador_primera_vez){
     int pantalla_requiere_actualizacion=1;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
+    momento=-1;//DEP
+    USUARIO usuario = {98, "FERSA"}, usuarioprueba = {0};
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             pantalla_requiere_actualizacion=0;
@@ -224,26 +227,44 @@ void main_habitus(int verif_iniciador_primera_vez){
             actualizar_display();
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){//Evento de que perdiste el foco de la ventana
-            printf("PERDISTE EL FOCO\n");
-            USUARIO usuario = {98, "FERSA"}, usuarioprueba = {0};
-
-            usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
-            INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
-
-            printf("ID: %i\n\n", usuario.ID_usuario);
-            //printf("\nEl tamaño al final fue de: %i", contadorBytesArch("./data/usuarios.dat"));
-            printf("Apoco %lli \n", sizeof(USUARIO));
-            SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 12);
-            printf("\nIDd: %i USERNAME: %s", usuarioprueba.ID_usuario, usuarioprueba.nombre);
-            //contadorBytesArch("./data/app.dat");
-            //FILE *archh = fopen("./data/app.dat", "rb");
-            //manejarAUTOINCREMENT("./data/app.dat");
+            //printf("PERDISTE EL FOCO\n");
         }
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN){//Evento de que retomaste el foco de la ventana
             //printf("RECUPERASTE EL FOCO\n");
+
         }
         else{//Si no fueron eventos generales de la ventana:
             switch (momento) {
+                case -1: //Depuracion
+                    switch (evento.type) {
+                        case ALLEGRO_EVENT_KEY_DOWN:
+                            switch (evento.keyboard.keycode) {
+                                case ALLEGRO_KEY_F:
+
+
+                                    printf("\n\n----\n");
+                                    //printf("ID: %i\n\n", usuario.ID_usuario);
+                                    //usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
+                                    SUPER_INSERT(&usuario.ID_usuario, "./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
+                                    //printf("ID: %i\n\n", usuario.ID_usuario);
+                                    //INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
+
+                                    obtenerTamanioEstructura(sizeof(USUARIO), "USUARIO");
+                                    obtenerTamanioEstructura(sizeof(int), "int");
+                                    SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 12);
+                                    printf("IDd: %i USERNAME: %s\n", usuarioprueba.ID_usuario, usuarioprueba.nombre);
+
+                                    //contadorBytesArch("./data/usuarios.dat");
+                                    //FILE *archh = fopen("./data/app.dat", "rb");
+                                    //manejarAUTOINCREMENT("./data/app.dat");
+                                    break;
+                                default:
+                            }
+                            break;
+                        default:
+
+                    }
+                    break;
                 case 0:
                     switch (evento.type) {
                         
@@ -454,6 +475,7 @@ int main() {
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
         //Prueba función UPDATE
+<<<<<<< HEAD
         HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
         habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
 //        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
@@ -464,6 +486,16 @@ int main() {
 
 
         EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
+=======
+        //HABITO habit1 ={1, "HABITO PARA REGISTRO 1 ", "NOTITA 1 WOW", "2", 5, '\0', '\0', 85, '\0', '\0'};
+        //habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
+
+
+        //UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
+        //DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
+        //SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 2);
+        //EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
+>>>>>>> CRUD2
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
 

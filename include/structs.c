@@ -68,3 +68,18 @@ typedef struct {
     char ejemplo[20];
     int intej;
 } EJEMPLO;
+typedef struct{
+    int origenX;
+    int origenY;
+    //
+    //void * estructura;
+} VISUALES;
+/*
+RECORDATORIOS recordatorio[56];
+
+VISUALES recordatorios = {0,0, &recordatorio[0]};
+int hola(){
+    recordatorios.estructura->
+}
+VISUALES recordatorios_visuales[56];
+ */
