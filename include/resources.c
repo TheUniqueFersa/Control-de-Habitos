@@ -15,6 +15,16 @@ ALLEGRO_FONT * roboto_italic[60];
 ALLEGRO_FONT * roboto_regular[60];
 ALLEGRO_FONT * roboto_thin[60];
 ALLEGRO_FONT * roboto_black[60];
+
+ALLEGRO_BITMAP *RECORDS;
+ALLEGRO_BITMAP *HABITOS;
+ALLEGRO_BITMAP *CALENDARIO;
+ALLEGRO_BITMAP *AJUSTES;
+
+ALLEGRO_BITMAP *CALENDARIOROSA;
+ALLEGRO_BITMAP *AJUSTESROSA;
+ALLEGRO_BITMAP *RECORDSROSA;
+ALLEGRO_BITMAP *HABITOSROSA;
 int init_resources(){
     int inicializado_correctamente=1;
     fondo_gris1 = al_map_rgb(143,143,143);
@@ -22,7 +32,9 @@ int init_resources(){
     secundario_pastel_magenta = al_map_rgb(227,158,193);
     neutro1_tinta_de_pulpo = al_map_rgb(47,50,58);
     neutro2_african_violet = al_map_rgb(222, 186, 192);
-    neutro3_french_lilac = al_map_rgb(56, 38, 56);
+
+    neutro3_french_lilac = al_map_rgb(222, 186, 192);
+    //neutro3_french_lilac = al_map_rgb(56, 38, 56);
     texto_black = al_map_rgb(0,0,0);
     for(int i=0; i<60; i++) {
         lexend_regular[i] = al_load_font("./media/fuentes/lexend/Lexend-Regular.ttf", i, 0);
@@ -44,6 +56,22 @@ int init_resources(){
             printf("ERROR: %i\n", al_get_errno());
             printf("ERROR: Hubo un problema al cargar las fuentes de roboto\n");
         }
+    }
+    RECORDS = al_load_bitmap("./media/img/recordatorio_blanco.jpg");
+    HABITOS = al_load_bitmap("./media/img/habitosblanco.jpg");
+    CALENDARIO = al_load_bitmap("./media/img/cal_blanco.jpg");
+    AJUSTES = al_load_bitmap("./media/img/ajustes_blanco.jpg");
+
+    CALENDARIOROSA = al_load_bitmap("./media/img/cal_rosa.jpg");
+    RECORDSROSA = al_load_bitmap("./media/img/recordatorio_rosa.jpg");
+    HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
+    AJUSTESROSA = al_load_bitmap("./media/img/ajustes_rosa.jpg");
+    HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
+
+    if(!RECORDS || !HABITOS || !CALENDARIO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !HABITOSROSA){
+        inicializado_correctamente = 0;
+        printf("ERROR: %i\n", al_get_errno());
+        printf("ERROR: Hubo un problema al cargar las imágenes de img\n");
     }
     return inicializado_correctamente;
 }
