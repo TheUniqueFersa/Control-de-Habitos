@@ -10,7 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-//#include "../include/structs.c"
+#include "../include/structs.c"
 #include "../include/CRUD.c"
 #include "../include/resources.c"
 /* ---->  <---- */
@@ -95,7 +95,7 @@ void main_habitus(int verif_iniciador_primera_vez){
         else if(evento.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT){//Evento de que perdiste el foco de la ventana
             printf("PERDISTE EL FOCO\n");
             contadorBytesArch("./data/app.dat");
-            FILE *archh = fopen("./data/app.dat", "rb");
+            FILE *archh = fopen("./data/app.dat", "rb+");
             moverNLastId(archh);
             manejarNLastId("./data/app.dat");
         }
@@ -121,6 +121,8 @@ void main_habitus(int verif_iniciador_primera_vez){
                 case 4:
                     break;
                 default:
+                    break;
+
 
             }
         }
@@ -144,6 +146,7 @@ int main() {
         // = acceso --TODO
         main_habitus(0);
 
+//
         //al_destroy_timer( n );
         al_destroy_event_queue(cola_eventos);
         al_destroy_display(disp);
