@@ -19,6 +19,8 @@ int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIO
 void main_habitus(int);
 void actualizar_display();
 int init_resources();
+void IUSD();
+void llamarDELETE(int);
 //termina;
 /* ----> ALLEGRO {TIPO DE DATOS} <---- */
 // Displays
@@ -153,6 +155,34 @@ void main_habitus(int verif_iniciador_primera_vez){
         }
     }
 }
+void IUSD(){
+    int opcion;
+    printf("1.Insert.\n2.Update\n3.Select\n4.Delete.");
+    scanf("%i", &opcion);
+    if (opcion==4){
+        llamarDELETE(opcion);
+    }
+}
+
+void llamarDELETE(int funcLlamar){
+    HABITO habNULL={0};
+    USUARIO usuNULL={0};
+    HORARIO  horNULL={0};
+    RECORDATORIOS recNULL={0};
+
+    int opcion;
+    printf("Estructura:\n1.Habito\n2.Usuario\n3.Horario\n4.Recordatorio");
+    scanf("%i", &opcion);
+    switch (opcion) {
+        case 1:
+            //DELETE();
+            break;
+    }
+
+}
+
+
+
 int main() {
     int acceso;
 
@@ -169,8 +199,8 @@ int main() {
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
 
         //Prueba función UPDATE
-        HABITO habit1 ={1, "HabitoUWUOWOWO", "NotitaYAUUWUWadasdasU", "2", 1, '\0', '\0', 5, '\0', '\0'};
-        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1);
+        //HABITO habit1 ={1, "HabitoUWUOWOWO", "NotitaYAUUWUWadasdasU", "2", 1, '\0', '\0', 5, '\0', '\0'};
+      //  UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1);
         EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
