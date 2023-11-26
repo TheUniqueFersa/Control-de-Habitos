@@ -37,6 +37,7 @@ ALLEGRO_BITMAP *BITMAP;
 
 //TIMERS
 ALLEGRO_TIMER *AFK;
+
 //COLORES
 ALLEGRO_FONT *fuente1;
 
@@ -144,13 +145,16 @@ void ObtenerHora(){
     calendario(dia, dia_semana,mes);
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
-
 }
 
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
     al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
+    al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 175, 0, 175,100, 175, 0);
+    al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 175, 0, 350,100, 175, 0);
+    al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 175, 0, 525,100, 175, 0);
     al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
     ObtenerHora();
     al_flip_display();
