@@ -123,6 +123,7 @@ void Pendientes(){
     //theta se trabaja en radianes
     //PasoHabitos=(-2*ALLEGRO_PI)/CantHabitosHoy
     char CantHabitosHoy[2]="05";
+    al_draw_line(1000,25,1000,675,fondo_gris1,2);
     //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
     al_draw_arc(1100,75, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,principal_pale_chestnut,15.0);
     al_draw_text(lexend_regular[30],texto_black,1100,55,ALLEGRO_ALIGN_CENTER,CantHabitosHoy);
@@ -130,7 +131,6 @@ void Pendientes(){
     al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
 }
 void calendario(int dia_semana, int mes,int primero){
-    printf("dia del mes: %d",primero);
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
@@ -205,7 +205,10 @@ void ObtenerHora(){
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
 void ventanaActual(int momento){
+    int i=0;
     switch (momento) {
+        case 0:
+            break;
         case 1:
             al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 300, 0, 0,100, 300, 0);
             al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
@@ -232,13 +235,16 @@ void ventanaActual(int momento){
             break;
         default:
     }
+    if(momento!=0){
+        al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+        ObtenerHora();
+        al_draw_line(100,25,100,675,fondo_gris1,2);
+    }
 }
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
     //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
     ventanaActual(momento);
-    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
-    ObtenerHora();
     al_flip_display();
 }
 void inicializar_rutas_usuario(char * usuario){
@@ -276,6 +282,12 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     momento=-1;//DEP
     USUARIO usuario = {777, "Usuario"}, usuarioprueba = {0};
+    al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
+    if(momento==0){
+        al_draw_text(lexend_regular[40], al_map_rgb(0,0,0),600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
+        al_draw_text(lexend_regular[30], al_map_rgb(0,0,0),600,350,ALLEGRO_ALIGN_CENTER,"Presiona cualquier tecla para continuar");
+    }
+    char nombre[30] = {0};
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             pantalla_requiere_actualizacion=0;
@@ -287,6 +299,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 
         //EVENTOS SUCEDIENDO:
         al_wait_for_event(cola_eventos, &evento);
+
         if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
             //funcion de confirmacion() --TODO
             fin = 1;
@@ -319,8 +332,28 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     }
                     break;
                 case 0:
-                    switch (evento.type) {
-                        
+                    al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
+                    al_draw_text(lexend_regular[25], al_map_rgb(0, 0, 0), 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    al_draw_rectangle(280,340,920,380,texto_black,5);
+                    if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                        if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+                            // Añadir el carácter a la cadena de entrada
+                            int len = strlen(nombre);
+                            if (len < sizeof(nombre) - 1) {
+                                nombre[len] = evento.keyboard.unichar;
+                                nombre[len + 1] = '\0';
+                            }
+                        } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+                            // Borrar el último carácter de la cadena de entrada
+                            int len = strlen(nombre);
+                            if (len > 0) {
+                                nombre[len - 1] = '\0';
+                            }
+                        }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                            //Aqui se ingresa el nombre del usuario
+                            momento=4;
+                        }
+                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                     }
                     break;
                 case 1:
@@ -333,6 +366,31 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                 case 3:
                     break;
                 case 4:
+                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                    al_draw_text(lexend_regular[15], al_map_rgb(0, 0, 0), 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    al_draw_rectangle(300,340,800,365,texto_black,5);
+                    if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                        if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+                            // Añadir el carácter a la cadena de entrada
+                            int len = strlen(nombre);
+                            if (len < sizeof(nombre) - 1) {
+                                nombre[len] = evento.keyboard.unichar;
+                                nombre[len + 1] = '\0';
+                            }
+                        } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+                            // Borrar el último carácter de la cadena de entrada
+                            int len = strlen(nombre);
+                            if (len > 0) {
+                                nombre[len - 1] = '\0';
+                            }
+                        }
+                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                            //Aqui se ingresa el nombre del usuario
+                            al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                            al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
+                        }
+                    }
                     break;
                 default:
                     break;
