@@ -352,6 +352,7 @@ void actualizar_display(){
    al_draw_text(lexend_regular[45],texto_black,565,185,ALLEGRO_ALIGN_CENTER,"Dificultad");
     al_draw_filled_rounded_rectangle(890, 496, 1110, 700, 25, 25, al_map_rgb(255, 255, 255));//222, 186, 192, 1
     al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
+    //al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
 
 
 

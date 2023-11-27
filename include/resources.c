@@ -75,7 +75,7 @@ int init_resources(){
     HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
     AJUSTESROSA = al_load_bitmap("./media/img/ajustes_rosa.jpg");
     HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
-
+    //HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
     LOGO = al_load_bitmap("./media/img/logo.png");
 
     EDITARHABITO = al_load_bitmap("./media/img/editar.jpg");
