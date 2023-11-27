@@ -410,6 +410,8 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     return temp;
 }
 DIFICULTAD * dificultades;
+TIPO * tipos;
+HABITO * habitos;
 void CARGAR_TODOS_LOS_REGISTROS(){
     int retorno = 0, n_reg_dificultades=0, i=0;
     n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
@@ -421,10 +423,17 @@ void CARGAR_TODOS_LOS_REGISTROS(){
     }
     int n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
     printf("Registros: %i\n", n_reg_tipo);
-    TIPO * tipos = (DIFICULTAD *) crearArreglo(sizeof(TIPO), n_reg_tipo);
+    tipos = (TIPO *) crearArreglo(sizeof(TIPO), n_reg_tipo);
     for(i = 0; i<n_reg_tipo; i++){
         SELECT(rutaTIPO, &tipos[i], sizeof(TIPO), 1, i+1);
         printf("IDDDD: %i, tipo: %s\n", tipos[i].ID_tipo, tipos[i].tipo);
+    }
+    int n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
+    printf("Registros: %i\n", n_reg_habitos);
+    habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
+    for(i = 0; i<n_reg_habitos; i++){
+        SELECT(rutaHABITO, &habitos[i], sizeof(HABITO), 1, i+1);
+        printf("IDDDD: %i, tipo: %s\n", habitos[i].ID_habito, habitos[i].nombre);
     }
 
 }
@@ -445,21 +454,42 @@ void convertirFecha(const char *fecha, struct tm *tiempo) {
     sscanf(fecha, "%d/%d/%d", &tiempo->tm_mday, &tiempo->tm_mon, &tiempo->tm_year);
 
     // Ajustar los valores para que coincidan con la estructura tm
+    /*
     tiempo->tm_mon -= 1; // Restar 1 al mes porque en la estructura tm, enero es 0, febrero es 1, etc.
     tiempo->tm_year -= 1900; // Restar 1900 al año, ya que en la estructura tm se cuentan los años desde 1900
+     */
 }
-//posiciones[1][n];
-
-
-
-    //char fecha[] = "30/11/2023";
-    //struct tm tiempo = {0};
-
-    //convertirFecha(fecha, &tiempo);
 
 void reseteatEstadoMomento(int momentoACambiar){
     momento = momentoACambiar;
     estado = 0;
+}
+time_t convertirAtime_t(const char *cadenaFecha) {
+    struct tm tiempo = {0}; // Crear una estructura tm para almacenar la fecha
+    char *token;
+    char copiaFecha[strlen(cadenaFecha) + 1];
+    strcpy(copiaFecha, cadenaFecha);
+
+    // Strtok divide la cadena de texto en tokens utilizando '/'
+    token = strtok(copiaFecha, "/");
+    tiempo.tm_mday = atoi(token); // Obtener y almacenar el día
+
+    token = strtok(NULL, "/");
+    tiempo.tm_mon = atoi(token) - 1; // Obtener y almacenar el mes (restar 1 porque en tm es de 0 a 11)
+
+    token = strtok(NULL, "/");
+    tiempo.tm_year = atoi(token) - 1900; // Obtener y almacenar el año (restar 1900 porque tm_year cuenta desde 1900)
+
+    // Configurar otros valores en la estructura tm
+    tiempo.tm_hour = 0;
+    tiempo.tm_min = 0;
+    tiempo.tm_sec = 0;
+    tiempo.tm_isdst = -1; // Indicar que la información sobre horario de verano es desconocida
+
+    // Convertir la estructura tm a time_t
+    time_t tiempoUnix = mktime(&tiempo);
+
+    return tiempoUnix;
 }
 
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
@@ -470,7 +500,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    //momento=-1;//DEP
+    momento=-1;//DEP
     USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
 
     /**/
@@ -541,6 +571,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     TIPO tip2 = {2, "Escuela"};
                                     TIPO tip3 = {3, "Salud"};
                                     /*HABITO*/
+
+                                    /*
                                     time_t tiempo= time(NULL);
                                     struct tm *infoTiempo;
                                     time(&tiempo);
@@ -548,18 +580,30 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     FECHA miFecha = *infoTiempo;
                                     printf("Fecha actual: %d/%d/%d %02d:%02d:%02d\n", miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
                                            miFecha.tm_hour, miFecha.tm_min, miFecha.tm_sec);
+                                           */
 
-                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3, dif3,  12, tiempo, miFecha};
-                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
-                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
-                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
+                                    char fecha[5][20] = {"30/11/2023", {"28/02/2024"}, {"15/07/2024"}, {"03/11/2024"},
+                                                         {"22/05/2025"}};
 
-                                    //SUPERO INSERT HABITO
-                                    SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab3.ID_habito, rutaHABITO, &hab3, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab4.ID_habito, rutaHABITO, &hab4, sizeof(HABITO), 1);
+                                    struct tm tiempo[5] = {0};
+                                    time_t fechaConvertida[5];
+                                    for (int i = 0; i < 5; i++) {
+                                        convertirFecha(fecha[i], &tiempo[i]);
+                                        printf("%d/%d/%d\n", tiempo[i].tm_mday, tiempo[i].tm_mon, tiempo[i].tm_year);
+                                        fechaConvertida[i] = convertirAtime_t(fecha[i]);
+                                        printf("Fecha convertida a time_t: %ld\n", (long) fechaConvertida[i]);
+                                    }
 
+                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3,
+                                                   dif3, 12, fechaConvertida[0], tiempo[0]};
+                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1,
+                                                   35, fechaConvertida[1], tiempo[1]};
+                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3,
+                                                   dif3, 2, fechaConvertida[2], tiempo[2]};
+                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1,
+                                                   tip1, &dif1, dif1, 100, fechaConvertida[3], tiempo[3]};
+
+                                    HABITO vacioo = {0};
 
                                     /*REGISTROH-HABITOS*/
 
