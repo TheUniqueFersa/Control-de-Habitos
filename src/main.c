@@ -119,11 +119,12 @@ void Dia(int dia){
         }
     }
 }
+char CantHabitosHoy[2]="10"; //GLOBAL para que se imprima bien
 void Pendientes(){
     //-ALLEGRO_PI/2.0 SE UTILIZA PARA INICIAR EN LA PARTE SUPERIOR DE LA CIRCUNFERENCIA
     //theta se trabaja en radianes
     //PasoHabitos=(-2*ALLEGRO_PI)/CantHabitosHoy
-    char CantHabitosHoy[2]="05";
+
     al_draw_line(1000,25,1000,675,fondo_gris1,2);
     //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
     al_draw_arc(1100,75, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,principal_pale_chestnut,15.0);
@@ -212,7 +213,7 @@ void ventanaActual(int momento){
             break;
         case 1:
             al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_filled_rectangle(100,0,1200,700, fondo_principal_comohuesito);
@@ -225,13 +226,13 @@ void ventanaActual(int momento){
             break;
         case 3:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDSROSA, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             break;
         case 4:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             break;
@@ -322,12 +323,12 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     RECORDATORIOS reNULL= {0};
     DIFICULTAD diNULL ={0};
     TIPO tNULL = {0};
-    SELECT(rutaTIPO, &tNULL, sizeof(TIPO), 1, 2);
+    //SELECT(rutaTIPO, &tNULL, sizeof(TIPO), 1, 2);
 //        printf("Nombre: %s\nNota:%s\nID:%i\n", haNULL.nombre, haNULL.nota, haNULL.ID_habito);
 //        printf("Nombre: %s\nID:%i", usNULL.nombre, usNULL.ID_usuario);
 //    printf("recordatorio: %s\nid:%i\nTIPO:%s\n", reNULL.recordatorio, reNULL.ID_recordatorio, reNULL.ptr_fk_tipo->tipo);
 //    printf("Dificultad: %s\nID:%i", diNULL.dificultad, diNULL.ID_dificultad);
-    printf("Tipo:%s\nID:%i\n", tNULL.tipo, tNULL.ID_tipo);
+//    printf("Tipo:%s\nID:%i\n", tNULL.tipo, tNULL.ID_tipo);
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             pantalla_requiere_actualizacion=0;
@@ -362,18 +363,22 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 case ALLEGRO_KEY_F:
                                     printf("\n\n----\n");
                                     /*DIFICULTAD*/
+                                    /* --HECHA
                                     DIFICULTAD dif1 = {777, "Muy facil"};
                                     DIFICULTAD dif2 = {2, "Facil"};
                                     DIFICULTAD dif3 = {3, "Intermedio"};
                                     DIFICULTAD dif4 = {4, "Dificil"};
                                     DIFICULTAD dif5 = {5, "Muy dificil"};
                                     DIFICULTAD vacia = {0};
+                                    */
                                     /*USUARIO*/
+                                    /*
                                     USUARIO usu1 = {1, "Luillilol"};
                                     USUARIO usu2 = {2, "Fersa"};
                                     USUARIO usu3 = {3, "José"};
                                     USUARIO usu4 = {4, "Arias"};
                                     USUARIO usu5 = {5, "Raz"};
+                                     */
                                     /*TIPO */
                                     TIPO tip1 = {1, "Personal"};
                                     TIPO tip2 = {2, "Escuela"};
@@ -384,14 +389,29 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     time(&tiempo);
                                     infoTiempo = localtime(&tiempo);
                                     FECHA miFecha = *infoTiempo;
-                                    printf("Fecha actual: %d/%02d/%02d %02d:%02d:%02d\n",
-                                           miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
+                                    printf("Fecha actual: %d/%d/%d %02d:%02d:%02d\n", miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
                                            miFecha.tm_hour, miFecha.tm_min, miFecha.tm_sec);
-                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, &dif3, 12, tiempo, miFecha};
-                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, &dif1, 35,  tiempo, miFecha};
-                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, &dif3, 2,  tiempo, miFecha};
-                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, &dif1, 100,  tiempo, miFecha};
+                                    /*
+                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3, dif3,  12, tiempo, miFecha};
+                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
+                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
+                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
+                                      */
+                                            //SUPER INSERT TIPO
+                                            /*
+                                    SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
+                                    SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
+                                    SUPER_INSERT(&tip3.ID_tipo, rutaTIPO, &tip3, sizeof(TIPO), 1);
+                                    //SUPERO INSERT HABITO
+                                    SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
+                                    SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
+                                    SUPER_INSERT(&hab3.ID_habito, rutaHABITO, &hab3, sizeof(HABITO), 1);
+                                    SUPER_INSERT(&hab4.ID_habito, rutaHABITO, &hab4, sizeof(HABITO), 1);
+                                             */
+
                                     /*REGISTROH-HABITOS*/
+
+                                    /*
                                     time_t tiempo2= time(NULL);
                                     struct tm *infoTiempo2;
                                     time(&tiempo2);
@@ -404,25 +424,33 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     REGISTRO_HABITOS reg_hab2 = {2, &hab2, tiempo2, miFecha2, 4, 1};
                                     REGISTRO_HABITOS reg_hab3 = {3, &hab3, tiempo2, miFecha2, 1, 0};
                                     REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
+                                    */
                                     /*HORARIO*/
+                                    /*
                                     HORARIO horario1 = {1, "Algebra", "1000100", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
                                     HORARIO horario2 = {2, "Curso Progra", "1010101", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
                                     HORARIO horario3 = {3, "Calculo", "0111000", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
+                                    */
                                     /*HORA_HORARIO*/
+                                    /*
                                     HORA_HORARIO hor_hor1={1, &horario1, tiempo, miFecha2, miFecha2};
                                     HORA_HORARIO hor_hor2={2, &horario1, tiempo, miFecha2, miFecha2};
                                     HORA_HORARIO hor_hor3={3, &horario2, tiempo, miFecha2, miFecha2};
                                     HORA_HORARIO hor_hor4={4, &horario2, tiempo, miFecha2, miFecha2};
+                                     */
                                     /*RECORDATORIOS*/
+                                    /*
                                     RECORDATORIOS recor1 = {1, "EXAMEN FINAL PIÑA", &tip2, tiempo, miFecha2, 0};
                                     RECORDATORIOS recor2 = {2, "Serie Algebra", &tip2, tiempo, miFecha2, 1};
                                     RECORDATORIOS recor3 = {3, "Salida con amigos", &tip1, tiempo, miFecha2, 0};
                                     RECORDATORIOS recor4 = {4, "Cita con Doctor", &tip3, tiempo, miFecha2, 1};
+                                     */
                                     /*PRODUCTIVIDAD*/
+                                    /*
                                     PRODUCTIVIDAD product1= {1, tiempo, miFecha2, 7, 6};
                                     PRODUCTIVIDAD product2= {2, tiempo, miFecha2, 8, 7};
                                     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
-
+                                    */
 /*
                                     //SUPERINSERT DIFICULTAD
                                     SUPER_INSERT(&dif1.ID_dificultad, rutaDIFICULTAD, &dif1, sizeof(DIFICULTAD), 1);
@@ -436,6 +464,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     SUPER_INSERT(&usu3.ID_usuario, rutaUSUARIO, &usu3, sizeof(USUARIO), 1);
                                     SUPER_INSERT(&usu4.ID_usuario, rutaUSUARIO, &usu4, sizeof(USUARIO), 1);
                                     SUPER_INSERT(&usu5.ID_usuario, rutaUSUARIO, &usu5, sizeof(USUARIO), 1);
+
                                     //SUPER INSERT TIPO
                                     SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
@@ -651,8 +680,8 @@ void llamarSELECT(){
         case 1:
 //            *ruta = "./data/usuarios/1/habito.dat";
 //            DELETE("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
-            SELECT("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
-            printf("Nombre: %s\nNota:%s\nID:%i\n", habNULL.nombre, habNULL.nota, habNULL.ID_habito);
+            //SELECT("./data/usuarios/1/habito.dat", &habNULL, sizeof(HABITO), 1, id);
+            //printf("Nombre: %s\nNota:%s\nID:%i\n", habNULL.nombre, habNULL.nota, habNULL.ID_habito);
             break;
         case 2:
             *ruta = "./data/usuarios/1/usuario.dat";
@@ -726,10 +755,10 @@ void creacionEstructuras(){
            miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
            miFecha.tm_hour, miFecha.tm_min, miFecha.tm_sec);
 
-    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, &dif3, 12, tiempo, miFecha};
-    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, &dif1, 35,  tiempo, miFecha};
-    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, &dif3, 2,  tiempo, miFecha};
-    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, &dif1, 100,  tiempo, miFecha};
+    //HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, &dif3, 12, tiempo, miFecha};
+    //HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, &dif1, 35,  tiempo, miFecha};
+    //HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, &dif3, 2,  tiempo, miFecha};
+    //HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, &dif1, 100,  tiempo, miFecha};
 
     /*REGISTROH-HABITOS*/
     time_t tiempo2= time(NULL);
@@ -741,10 +770,10 @@ void creacionEstructuras(){
            miFecha2.tm_year + 1900, miFecha2.tm_mon + 1, miFecha2.tm_mday,
            miFecha2.tm_hour, miFecha2.tm_min, miFecha2.tm_sec);
 
-    REGISTRO_HABITOS reg_hab1 = {1, &hab1, tiempo2, miFecha2, 1, 0};
-    REGISTRO_HABITOS reg_hab2 = {2, &hab2, tiempo2, miFecha2, 4, 1};
-    REGISTRO_HABITOS reg_hab3 = {3, &hab3, tiempo2, miFecha2, 1, 0};
-    REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
+    //REGISTRO_HABITOS reg_hab1 = {1, &hab1, tiempo2, miFecha2, 1, 0};
+    //REGISTRO_HABITOS reg_hab2 = {2, &hab2, tiempo2, miFecha2, 4, 1};
+    //REGISTRO_HABITOS reg_hab3 = {3, &hab3, tiempo2, miFecha2, 1, 0};
+    //REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
 
     /*HORARIO*/
     HORARIO horario1 = {1, "Algebra", "1000100", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
