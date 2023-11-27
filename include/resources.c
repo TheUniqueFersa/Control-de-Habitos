@@ -29,6 +29,7 @@ ALLEGRO_BITMAP *LOGO;
 ALLEGRO_BITMAP *EDITARHABITO;
 ALLEGRO_BITMAP *BORRARHABITO;
 ALLEGRO_BITMAP *NUEVOHABITO;
+ALLEGRO_BITMAP *AMOGUS;
 int init_resources(){
     int inicializado_correctamente=1;
     fondo_gris1 = al_map_rgb(143,143,143);
@@ -77,6 +78,7 @@ int init_resources(){
     EDITARHABITO = al_load_bitmap("./media/img/editar.jpg");
     BORRARHABITO = al_load_bitmap("./media/img/borrar.jpg");
     NUEVOHABITO = al_load_bitmap("./media/img/nuevo.png");
+
 
 
     if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO){

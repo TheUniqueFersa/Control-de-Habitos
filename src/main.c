@@ -174,14 +174,32 @@ void actualizar_display(){
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
     //al_draw_filled_circle(100, 510, 50, al_map_rgb(74, 63, 75));*/
-    al_draw_filled_rounded_rectangle(325, 300, 800, 720, 40, 40, al_map_rgb(74, 63, 75));
-    al_draw_filled_circle(562, 400, 235, al_map_rgb(74, 63, 75));
+    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
+    al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
+    //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
+    al_draw_pieslice(475, 400, 120,2.9, 3.6, al_map_rgb(255, 255, 255), 4);
     al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
 
-    //al_draw_arc(562, 400, 245, 3.5, 2.4, al_map_rgba(233, 0, 0, 128), 10);
+
+    al_draw_arc(475, 400, 120, 2.95, 0.55, al_map_rgba(255, 0, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 3.6, 0.6, al_map_rgba(255, 134, 0, 500), 20);//255, 134, 0, 1
+    al_draw_arc(475, 400, 120, 4.3, 0.8, al_map_rgba(255, 255, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 5.2, 0.7, al_map_rgba(69, 183, 30, 500), 20);
+    al_draw_arc(475, 400, 120, 5.95, 0.5, al_map_rgba(22, 82, 1, 500), 20);//22, 82, 1, 1
+    al_draw_filled_circle(475, 400, 15, al_map_rgb(0, 0, 0));//255, 134, 0, 1
+    al_draw_filled_triangle(470, 400, 480, 400, 475, 300, al_map_rgb(0, 0, 0));
+    al_draw_filled_rounded_rectangle(450, 175, 675, 250, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 360, 175,80, 80, 0);
+    al_draw_filled_rounded_rectangle(625, 270, 780, 635, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_filled_rounded_rectangle(650, 290, 755, 330, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 335, 755, 403, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+
     ObtenerHora();
     al_flip_display();
 }
