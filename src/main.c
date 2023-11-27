@@ -243,7 +243,59 @@ void ventanaActual(int momento){
     }
 }
 void actualizar_display(){
-    ventanaActual(momento);
+    //FIGURAS PRIMITAVAS
+    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
+    al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 175, 0, 175,100, 175, 0);
+    al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 175, 0, 350,100, 175, 0);
+    al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 175, 0, 525,100, 175, 0);
+
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle(101, 0, 1000, 720, al_map_rgb(47, 50, 58));
+    /*al_draw_filled_rectangle(300, 90, 500, 120, al_map_rgb(214, 164, 226));
+    al_draw_filled_rectangle(600, 90, 800, 120, al_map_rgb(214, 164, 226));
+    //l_draw_filled_rectangle(150, 150, 950, 600, al_map_rgb(119, 86, 122));
+    /*al_draw_filled_rectangle(175, 175, 925, 400, al_map_rgb(74, 63, 75));
+    al_draw_filled_rectangle(190, 190, 910, 235, al_map_rgb(227, 158, 193));//227, 158, 193, 1
+    al_draw_filled_rectangle(190, 250, 540, 370, al_map_rgb(227, 158, 193)); //(225, 0, 129));
+    al_draw_filled_rectangle(550, 250, 910, 370, al_map_rgb(227, 158, 193));
+    //al_draw_filled_rectangle(550, 250, 910, 290, al_map_rgb(225, 0, 129));
+    al_draw_filled_rectangle(550, 330, 910, 370, al_map_rgb(225, 0, 129));
+    al_draw_filled_rectangle(220, 270, 290, 340, al_map_rgb(225, 0, 129));
+    al_draw_filled_rectangle(440, 270, 510, 340, al_map_rgb(225, 0, 129));
+    al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 488, 0,125, 125, 0);
+    al_draw_filled_rectangle(340, 285, 390, 330, al_map_rgb(225, 0, 129));
+    al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
+    al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
+    al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
+    //al_draw_filled_circle(100, 510, 50, al_map_rgb(74, 63, 75));*/
+    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
+    al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
+    //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
+    al_draw_pieslice(475, 400, 120,2.9, 3.6, al_map_rgb(255, 255, 255), 4);
+    al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
+    al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
+    al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
+    al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
+
+
+    al_draw_arc(475, 400, 120, 2.95, 0.55, al_map_rgba(255, 0, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 3.6, 0.6, al_map_rgba(255, 134, 0, 500), 20);//255, 134, 0, 1
+    al_draw_arc(475, 400, 120, 4.3, 0.8, al_map_rgba(255, 255, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 5.2, 0.7, al_map_rgba(69, 183, 30, 500), 20);
+    al_draw_arc(475, 400, 120, 5.95, 0.5, al_map_rgba(22, 82, 1, 500), 20);//22, 82, 1, 1
+    al_draw_filled_circle(475, 400, 15, al_map_rgb(0, 0, 0));//255, 134, 0, 1
+    al_draw_filled_triangle(470, 400, 480, 400, 475, 300, al_map_rgb(0, 0, 0));
+    al_draw_filled_rounded_rectangle(450, 175, 675, 250, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 360, 175,80, 80, 0);
+    al_draw_filled_rounded_rectangle(625, 270, 780, 635, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_filled_rounded_rectangle(650, 290, 755, 330, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 335, 755, 403, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+
+    ObtenerHora();
     al_flip_display();
 }
 void inicializar_rutas_usuario(char * usuario){
