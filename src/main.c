@@ -282,8 +282,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    momento=-1;//DEP
-    USUARIO usuario = {1, "ALCANTARA"}, usuarioprueba = {0};
+    //momento=-1;//DEP
+    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
     al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
     if(momento==0){
         al_draw_text(lexend_regular[40], al_map_rgb(0,0,0),600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
@@ -360,8 +360,11 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             }
                         }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
-                            momento=1;
                             //UPDATE
+                            strcpy(usuario.nombre,nombre);
+                            UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("%s",usuario.nombre);
+                            momento=4;
                         }
                         al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                     }
@@ -397,9 +400,14 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
+                            strcpy(usuario.nombre,nombre);
+                            UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("%s",usuario.nombre);
+                            SELECT(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("Seleccionando %s",usuario.nombre);
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
-                            //UPDATE
+                            momento=1;
                         }
                     }
                     break;
