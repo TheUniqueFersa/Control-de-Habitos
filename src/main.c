@@ -448,6 +448,9 @@ void convertirFecha(const char *fecha, struct tm *tiempo) {
     tiempo->tm_mon -= 1; // Restar 1 al mes porque en la estructura tm, enero es 0, febrero es 1, etc.
     tiempo->tm_year -= 1900; // Restar 1900 al año, ya que en la estructura tm se cuentan los años desde 1900
 }
+//posiciones[1][n];
+
+
 
     //char fecha[] = "30/11/2023";
     //struct tm tiempo = {0};
@@ -695,6 +698,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                     creacionEstructuras();
                     al_flip_display();
+
+
                     break;
                 case 2:
                     break;
