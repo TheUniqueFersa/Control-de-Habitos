@@ -30,6 +30,7 @@ ALLEGRO_BITMAP *LOGO;
 ALLEGRO_BITMAP *EDITARHABITO;
 ALLEGRO_BITMAP *BORRARHABITO;
 ALLEGRO_BITMAP *NUEVOHABITO;
+ALLEGRO_BITMAP *AMOGUS;
 int init_resources(){
     int inicializado_correctamente=1;
 
@@ -82,10 +83,12 @@ int init_resources(){
     NUEVOHABITO = al_load_bitmap("./media/img/nuevo.png");
 
 
+
     if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO){
         inicializado_correctamente = 0;
         printf("ERROR: %i\n", al_get_errno());
         printf("ERROR: Hubo un problema al cargar las imagenes de img\n");
+        printf("\n");
     }
     return inicializado_correctamente;
 }

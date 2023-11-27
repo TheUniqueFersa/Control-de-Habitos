@@ -216,7 +216,6 @@ void ventanaActual(int momento){
             al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
-            al_draw_filled_rectangle(100,0,1200,700, fondo_principal_comohuesito);
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -246,8 +245,13 @@ void ventanaActual(int momento){
 }
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
-    //al_draw_rectangle(30, 250, 150, 300, al_map_rgb(255, 0, 0), 3);
-    ventanaActual(momento);
+    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
+    al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 175, 0, 175,100, 175, 0);
+    al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 175, 0, 350,100, 175, 0);
+    al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 175, 0, 525,100, 175, 0);
+
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
     al_draw_filled_rectangle(101, 0, 1000, 720, al_map_rgb(47, 50, 58));
     /*al_draw_filled_rectangle(300, 90, 500, 120, al_map_rgb(214, 164, 226));
     al_draw_filled_rectangle(600, 90, 800, 120, al_map_rgb(214, 164, 226));
@@ -266,13 +270,32 @@ void actualizar_display(){
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
     //al_draw_filled_circle(100, 510, 50, al_map_rgb(74, 63, 75));*/
-    al_draw_filled_rounded_rectangle(325, 300, 800, 720, 40, 40, al_map_rgb(74, 63, 75));
-    al_draw_filled_circle(562, 400, 235, al_map_rgb(74, 63, 75));
+    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
+    al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
+    //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
+    al_draw_pieslice(475, 400, 120,2.9, 3.6, al_map_rgb(255, 255, 255), 4);
     al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
+    al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
 
-    //al_draw_arc(562, 400, 245, 3.5, 2.4, al_map_rgba(233, 0, 0, 128), 10);
+
+    al_draw_arc(475, 400, 120, 2.95, 0.55, al_map_rgba(255, 0, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 3.6, 0.6, al_map_rgba(255, 134, 0, 500), 20);//255, 134, 0, 1
+    al_draw_arc(475, 400, 120, 4.3, 0.8, al_map_rgba(255, 255, 0, 500), 20);
+    al_draw_arc(475, 400, 120, 5.2, 0.7, al_map_rgba(69, 183, 30, 500), 20);
+    al_draw_arc(475, 400, 120, 5.95, 0.5, al_map_rgba(22, 82, 1, 500), 20);//22, 82, 1, 1
+    al_draw_filled_circle(475, 400, 15, al_map_rgb(0, 0, 0));//255, 134, 0, 1
+    al_draw_filled_triangle(470, 400, 480, 400, 475, 300, al_map_rgb(0, 0, 0));
+    al_draw_filled_rounded_rectangle(450, 175, 675, 250, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 360, 175,80, 80, 0);
+    al_draw_filled_rounded_rectangle(625, 270, 780, 635, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
+    al_draw_filled_rounded_rectangle(650, 290, 755, 330, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 335, 755, 403, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+    al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+
     ObtenerHora();
     al_flip_display();
 }
@@ -301,6 +324,13 @@ void inicializar_rutas_usuario(char * usuario){
     strcat(rutaPRODUCTIVIDAD, usuario);
     strcat(rutaPRODUCTIVIDAD, frag_2rutaPRODUCTIVIDAD);
 }
+void colorearDia(int x, int y, char valor) {
+    if(valor==1){
+        al_draw_filled_rectangle(x,y,x+20,y+20,principal_pale_chestnut);
+    }else{
+        al_draw_filled_rectangle(x,y,x+20,y+20,fondo_gris1);
+    }
+}
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -309,12 +339,12 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    momento=-1;//DEP
-    USUARIO usuario = {1, "ALCANTARA"}, usuarioprueba = {0};
+    //momento=-1;//DEP
+    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
     al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
     if(momento==0){
-        al_draw_text(lexend_regular[40], al_map_rgb(0,0,0),600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
-        al_draw_text(lexend_regular[30], al_map_rgb(0,0,0),600,350,ALLEGRO_ALIGN_CENTER,"Presiona cualquier tecla para continuar");
+        al_draw_text(lexend_regular[40], texto_black,600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
+        al_draw_text(lexend_regular[30], texto_black,600,350,ALLEGRO_ALIGN_CENTER,"Presiona cualquier tecla para continuar");
     }
     char nombre[30] = {0};
     /**/
@@ -515,7 +545,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     break;
                 case 0:
                     al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
-                    al_draw_text(lexend_regular[25], al_map_rgb(0, 0, 0), 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    al_draw_text(lexend_regular[25], texto_black, 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
                     al_draw_rectangle(280,340,920,380,texto_black,5);
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
@@ -533,24 +563,28 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             }
                         }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
-                            momento=1;
                             //UPDATE
+                            strcpy(usuario.nombre,nombre);
+                            UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("%s",usuario.nombre);
+                            momento=4;
                         }
-                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        al_draw_text(lexend_regular[30], texto_black, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                     }
                     break;
                 case 1:
-                    switch (evento.type) {
-
-                    }
+                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                    creacionEstructuras();
+                    al_flip_display();
                     break;
                 case 2:
                     break;
                 case 3:
                     break;
                 case 4:
+                    
                     al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
-                    al_draw_text(lexend_regular[15], al_map_rgb(0, 0, 0), 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
                     al_draw_rectangle(300,340,800,365,texto_black,5);
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
@@ -570,9 +604,14 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
+                            strcpy(usuario.nombre,nombre);
+                            UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("%s",usuario.nombre);
+                            SELECT(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
+                            printf("Seleccionando %s",usuario.nombre);
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
-                            //UPDATE
+                            momento=1;
                         }
                     }
                     break;
@@ -796,6 +835,21 @@ void creacionEstructuras(){
     PRODUCTIVIDAD product1= {1, tiempo, miFecha2, 7, 6};
     PRODUCTIVIDAD product2= {2, tiempo, miFecha2, 8, 7};
     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
+
+
+    al_draw_textf(lexend_bold[40], texto_black, 500, 10, ALLEGRO_ALIGN_CENTER, "Hábito 1: %s", hab1.nombre);
+    al_draw_textf(lexend_regular[15], texto_black, 110, 80, 0, "Notas: %s", hab1.nota);
+    int x = 650, y = 80;
+    for (int i = 0; i < 4; ++i) {
+        char cadena[7]={0};
+        strcpy(cadena,hab1.repeticion_semanal);
+        for(int j=0;i<7;i++){
+            int valor=cadena[i]-48;
+            printf("%d\n",valor);
+            colorearDia(x,y,valor);
+            x+=30;
+        }
+    }
 }
 int main() {
     int acceso;

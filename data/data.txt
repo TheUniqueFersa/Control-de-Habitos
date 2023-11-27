@@ -1,2 +1,0 @@
-Aquí se alojarán archivos de datos del usuario
-BD de txt :p
