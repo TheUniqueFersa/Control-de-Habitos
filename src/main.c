@@ -279,9 +279,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     printf("%i, %i\n", momento, ultimo_usuario);
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
-    //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
+    printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     momento=-1;//DEP
-    USUARIO usuario = {777, "Usuario"}, usuarioprueba = {0};
+    USUARIO usuario = {1, "ALCANTARA"}, usuarioprueba = {0};
     al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
     if(momento==0){
         al_draw_text(lexend_regular[40], al_map_rgb(0,0,0),600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
@@ -321,6 +321,26 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             switch (evento.keyboard.keycode) {
                                 case ALLEGRO_KEY_F:
                                     printf("\n\n----\n");
+                                    DIFICULTAD dif1 = {1, "Muy facil"};
+                                    DIFICULTAD dif2 = {0};
+                                    DIFICULTAD dif3 = {3, "Intermedio"};
+                                    DIFICULTAD dif4 = {4, "Dificil"};
+                                    DIFICULTAD dif5 = {5, "Muy dificil"};
+
+                                    //SUPER_INSERT(&dif1.ID_dificultad, rutaDIFICULTAD, &dif1, sizeof(DIFICULTAD), 1);
+
+                                    //SELECT(rutaDIFICULTAD, &dif2, sizeof(DIFICULTAD), 1, 2);
+                                    //printf("%i, %s", dif2.ID_dificultad, dif2.dificultad);
+
+                                    obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
+                                    contadorBytesArch(rutaDIFICULTAD);
+                                    //UPDATE(rutaUSUARIO, &usuario, sizeof(USUARIO), 1, 1);
+
+                                    //SELECT(rutaUSUARIO, &usuarioprueba, sizeof(USUARIO), 1, 1);
+                                    //printf("IDd: %i USERNAME: %s\n", usuarioprueba.ID_usuario, usuarioprueba.nombre);
+
+
+
 
 
                                     break;
@@ -352,8 +372,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             momento=4;
+                            //UPDATE
                         }
-                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, usuario.nombre);
                     }
                     break;
                 case 1:
@@ -384,11 +405,12 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 nombre[len - 1] = '\0';
                             }
                         }
-                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, usuario.nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
+                            //UPDATE
                         }
                     }
                     break;
@@ -689,7 +711,7 @@ int main() {
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
         /*CREACIÓN DE ESTRUCTURAS*/
-        creacionEstructuras();
+        //creacionEstructuras();
 
 
 

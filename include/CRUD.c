@@ -118,17 +118,31 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
 }
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
     printf("\nFuncionSELECT\n");
-    FILE *archivo = fopen(ruta, "rb");  //requiere de la apertura en el modo: rb ||
-    if(archivo != NULL){
-        rewind(archivo);
-        //desplazarAUTOINCREMENT(archivo);
-        fseek(archivo, (id - 1) * ((long)tam_elem), SEEK_CUR);
-        //printf("Antes de lectura: %li\t", ftell(archivo));
-        fread(registro_en_codigo, tam_elem, num_elem, archivo);
-    }else
-        printf("La base de datos no existe (SELECT)\n");
+    if(strcmp("./data/app.dat", ruta)==0){
+        printf("ENTRE A APP.DAt");
+        FILE *arch = fopen(ruta, "rb");
+        if(arch!=NULL){
+            rewind(arch);
+            //printf("Antes de lectura: %li\t", ftell(archivo));
+            fread(registro_en_codigo, tam_elem, num_elem, arch);
+            fclose(arch);
+        }else{
+            printf("ERROR al abrir archivo wb app.dat\n");
+        }
+    }else{
+        FILE *archivo = fopen(ruta, "rb");  //requiere de la apertura en el modo: rb ||
+        if(archivo != NULL){
+            rewind(archivo);
+            desplazarAUTOINCREMENT(archivo);
+            fseek(archivo, (id - 1) * ((long)tam_elem), SEEK_CUR);
+            //printf("Antes de lectura: %li\t", ftell(archivo));
+            fread(registro_en_codigo, tam_elem, num_elem, archivo);
+        }else
+            printf("La base de datos no existe (SELECT)\n");
+    }
     return 0;
 }
+
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int id){
     printf("\nFuncion UPDATE\n");
     FILE *archivo = fopen(ruta, "rb+");
