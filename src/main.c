@@ -68,7 +68,12 @@ DIFICULTAD difNULL = {0};
 
 /* ----> VARIABLES GLOBALES <---- */
 int fin=0;
-int momento=0, estado=0; /*0: Inicio primera vez
+int momento=0, estado=0; /*0: Inicio primera vez*/
+int tamArrPos=6, loc=0;
+int * arrPos, *arrHab;
+ //Nos permiten navegar en el momento 1
+/*
+ *
  * //Estado: 0-> Leer, 1 -> Crear, 2-> Modificar, 3-> Eliminar
  *              1:
  *
@@ -500,7 +505,16 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    momento=-1;//DEP
+    //momento=-1;//DEP
+
+    /*Crear arreglo nimámico Para Fersa*/
+    printf("CREAR ARREGLO ARRPOS\n");
+    arrPos = (int *) crearArreglo(sizeof(int), 6);
+    arrHab = (int *) crearArreglo(sizeof(int), 1);
+    /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
+     * no estan vacias del arreglo que almacena estructuras de habitos*/
+
+
     USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
 
     /**/
@@ -738,12 +752,36 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         //al_flip_display();
                     }
                     break;
-                case 1:
+                case 1: /*Habitos*/
                     al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                     creacionEstructuras();
                     al_flip_display();
+                    /*Flechitas arriba y abajo para cambiar de habito*/
 
+                    switch(evento.type){
+                        case ALLEGRO_EVENT_KEY_DOWN:
+                            switch(evento.keyboard.keycode){
+                                case ALLEGRO_KEY_DOWN:
+                                    if(loc<tamArrPos && loc>=0){
+                                        printf("ENTRA ABAJO\n");
+                                        loc++;
+                                    }
+                                    break;
+                                case ALLEGRO_KEY_UP:
+                                    if(loc>0 && loc<=tamArrPos){
+                                        printf("ENTRA ARRIBA\n");
+                                        loc--;
+                                    }
+                                    break;
+                                case ALLEGRO_KEY_E:
 
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    printf("Tamaño:%i\tLocalización:%i", tamArrPos, loc);
                     break;
                 case 2:
                     break;
