@@ -18,13 +18,17 @@ ALLEGRO_FONT * roboto_black[60];
 
 ALLEGRO_BITMAP *RECORDS;
 ALLEGRO_BITMAP *HABITOS;
-ALLEGRO_BITMAP *CALENDARIO;
+ALLEGRO_BITMAP *CALENDARIOBLANCO;
 ALLEGRO_BITMAP *AJUSTES;
 
 ALLEGRO_BITMAP *CALENDARIOROSA;
 ALLEGRO_BITMAP *AJUSTESROSA;
 ALLEGRO_BITMAP *RECORDSROSA;
 ALLEGRO_BITMAP *HABITOSROSA;
+ALLEGRO_BITMAP *LOGO;
+ALLEGRO_BITMAP *EDITARHABITO;
+ALLEGRO_BITMAP *BORRARHABITO;
+ALLEGRO_BITMAP *NUEVOHABITO;
 int init_resources(){
     int inicializado_correctamente=1;
     fondo_gris1 = al_map_rgb(143,143,143);
@@ -59,7 +63,7 @@ int init_resources(){
     }
     RECORDS = al_load_bitmap("./media/img/recordatorio_blanco.jpg");
     HABITOS = al_load_bitmap("./media/img/habitosblanco.jpg");
-    CALENDARIO = al_load_bitmap("./media/img/cal_blanco.jpg");
+    CALENDARIOBLANCO = al_load_bitmap("./media/img/cal_blanco.jpg");
     AJUSTES = al_load_bitmap("./media/img/ajustes_blanco.jpg");
 
     CALENDARIOROSA = al_load_bitmap("./media/img/cal_rosa.jpg");
@@ -68,10 +72,17 @@ int init_resources(){
     AJUSTESROSA = al_load_bitmap("./media/img/ajustes_rosa.jpg");
     HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
 
-    if(!RECORDS || !HABITOS || !CALENDARIO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !HABITOSROSA){
+    LOGO = al_load_bitmap("./media/img/logo.png");
+
+    EDITARHABITO = al_load_bitmap("./media/img/editar.jpg");
+    BORRARHABITO = al_load_bitmap("./media/img/borrar.jpg");
+    NUEVOHABITO = al_load_bitmap("./media/img/nuevo.png");
+
+
+    if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO){
         inicializado_correctamente = 0;
         printf("ERROR: %i\n", al_get_errno());
-        printf("ERROR: Hubo un problema al cargar las imágenes de img\n");
+        printf("ERROR: Hubo un problema al cargar las imagenes de img\n");
     }
     return inicializado_correctamente;
 }
