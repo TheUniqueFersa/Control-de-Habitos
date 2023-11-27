@@ -63,6 +63,7 @@ HABITO habNULL={0};
 USUARIO usuNULL={0};
 HORARIO  horNULL={0};
 RECORDATORIOS recNULL={0};
+DIFICULTAD difNULL = {0};
 /* ---- termina; ---- */
 
 /* ----> VARIABLES GLOBALES <---- */
@@ -214,6 +215,7 @@ void ventanaActual(int momento){
             al_draw_scaled_bitmap(CALENDARIO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+            al_draw_filled_rectangle(100,0,1200,700, fondo_principal_comohuesito);
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -321,28 +323,15 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             switch (evento.keyboard.keycode) {
                                 case ALLEGRO_KEY_F:
                                     printf("\n\n----\n");
-                                    DIFICULTAD dif1 = {1, "Muy facil"};
-                                    DIFICULTAD dif2 = {0};
+                                    DIFICULTAD dif1 = {777, "Muy facil"};
+                                    DIFICULTAD dif2 = {2, "Facil"};
                                     DIFICULTAD dif3 = {3, "Intermedio"};
                                     DIFICULTAD dif4 = {4, "Dificil"};
                                     DIFICULTAD dif5 = {5, "Muy dificil"};
-
-                                    //SUPER_INSERT(&dif1.ID_dificultad, rutaDIFICULTAD, &dif1, sizeof(DIFICULTAD), 1);
-
-                                    //SELECT(rutaDIFICULTAD, &dif2, sizeof(DIFICULTAD), 1, 2);
-                                    //printf("%i, %s", dif2.ID_dificultad, dif2.dificultad);
-
+                                    DIFICULTAD vacia = {0};
+                                    
                                     obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
                                     contadorBytesArch(rutaDIFICULTAD);
-                                    //UPDATE(rutaUSUARIO, &usuario, sizeof(USUARIO), 1, 1);
-
-                                    //SELECT(rutaUSUARIO, &usuarioprueba, sizeof(USUARIO), 1, 1);
-                                    //printf("IDd: %i USERNAME: %s\n", usuarioprueba.ID_usuario, usuarioprueba.nombre);
-
-
-
-
-
                                     break;
                                 default:
                             }
@@ -371,10 +360,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             }
                         }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
-                            momento=4;
+                            momento=1;
                             //UPDATE
                         }
-                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, usuario.nombre);
+                        al_draw_text(lexend_regular[30], al_map_rgb(0, 0, 0), 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                     }
                     break;
                 case 1:
@@ -405,7 +394,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 nombre[len - 1] = '\0';
                             }
                         }
-                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, usuario.nombre);
+                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
@@ -591,6 +580,8 @@ void creacionEstructuras(){
     DIFICULTAD dif3 = {3, "Intermedio"};
     DIFICULTAD dif4 = {4, "Dificil"};
     DIFICULTAD dif5 = {5, "Muy dificil"};
+
+
 
     /*USUARIO*/
     USUARIO usu1 = {1, "Luillilol"};
