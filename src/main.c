@@ -58,7 +58,8 @@ struct APP{
     int init;
     int ID_last_user;
 };
-struct APP appp = {0, 1}, app_recibe = {0};
+USUARIO usuario ={1,""},usuarioprueba={0};
+struct APP app_recibe = {0};
 HABITO habNULL={0};
 USUARIO usuNULL={0};
 HORARIO  horNULL={0};
@@ -236,6 +237,8 @@ void ventanaActual(){
             al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+
+            al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
@@ -283,7 +286,7 @@ void ventanaActual(){
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
 
-    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    //al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
 
     al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
     al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 175, 0, 175,100, 175, 0);
@@ -317,7 +320,7 @@ void actualizar_display(){
     al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);*/
 
     //interfaz de dificultad
-    al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
+   al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
    al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
    //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
@@ -363,31 +366,36 @@ void actualizar_display(){
 
     ObtenerHora();
     ventanaActual();
+    //IMPRIME NOMBRE USUARIO:
+    al_draw_text(lexend_regular[10],fondo_gris1,1100,645,ALLEGRO_ALIGN_CENTER,"USUARIO");
+    al_draw_text(lexend_regular[14],texto_black,1100,655,ALLEGRO_ALIGN_CENTER,usuario.nombre);
+
+    
     al_flip_display();
 }
-void inicializar_rutas_usuario(char * usuario){
-    strcat(rutaDIFICULTAD, usuario);
+void inicializar_rutas_usuario(char * id_string_usuario){
+    strcat(rutaDIFICULTAD, id_string_usuario);
     strcat(rutaDIFICULTAD, frag_2rutaDIFICULTAD);
 
-    strcat(rutaTIPO, usuario);
+    strcat(rutaTIPO, id_string_usuario);
     strcat(rutaTIPO, frag_2rutaTIPO);
 
-    strcat(rutaHABITO, usuario);
+    strcat(rutaHABITO, id_string_usuario);
     strcat(rutaHABITO, frag_2rutaHABITO);
 
-    strcat(rutaREGISTROHABITO, usuario);
+    strcat(rutaREGISTROHABITO, id_string_usuario);
     strcat(rutaREGISTROHABITO, frag_2rutaREGISTROHABITO);
 
-    strcat(rutaHORARIO, usuario);
+    strcat(rutaHORARIO, id_string_usuario);
     strcat(rutaHORARIO, frag_2rutaHORARIO);
 
-    strcat(rutaHORA_HORARIO, usuario);
+    strcat(rutaHORA_HORARIO, id_string_usuario);
     strcat(rutaHORA_HORARIO, frag_2rutaHORA_HORARIO);
 
-    strcat(rutaRECORDATORIO, usuario);
+    strcat(rutaRECORDATORIO, id_string_usuario);
     strcat(rutaRECORDATORIO, frag_2rutaRECORDATORIO);
 
-    strcat(rutaPRODUCTIVIDAD, usuario);
+    strcat(rutaPRODUCTIVIDAD, id_string_usuario);
     strcat(rutaPRODUCTIVIDAD, frag_2rutaPRODUCTIVIDAD);
 }
 typedef struct {
@@ -546,6 +554,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
+    if(verif_iniciador_primera_vez == 1){
+        SELECT(rutaUSUARIO, &usuario, sizeof(USUARIO), 1, ultimo_usuario);
+        //printf("USERR: %i, %s", usuario.ID_usuario, usuario.nombre);
+    }
     printf("Momento: %i, Usuario: %i\n", momento, ultimo_usuario);
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
@@ -558,9 +570,6 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     arrHab = (int *) crearArreglo(sizeof(int), 1);
     /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
      * no estan vacias del arreglo que almacena estructuras de habitos*/
-
-
-    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
 
     /**/
     USUARIO usNULL = {0};
@@ -789,7 +798,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             //UPDATE
                             strcpy(usuario.nombre,nombre);
                             UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
-                            printf("%s",usuario.nombre);
+                            //printf("%s",usuario.nombre);
+                            //Actualiza archivo de ingresado por primera vez:
+                            struct APP appActualizado = {1, usuario.ID_usuario};
+                            INSERT(rutaAPP, &appActualizado, sizeof(struct APP), 1);
 
                             reseteatEstadoMomento(1);
                         }
@@ -798,9 +810,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     }
                     break;
                 case 1: /*Habitos*/
-                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+
                     creacionEstructuras();
-                    al_flip_display();
+                    //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
 
                     switch(evento.type){
