@@ -18,7 +18,9 @@ typedef struct {
     char repeticion_semanal[7];
     int repeticion;
     TIPO *ptr_fk_tipo;
+    TIPO fk_tipo;//-----
     DIFICULTAD *ptr_fk_difi;
+    DIFICULTAD fk_dif1;//-----
     int racha;
     time_t tiempo;
     FECHA fecha_ini;

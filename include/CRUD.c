@@ -125,6 +125,7 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
             rewind(arch);
             //printf("Antes de lectura: %li\t", ftell(archivo));
             fread(registro_en_codigo, tam_elem, num_elem, arch);
+
             fclose(arch);
         }else{
             printf("ERROR al abrir archivo wb app.dat\n");
