@@ -449,10 +449,10 @@ void convertirFecha(const char *fecha, struct tm *tiempo) {
     tiempo->tm_year -= 1900; // Restar 1900 al año, ya que en la estructura tm se cuentan los años desde 1900
 }
 
-    char fecha[] = "30/11/2023";
-    struct tm tiempo = {0};
+    //char fecha[] = "30/11/2023";
+    //struct tm tiempo = {0};
 
-    convertirFecha(fecha, &tiempo);
+    //convertirFecha(fecha, &tiempo);
 
 void reseteatEstadoMomento(int momentoACambiar){
     momento = momentoACambiar;
