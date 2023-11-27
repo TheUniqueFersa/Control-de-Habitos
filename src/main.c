@@ -428,7 +428,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
 
                                             //SUPER INSERT TIPO
-                                            
+                                            /*
                                     SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip3.ID_tipo, rutaTIPO, &tip3, sizeof(TIPO), 1);
