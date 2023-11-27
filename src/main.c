@@ -274,6 +274,87 @@ void inicializar_rutas_usuario(char * usuario){
     strcat(rutaPRODUCTIVIDAD, usuario);
     strcat(rutaPRODUCTIVIDAD, frag_2rutaPRODUCTIVIDAD);
 }
+typedef struct {
+    HABITO * ptr_ID_habito;
+    ALLEGRO_FONT *para_nombre;
+    int coord_x_nombre;
+    int coord_y_nombre;
+    ALLEGRO_FONT *para_nota;
+    int coord_x_nota;
+    int coord_y_nota;
+    int coord_x_repet_s;
+    int coord_y_repet_s;
+    int coord_x_repet;
+    int coord_y_repet;
+    int coord_x_tipo;
+    int coord_y_tipo;
+    int coord_x_dif;
+    int coord_y_dif;
+    int coord_x_racha;
+    int coord_y_racha;
+    int coord_x_fecha;
+    int coord_y_fecha;
+}HABITO_VISUAL;
+typedef struct {
+    HORARIO * ptr_ID_horario;
+    ALLEGRO_FONT *para_nombre;
+    int coord_x_nombre;
+    int coord_y_nombre;
+    int coord_x_repet_s;
+    int coord_y_repet_s;
+    int coord_x_tipo;
+    int coord_y_tipo;
+    int coord_x_fecha;
+    int coord_y_fecha;
+}HORARIO_VISUAL;
+typedef struct {
+    RECORDATORIOS * ptr_ID_recordatorio;
+    ALLEGRO_FONT *para_nombre;
+    int coord_x_nombre;
+    int coord_y_nombre;
+    int coord_x_tipo;
+    int coord_y_tipo;
+    int coord_x_fecha;
+    int coord_y_fecha;
+    int coord_x_ecomple;
+    int coord_y_ecomple;
+}RECORDATORIO_VISUAL;
+int obtenerNumeroRegistros(char * ruta, size_t tamanio){
+    long int entero = sizeof(int);
+    int bytesSoloRegistro = contadorBytesArch(ruta) - entero, registros=0;
+    return registros = bytesSoloRegistro/tamanio;
+}
+void *crearArreglo(size_t tamanioElemento, int cantidadElementos) {
+    int retorno=0;
+    void *arreglo = malloc(tamanioElemento * cantidadElementos);
+    if (arreglo == NULL) {
+        printf("Error: No se pudo asignar memoria para el arreglo.\n");
+        retorno = 1;
+    }
+    return arreglo;
+}
+void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
+    int retorno = 0;
+    void *temp = realloc(arreglo, tamanioElemento * nuevoTamano);
+    if (temp == NULL) {
+        printf("Error: No se pudo ajustar el tamaño del arreglo.\n");
+        free(arreglo); // Liberar el arreglo original si realloc falló
+        retorno = 1;
+    }
+    return temp;
+}
+void CARGAR_TODOS_LOS_REGISTROS(int cantidadRegistros){
+    int n = cantidadRegistros-1, retorno = 0;
+    DIFICULTAD * dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), cantidadRegistros);
+
+
+
+    for(int i = 0; i<cantidadRegistros; i++){
+        Dificultad
+    }
+}
+//DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
+
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -281,7 +362,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     printf("%i, %i\n", momento, ultimo_usuario);
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
-    printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
+    //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     momento=-1;//DEP
     USUARIO usuario = {1, "ALCANTARA"}, usuarioprueba = {0};
     al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
@@ -329,7 +410,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     DIFICULTAD dif4 = {4, "Dificil"};
                                     DIFICULTAD dif5 = {5, "Muy dificil"};
                                     DIFICULTAD vacia = {0};
-                                    
+
                                     obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
                                     contadorBytesArch(rutaDIFICULTAD);
                                     break;

@@ -68,18 +68,20 @@ typedef struct {
     char ejemplo[20];
     int intej;
 } EJEMPLO;
+EJEMPLO ejemplin;
 typedef struct{
     int origenX;
     int origenY;
     //
-    //void * estructura;
+    EJEMPLO * estructura;
 } VISUALES;
-/*
+VISUALES habitosc = {1,1, &ejemplin};
+
 RECORDATORIOS recordatorio[56];
 
 VISUALES recordatorios = {0,0, &recordatorio[0]};
+/*
 int hola(){
-    recordatorios.estructura->
-}
-VISUALES recordatorios_visuales[56];
- */
+    habitosc.estructura.
+}*/
+//VISUALES recordatorios_visuales[56];
