@@ -179,6 +179,7 @@ void actualizar_display(){
     al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
+    al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
 
     //al_draw_arc(562, 400, 245, 3.5, 2.4, al_map_rgba(233, 0, 0, 128), 10);
     ObtenerHora();

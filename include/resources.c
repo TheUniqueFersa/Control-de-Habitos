@@ -83,6 +83,7 @@ int init_resources(){
         inicializado_correctamente = 0;
         printf("ERROR: %i\n", al_get_errno());
         printf("ERROR: Hubo un problema al cargar las imagenes de img\n");
+        printf("\n");
     }
     return inicializado_correctamente;
 }
