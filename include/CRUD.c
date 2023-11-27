@@ -32,9 +32,9 @@ int desplazarAUTOINCREMENT(FILE *arch){ //requiere de la apertura en el modo: rb
     int variableDestino=0, retorno;
     //printf("AAlectura: %li\n", ftell(arch));
     fseek(arch, 0, SEEK_SET);
-    printf("DDlectura: %li\n", ftell(arch));
+    //printf("DDlectura: %li\n", ftell(arch));
     fread(&variableDestino, sizeof(int), 1, arch);
-    printf("DaDlectura: %li\n", ftell(arch));
+    //printf("DaDlectura: %li\n", ftell(arch));
     printf("-- AUTO_INCREMENT leido: %i --\n", variableDestino);
     retorno = (variableDestino > 0)? variableDestino: -1;
     return retorno;
@@ -117,7 +117,7 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     return retorno;
 }
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
-    printf("\nFuncionSELECT\n");
+    printf("FuncionSELECT\n");
     if(strcmp("./data/app.dat", ruta)==0){
         printf("ENTRE A APP.DAt");
         FILE *arch = fopen(ruta, "rb");

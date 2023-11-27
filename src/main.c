@@ -69,6 +69,7 @@ DIFICULTAD difNULL = {0};
 /* ----> VARIABLES GLOBALES <---- */
 int fin=0;
 int momento=0, estado=0; /*0: Inicio primera vez
+ * //Estado: 0-> Leer, 1 -> Crear, 2-> Modificar, 3-> Eliminar
  *              1:
  *
  *
@@ -408,15 +409,24 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     }
     return temp;
 }
-void CARGAR_TODOS_LOS_REGISTROS(int cantidadRegistros){
-    int n = cantidadRegistros-1, retorno = 0;
-    printf("Registros: %i\n", cantidadRegistros);
-    DIFICULTAD * dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), cantidadRegistros);
-
-    for(int i = 0; i<cantidadRegistros; i++){
+DIFICULTAD * dificultades;
+void CARGAR_TODOS_LOS_REGISTROS(){
+    int retorno = 0, n_reg_dificultades=0, i=0;
+    n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
+    printf("Registros: %i\n", n_reg_dificultades);
+    dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), n_reg_dificultades);
+    for(i = 0; i<n_reg_dificultades; i++){
         SELECT(rutaDIFICULTAD, &dificultades[i], sizeof(DIFICULTAD), 1, i+1);
-        printf("%i, %s\n", dificultades[i].ID_dificultad, dificultades[i].dificultad);
+        printf("IDDDD: %i, dificultad: %s\n", dificultades[i].ID_dificultad, dificultades[i].dificultad);
     }
+    int n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
+    printf("Registros: %i\n", n_reg_tipo);
+    TIPO * tipos = (DIFICULTAD *) crearArreglo(sizeof(TIPO), n_reg_tipo);
+    for(i = 0; i<n_reg_tipo; i++){
+        SELECT(rutaTIPO, &tipos[i], sizeof(TIPO), 1, i+1);
+        printf("IDDDD: %i, tipo: %s\n", tipos[i].ID_tipo, tipos[i].tipo);
+    }
+
 }
 //DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
 
@@ -427,6 +437,28 @@ void colorearDia(int x, int y, char valor) {
         al_draw_filled_rectangle(x,y,x+20,y+20,fondo_gris1);
     }
 }
+#include <stdio.h>
+#include <time.h>
+
+void convertirFecha(const char *fecha, struct tm *tiempo) {
+    // Parsear la fecha
+    sscanf(fecha, "%d/%d/%d", &tiempo->tm_mday, &tiempo->tm_mon, &tiempo->tm_year);
+
+    // Ajustar los valores para que coincidan con la estructura tm
+    tiempo->tm_mon -= 1; // Restar 1 al mes porque en la estructura tm, enero es 0, febrero es 1, etc.
+    tiempo->tm_year -= 1900; // Restar 1900 al año, ya que en la estructura tm se cuentan los años desde 1900
+}
+
+    char fecha[] = "30/11/2023";
+    struct tm tiempo = {0};
+
+    convertirFecha(fecha, &tiempo);
+
+void reseteatEstadoMomento(int momentoACambiar){
+    momento = momentoACambiar;
+    estado = 0;
+}
+
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -450,9 +482,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 //    printf("recordatorio: %s\nid:%i\nTIPO:%s\n", reNULL.recordatorio, reNULL.ID_recordatorio, reNULL.ptr_fk_tipo->tipo);
 //    printf("Dificultad: %s\nID:%i", diNULL.dificultad, diNULL.ID_dificultad);
 //    printf("Tipo:%s\nID:%i\n", tNULL.tipo, tNULL.ID_tipo);
-    printf("N registross: %i\n",obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO)));
-    printf("N registross: %i\n",obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD)));
-    //CARGAR_TODOS_LOS_REGISTROS();
+    //printf("N registross: %i\n",obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO)));
+    //printf("N registross: %i\n",obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD)));
+    CARGAR_TODOS_LOS_REGISTROS();
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             //pantalla_requiere_actualizacion=0;
@@ -500,14 +532,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 
                                     obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
                                     contadorBytesArch(rutaDIFICULTAD);
-                                    /*USUARIO*/
-                                    /*
-                                    USUARIO usu1 = {1, "Luillilol"};
-                                    USUARIO usu2 = {2, "Fersa"};
-                                    USUARIO usu3 = {3, "José"};
-                                    USUARIO usu4 = {4, "Arias"};
-                                    USUARIO usu5 = {5, "Raz"};
-                                     */
+
                                     /*TIPO */
                                     TIPO tip1 = {1, "Personal"};
                                     TIPO tip2 = {2, "Escuela"};
@@ -525,23 +550,13 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
                                     HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
                                     HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
-                                    SELECT(rutaDIFICULTAD, &vacia, sizeof(DIFICULTAD), 1, 5);
-                                    SELECT(rutaTIPO, &vaciaa, sizeof(TIPO), 1, 3);
-                                    printf("%i, %s\n", vacia.ID_dificultad, vacia.dificultad);
-                                    printf("%i, %s\n", vaciaa.ID_tipo, vaciaa.tipo);
-                                            //SUPER INSERT TIPO
-                                    /*
-                                    SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
-                                    SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
-                                    SUPER_INSERT(&tip3.ID_tipo, rutaTIPO, &tip3, sizeof(TIPO), 1);
-                                     */
-                                    /*
+
                                     //SUPERO INSERT HABITO
                                     SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
                                     SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
                                     SUPER_INSERT(&hab3.ID_habito, rutaHABITO, &hab3, sizeof(HABITO), 1);
                                     SUPER_INSERT(&hab4.ID_habito, rutaHABITO, &hab4, sizeof(HABITO), 1);
-                                             */
+
 
                                     /*REGISTROH-HABITOS*/
 
@@ -586,7 +601,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
                                     */
 /*
-
+//................................................
                                     //SUPER INSERT USUARIO
                                     SUPER_INSERT(&usu1.ID_usuario, rutaUSUARIO, &usu1, sizeof(USUARIO), 1);
                                     SUPER_INSERT(&usu2.ID_usuario, rutaUSUARIO, &usu2, sizeof(USUARIO), 1);
@@ -669,7 +684,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             strcpy(usuario.nombre,nombre);
                             UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
                             printf("%s",usuario.nombre);
-                            momento=1;
+
+                            reseteatEstadoMomento(1);
                         }
                         //al_draw_text(lexend_regular[30], texto_black, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         //al_flip_display();
@@ -714,7 +730,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             printf("Seleccionando %s",usuario.nombre);
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
+
                             momento=1;
+                            estado=0;
                         }
                     }
                     break;
