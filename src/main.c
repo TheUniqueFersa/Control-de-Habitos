@@ -24,6 +24,7 @@ void llamarINSERT();
 void llamarUPDATE();
 void llamarSELECT();
 void llamarDELETE();
+void creacionEstructuras();
 //termina;
 /* ----> ALLEGRO {TIPO DE DATOS} <---- */
 // Displays
@@ -356,8 +357,6 @@ void llamarSELECT(){
 
 
 }
-
-
 void llamarDELETE(){
     HABITO habNULL={0};
     USUARIO usuNULL={0};
@@ -394,6 +393,93 @@ void llamarDELETE(){
         default:
             break;
     }
+}
+
+void creacionEstructuras(){
+    /*Dificultad*/
+    DIFICULTAD dif1 = {1, "Muy facil"};
+    DIFICULTAD dif2 = {2, "Facil"};
+    DIFICULTAD dif3 = {3, "Intermedio"};
+    DIFICULTAD dif4 = {4, "Dificil"};
+    DIFICULTAD dif5 = {5, "Muy dificil"};
+
+    /*USUARIO*/
+    USUARIO usu1 = {1, "Luillilol"};
+    USUARIO usu2 = {2, "Fersa"};
+    USUARIO usu3 = {3, "José"};
+    USUARIO usu4 = {4, "Arias"};
+    USUARIO usu5 = {5, "Raz"};
+
+    /*TIPO */
+    TIPO tip1 = {1, "Personal"};
+    TIPO tip2 = {2, "Escuela"};
+    TIPO tip3 = {3, "Salud"};
+
+    /*HABITO*/
+    time_t tiempo= time(NULL);
+    struct tm *infoTiempo;
+    time(&tiempo);
+    infoTiempo = localtime(&tiempo);
+    FECHA miFecha = *infoTiempo;
+    printf("Fecha actual: %d/%02d/%02d %02d:%02d:%02d\n",
+           miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
+           miFecha.tm_hour, miFecha.tm_min, miFecha.tm_sec);
+
+    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, &dif3, 12, tiempo, miFecha};
+    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, &dif1, 35,  tiempo, miFecha};
+    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, &dif3, 2,  tiempo, miFecha};
+    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, &dif1, 100,  tiempo, miFecha};
+
+    /*REGISTROH-HABITOS*/
+    time_t tiempo2= time(NULL);
+    struct tm *infoTiempo2;
+    time(&tiempo2);
+    infoTiempo2= localtime(&tiempo2);
+    FECHA miFecha2 = *infoTiempo2;
+    printf("Fecha actual: %d/%02d/%02d %02d:%02d:%02d\n",
+           miFecha2.tm_year + 1900, miFecha2.tm_mon + 1, miFecha2.tm_mday,
+           miFecha2.tm_hour, miFecha2.tm_min, miFecha2.tm_sec);
+
+    REGISTRO_HABITOS reg_hab1 = {1, &hab1, tiempo2, miFecha2, 1, 0};
+    REGISTRO_HABITOS reg_hab2 = {2, &hab2, tiempo2, miFecha2, 4, 1};
+    REGISTRO_HABITOS reg_hab3 = {3, &hab3, tiempo2, miFecha2, 1, 0};
+    REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
+
+    /*HORARIO*/
+    HORARIO horario1 = {1, "Algebra", "1000100", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
+    HORARIO horario2 = {2, "Curso Progra", "1010101", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
+    HORARIO horario3 = {3, "Calculo", "0111000", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
+
+    /*HORA_HORARIO*/
+    HORA_HORARIO hor_hor1={1, &horario1, tiempo, miFecha2, miFecha2};
+    HORA_HORARIO hor_hor2={2, &horario1, tiempo, miFecha2, miFecha2};
+    HORA_HORARIO hor_hor3={3, &horario2, tiempo, miFecha2, miFecha2};
+    HORA_HORARIO hor_hor4={4, &horario2, tiempo, miFecha2, miFecha2};
+
+    /*RECORDATORIOS*/
+    RECORDATORIOS recor1 = {1, "EXAMEN FINAL PIÑA", &tip2, tiempo, miFecha2, 0};
+    RECORDATORIOS recor2 = {2, "Serie Algebra", &tip2, tiempo, miFecha2, 1};
+    RECORDATORIOS recor3 = {3, "Salida con amigos", &tip1, tiempo, miFecha2, 0};
+    RECORDATORIOS recor4 = {4, "Cita con Doctor", &tip3, tiempo, miFecha2, 1};
+
+    /*PRODUCTIVIDAD*/
+    PRODUCTIVIDAD product1= {1, tiempo, miFecha2, 7, 6};
+    PRODUCTIVIDAD product2= {2, tiempo, miFecha2, 8, 7};
+    PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -419,13 +505,13 @@ int main() {
         habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
 //        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
 //      DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-
 //      SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
-        IUSD();
-
-
-        EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
+//        IUSD();
+//        EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
+
+        /*CREACIÓN DE ESTRUCTURAS*/
+        creacionEstructuras();
 
 
 
