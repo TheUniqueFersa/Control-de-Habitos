@@ -6,6 +6,7 @@ ALLEGRO_COLOR neutro2_african_violet;
 ALLEGRO_COLOR neutro3_french_lilac;
 ALLEGRO_COLOR texto_black;
 ALLEGRO_COLOR fondo_gris1;
+ALLEGRO_COLOR fondo_principal_comohuesito;
 
 ALLEGRO_FONT * lexend_regular[60];
 ALLEGRO_FONT * lexend_bold[60];
@@ -27,6 +28,8 @@ ALLEGRO_BITMAP *RECORDSROSA;
 ALLEGRO_BITMAP *HABITOSROSA;
 int init_resources(){
     int inicializado_correctamente=1;
+
+    fondo_principal_comohuesito= al_map_rgb(235, 234, 211);
     fondo_gris1 = al_map_rgb(143,143,143);
     principal_pale_chestnut = al_map_rgb(222, 186, 192);
     secundario_pastel_magenta = al_map_rgb(227,158,193);
