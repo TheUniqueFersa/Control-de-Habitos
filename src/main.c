@@ -17,7 +17,7 @@
 /* ---->  <---- */
 /* ----> Prototipos <---- */
 int inicializar_allegro();//INICIALIZA TODO LO NECESARIO PARA QUE ALLEGRO FUNCIONÉ
-void main_habitus(int);
+void main_habitus(int, int);
 void actualizar_display();
 int init_resources();
 void IUSD();
@@ -52,9 +52,19 @@ ALLEGRO_FONT *fuente1;
 
 
 /* ---- termina; ---- */
+/* ----> ESTRUCTURAS GLOBALES <---- */
+struct APP{
+    int init;
+    int ID_last_user;
+};
+struct APP appp = {0, 1}, app_recibe = {0};
+HABITO habNULL={0};
+USUARIO usuNULL={0};
+HORARIO  horNULL={0};
+RECORDATORIOS recNULL={0};
+/* ---- termina; ---- */
 
 /* ----> VARIABLES GLOBALES <---- */
-/* ----> General <---- */
 int fin=0;
 int momento=0; /*0: Inicio primera vez
  *              1:
@@ -62,15 +72,41 @@ int momento=0; /*0: Inicio primera vez
  *
  *
  *              */
-/* ----> Nombres de archivos que manejar <---- */
+/* ----> Nombres/RUTAS de archivos que manejar <---- */
+char rutaAPP[100] = {"./data/app.dat"};
+char rutaUSUARIO[100] = {"./data/usuario.dat"};
+
+//char frag_1rutas[100] = {""};
+char frag_2rutaDIFICULTAD[100] = {"/dificultad.dat"};
+char frag_2rutaTIPO[100] = {"/tipo.dat"};
+char frag_2rutaHABITO[100] = {"/habito.dat"};
+char frag_2rutaREGISTROHABITO[100] = {"/registro_habito.dat"};
+char frag_2rutaHORARIO[100] = {"/horario.dat"};
+char frag_2rutaHORA_HORARIO[100] = {"/horario.dat"};
+char frag_2rutaRECORDATORIO[100] = {"/recordatorio.dat"};
+char frag_2rutaPRODUCTIVIDAD[100] = {"/productividad.dat"};
 
 
-char N_T_DIFICULTAD[100] = {"./../data/"};
-//termina;
+char rutaDIFICULTAD[100] = {"./data/usuarios/"};
+char rutaTIPO[100] = {"./data/usuarios/"};
+char rutaHABITO[100] = {"./data/usuarios/"};
+char rutaREGISTROHABITO[100] = {"./data/usuarios/"};
+char rutaHORARIO[100] = {"./data/usuarios/"};
+char rutaHORA_HORARIO[100] = {"./data/usuarios/"};
+char rutaRECORDATORIO[100] = {"./data/usuarios/"};
+char rutaPRODUCTIVIDAD[100] = {"./data/usuarios/"};
+/*
+char rutaDIFICULTAD[100] = {"./data/usuarios/1/dificultad.dat"};
+char rutaTIPO[100] = {"./data/usuarios/1/tipo.dat"};
+char rutaHABITO[100] = {"./data/usuarios/1/habito.dat"};
+char rutaREGISTROHABITO[100] = {"./data/usuarios/1/registro_habito.dat"};
+char rutaHORARIO[100] = {"./data/usuarios/1/horario.dat"};
+char rutaHORA_HORARIO[100] = {"./data/usuarios/1/horario.dat"};
+char rutaRECORDATORIO[100] = {"./data/usuarios/1/recordatorio.dat"};
+char rutaPRODUCTIVIDAD[100] = {"./data/usuarios/1/productividad.dat"};
+ */
+/* ---- termina; ---- */
 
-
-/* ----> ARCHIVOS <---- */
-//termina;
 void Dia(int dia){
     al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Do Lu  Ma Mi  Ju  Vi  Sa");
     for (int i = 0; i < 7; ++i) {
@@ -204,11 +240,41 @@ void actualizar_display(){
     ObtenerHora();
     al_flip_display();
 }
-void main_habitus(int verif_iniciador_primera_vez){
+void inicializar_rutas_usuario(char * usuario){
+    strcat(rutaDIFICULTAD, usuario);
+    strcat(rutaDIFICULTAD, frag_2rutaDIFICULTAD);
+
+    strcat(rutaTIPO, usuario);
+    strcat(rutaTIPO, frag_2rutaTIPO);
+
+    strcat(rutaHABITO, usuario);
+    strcat(rutaHABITO, frag_2rutaHABITO);
+
+    strcat(rutaREGISTROHABITO, usuario);
+    strcat(rutaREGISTROHABITO, frag_2rutaREGISTROHABITO);
+
+    strcat(rutaHORARIO, usuario);
+    strcat(rutaHORARIO, frag_2rutaHORARIO);
+
+    strcat(rutaHORA_HORARIO, usuario);
+    strcat(rutaHORA_HORARIO, frag_2rutaHORA_HORARIO);
+
+    strcat(rutaRECORDATORIO, usuario);
+    strcat(rutaRECORDATORIO, frag_2rutaRECORDATORIO);
+
+    strcat(rutaPRODUCTIVIDAD, usuario);
+    strcat(rutaPRODUCTIVIDAD, frag_2rutaPRODUCTIVIDAD);
+}
+void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
+    char usuarioString[100], frag_1RutaUsuario;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
+    printf("%i, %i\n", momento, ultimo_usuario);
+    itoa(ultimo_usuario, usuarioString, 10);
+    inicializar_rutas_usuario(usuarioString);
+    //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     momento=-1;//DEP
-    USUARIO usuario = {98, "FERSA"}, usuarioprueba = {0};
+    USUARIO usuario = {777, "Usuario"}, usuarioprueba = {0};
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             pantalla_requiere_actualizacion=0;
@@ -240,23 +306,9 @@ void main_habitus(int verif_iniciador_primera_vez){
                         case ALLEGRO_EVENT_KEY_DOWN:
                             switch (evento.keyboard.keycode) {
                                 case ALLEGRO_KEY_F:
-
-
                                     printf("\n\n----\n");
-                                    //printf("ID: %i\n\n", usuario.ID_usuario);
-                                    //usuario.ID_usuario = manejarAUTOINCREMENT("./data/usuarios.dat");
-                                    SUPER_INSERT(&usuario.ID_usuario, "./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
-                                    //printf("ID: %i\n\n", usuario.ID_usuario);
-                                    //INSERT("./data/usuarios.dat", &usuario, sizeof(USUARIO), 1);
 
-                                    obtenerTamanioEstructura(sizeof(USUARIO), "USUARIO");
-                                    obtenerTamanioEstructura(sizeof(int), "int");
-                                    SELECT("./data/usuarios.dat", &usuarioprueba, sizeof(USUARIO), 1, 12);
-                                    printf("IDd: %i USERNAME: %s\n", usuarioprueba.ID_usuario, usuarioprueba.nombre);
 
-                                    //contadorBytesArch("./data/usuarios.dat");
-                                    //FILE *archh = fopen("./data/app.dat", "rb");
-                                    //manejarAUTOINCREMENT("./data/app.dat");
                                     break;
                                 default:
                             }
@@ -314,7 +366,7 @@ void pedirDatosUPDATE(int opcion, int id){
     /*HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
     habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");*/
     HABITO newHab={0};
-    newHab.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
+    //newHab.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
     switch (opcion) {
         case 1:
             getchar();
@@ -419,10 +471,7 @@ void llamarSELECT(){
 
 
 void llamarDELETE(){
-    HABITO habNULL={0};
-    USUARIO usuNULL={0};
-    HORARIO  horNULL={0};
-    RECORDATORIOS recNULL={0};
+
     int opcion, id;
     char *ruta[] ={};
 
@@ -473,20 +522,19 @@ int main() {
         al_register_event_source(cola_eventos,al_get_timer_event_source(AFK)); // FUENTE: eventos de tipo temporizador
         al_register_event_source(cola_eventos, al_get_display_event_source(disp)); // FUENTE: eventos de la ventana
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
+        al_start_timer(AFK);
 
         //Prueba función UPDATE
-<<<<<<< HEAD
         HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
-        habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
+        //habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
 //        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
 //      DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
 
 //      SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
-        IUSD();
+        //IUSD();
 
 
         EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
-=======
         //HABITO habit1 ={1, "HABITO PARA REGISTRO 1 ", "NOTITA 1 WOW", "2", 5, '\0', '\0', 85, '\0', '\0'};
         //habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
 
@@ -495,15 +543,13 @@ int main() {
         //DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
         //SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 2);
         //EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
->>>>>>> CRUD2
 //        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
 
 
 
-        //ACCEDE AL ARCHIVO QUE TIENE LA INFORMACION DE INICIO DE APP POR PRIMERA VEZ
-        // = acceso --TODO
-        al_start_timer(AFK);
-        main_habitus(0);
+        SELECT(rutaAPP, &app_recibe, sizeof(struct APP), 1, 1);
+        //printf("main.c: %i, %i\n", app_recibe.init, app_recibe.ID_last_user);
+        main_habitus(app_recibe.init, app_recibe.ID_last_user);
         al_destroy_event_queue(cola_eventos);
         al_destroy_display(disp);
         al_destroy_timer(AFK);
@@ -513,39 +559,38 @@ int main() {
     }
     return 0;
 }
-int inicializar_allegro(){
-    int verif_todo_ok=1;
-    if(!al_init()) {
+int inicializar_allegro() {
+    int verif_todo_ok = 1;
+    if (!al_init()) {
         printf("No se pudo iniciar Allegro");
     }
-    if(!al_init_primitives_addon()){
+    if (!al_init_primitives_addon()) {
         printf("No se iniciaron las primitivas");
         verif_todo_ok = 0;
     }
-    if(!al_install_keyboard()){
+    if (!al_install_keyboard()) {
         printf("No se instalo el teclado");
         verif_todo_ok = 0;
     }
-    if(!al_init_image_addon()){
+    if (!al_init_image_addon()) {
         printf("No se inicio image addon");
         verif_todo_ok = 0;
     }
-    if(!al_install_audio()){//SONIDO
+    if (!al_install_audio()) {//SONIDO
         printf("No se cargo el complemento de audio");
         verif_todo_ok = 0;
     }
-    if(!al_init_acodec_addon()){//SONIDO
+    if (!al_init_acodec_addon()) {//SONIDO
         printf("No se pudo cargar el complemento de codex");
         verif_todo_ok = 0;
     }
-    if(!al_init_font_addon() || !al_init_ttf_addon()){
+    if (!al_init_font_addon() || !al_init_ttf_addon()) {
         printf("No se pudo cargar el complemento de fuentes");
         verif_todo_ok = 0;
     }
-    if(!init_resources()){
+    if (!init_resources()) {
         printf("Error al iniciar los recursos fuentes");
         verif_todo_ok = 0;
     }
     return verif_todo_ok;
 }
-

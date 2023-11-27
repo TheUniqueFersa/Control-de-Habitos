@@ -9,6 +9,7 @@
 #include <math.h>
 #include "structs.c"
 /*OTRAS COSAS*/
+
 int contadorBytesArch(char *ruta){
     printf("Ruta: %s\n", ruta);
     FILE *archi = fopen(ruta, "rb");
@@ -64,7 +65,7 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
                 //fseek(arch, 0, SEEK_SET);
                 printf("Posicion: %li\n", ftell(archi2));
                 //printf("INT LOL %lli", sizeof(AUTO_INCREMENT));
-                fwrite(&AUTO_INCREMENT, sizeof(int), 1, arch);
+                fwrite(&AUTO_INCREMENT, sizeof(int), 1, archi2);
                 printf("DESPUESlectura: %li\n", ftell(archi2));
             }
             else{
@@ -92,11 +93,14 @@ int SUPER_INSERT(int * ID, char *ruta, void *registro, size_t tam_elem, size_t n
 int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     int retorno;
     if(strcmp("./data/app.dat", ruta)==0){
+        printf("ENTRE A APP.DAt");
         FILE *arch = fopen(ruta, "wb");
         if(arch!=NULL){
             fwrite(registro, tam_elem, num_elem, arch);
             fclose(arch);
-        }// --TODO funcion que imprima error
+        }else{
+            printf("ERROR al abrir archivo wb app.dat\n");
+        }
     }
     else{
         FILE *arch = fopen(ruta, "rb+");
@@ -115,24 +119,12 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
     printf("\nFuncionSELECT\n");
     FILE *archivo = fopen(ruta, "rb");  //requiere de la apertura en el modo: rb ||
-    //HABITO hab;                  /*añadido para la lectura de los registros*/
     if(archivo != NULL){
         rewind(archivo);
-        desplazarAUTOINCREMENT(archivo);
+        //desplazarAUTOINCREMENT(archivo);
         fseek(archivo, (id - 1) * ((long)tam_elem), SEEK_CUR);
         //printf("Antes de lectura: %li\t", ftell(archivo));
-        /*añadido para la lectura de los registros*/
         fread(registro_en_codigo, tam_elem, num_elem, archivo);
-            //if (fread(registro_en_codigo, tam_elem, num_elem, archivo) == 1) {
-
-            //printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal, hab.racha);
-            //
-        //}
-        /*- - - - - - - - -- -- -*/
-        //fread(registro_en_codigo, tam_elem, num_elem, archivo);
-        //printf("Despues: %li\n", ftell(archivo));
-
-
     }else
         printf("La base de datos no existe (SELECT)\n");
     return 0;
@@ -140,7 +132,6 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int id){
     printf("\nFuncion UPDATE\n");
     FILE *archivo = fopen(ruta, "rb+");
-    HABITO hab;/**/
     if(archivo!=NULL ){
 //      fseek(ptrCF, 0, SEEK_END);
         rewind(archivo);
@@ -148,31 +139,11 @@ int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int
         fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
         //printf("\tUPDATE: %li\n", ftell(archivo));
         fwrite(registro_act, tam_elem, num_elem, archivo);
-
-        /*
-        rewind(archivo);
-        desplazarAUTOINCREMENT(archivo);
-        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
-        if (fread(&hab, tam_elem, num_elem, archivo) == 1) {
-            printf("nombre: %s nota:%s repeticion:%s racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
-                   hab.racha);
-        }*/
         fclose(archivo);
     }else{
         printf("La base de datos no existe (UPDATE)\n");
     }
-    EJEMPLO ej2;
-/*
-    if (ptrCF != NULL) {
-        while (fread(&hab, tam_elem, 1, ptrCF) == 1) {
-            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal, hab.racha);
-        }
-        fclose(ptrCF);
-    }*/
 }
-
-
-
 int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, int id){
     printf("\nFuncionDELETE\n");
     FILE *archivo = fopen(ruta, "rb+");
@@ -184,21 +155,12 @@ int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, 
         fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
         //printf("\tUPDATE: %li\n", ftell(archivo));
         fwrite(&habNULL, tam_elem, num_elem, archivo);
-
-        rewind(archivo);
-        desplazarAUTOINCREMENT(archivo);
-        fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
-        if (fread(&hab, tam_elem, num_elem, archivo) == 1) {
-            printf("nombre: %s, nota:%s, repeticion:%s, racha:%i  \n", hab.nombre, hab.nota, hab.repeticion_semanal,
-                   hab.racha);
-        }
-
     }else{
         printf("La base de datos no existe (DELETE)\n");
     }
     fclose(archivo);
 }
-
+// -- CONSIDERACIONES --
 //INSERT INTO tabla VALUES (1,1,1,1); ** SOLO SE PUEDEN METER REGISTROS COMPLETOS
 //SELECT * FROM tabla;
 //UPDATE tabla SET col = val WHERE columna = valor;
