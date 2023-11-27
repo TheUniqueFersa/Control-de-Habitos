@@ -68,7 +68,7 @@ DIFICULTAD difNULL = {0};
 
 /* ----> VARIABLES GLOBALES <---- */
 int fin=0;
-int momento=0; /*0: Inicio primera vez
+int momento=0, estado=0; /*0: Inicio primera vez
  *              1:
  *
  *
@@ -108,6 +108,8 @@ char rutaRECORDATORIO[100] = {"./data/usuarios/1/recordatorio.dat"};
 char rutaPRODUCTIVIDAD[100] = {"./data/usuarios/1/productividad.dat"};
  */
 /* ---- termina; ---- */
+
+char nombre[30] = {0};
 
 void Dia(int dia){
     al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Do Lu  Ma Mi  Ju  Vi  Sa");
@@ -206,10 +208,21 @@ void ObtenerHora(){
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
-void ventanaActual(int momento){
+void ventanaActual(){
     int i=0;
     switch (momento) {
         case 0:
+            if(estado==0){
+                al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
+                al_draw_text(lexend_regular[40], texto_black,600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
+                al_draw_text(lexend_regular[30], texto_black,600,350,ALLEGRO_ALIGN_CENTER,"Presiona cualquier tecla para continuar");
+            }
+            else{
+                al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
+                al_draw_text(lexend_regular[25], texto_black, 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                al_draw_rectangle(280,340,920,380,texto_black,5);
+                al_draw_text(lexend_regular[30], texto_black, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
+            }
             break;
         case 1:
             al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -236,6 +249,7 @@ void ventanaActual(int momento){
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             break;
         default:
+
     }
     if(momento!=0){
         al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
@@ -297,6 +311,7 @@ void actualizar_display(){
     al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
 
     ObtenerHora();
+    ventanaActual();
     al_flip_display();
 }
 void inicializar_rutas_usuario(char * usuario){
@@ -395,12 +410,12 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
 }
 void CARGAR_TODOS_LOS_REGISTROS(int cantidadRegistros){
     int n = cantidadRegistros-1, retorno = 0;
+    printf("Registros: %i\n", cantidadRegistros);
     DIFICULTAD * dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), cantidadRegistros);
 
-
-
     for(int i = 0; i<cantidadRegistros; i++){
-        Dificultad
+        SELECT(rutaDIFICULTAD, &dificultades[i], sizeof(DIFICULTAD), 1, i+1);
+        printf("%i, %s\n", dificultades[i].ID_dificultad, dificultades[i].dificultad);
     }
 }
 //DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
@@ -416,18 +431,13 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
-    printf("%i, %i\n", momento, ultimo_usuario);
+    printf("Momento: %i, Usuario: %i\n", momento, ultimo_usuario);
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    momento=-1;//DEP
+    //momento=-1;//DEP
     USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
-    al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
-    if(momento==0){
-        al_draw_text(lexend_regular[40], texto_black,600,300,ALLEGRO_ALIGN_CENTER,"Parece que es tu primera vez abriendo Habitus");
-        al_draw_text(lexend_regular[30], texto_black,600,350,ALLEGRO_ALIGN_CENTER,"Presiona cualquier tecla para continuar");
-    }
-    char nombre[30] = {0};
+
     /**/
     USUARIO usNULL = {0};
     HABITO haNULL = {0};
@@ -440,16 +450,21 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 //    printf("recordatorio: %s\nid:%i\nTIPO:%s\n", reNULL.recordatorio, reNULL.ID_recordatorio, reNULL.ptr_fk_tipo->tipo);
 //    printf("Dificultad: %s\nID:%i", diNULL.dificultad, diNULL.ID_dificultad);
 //    printf("Tipo:%s\nID:%i\n", tNULL.tipo, tNULL.ID_tipo);
+    printf("N registross: %i\n",obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO)));
+    printf("N registross: %i\n",obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD)));
+    //CARGAR_TODOS_LOS_REGISTROS();
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
-            pantalla_requiere_actualizacion=0;
+            //pantalla_requiere_actualizacion=0;
             actualizar_display();
         }
         else if(!al_event_queue_is_empty(cola_eventos)){
-            pantalla_requiere_actualizacion = 1;
+            //pantalla_requiere_actualizacion = 1;
         }
 
         //EVENTOS SUCEDIENDO:
+        printf("Momento: %i", momento);
+        printf("Nombre: %s", nombre);
         al_wait_for_event(cola_eventos, &evento);
 
         if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
@@ -481,6 +496,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     DIFICULTAD dif4 = {4, "Dificil"};
                                     DIFICULTAD dif5 = {5, "Muy dificil"};
                                     DIFICULTAD vacia = {0};
+                                    TIPO vaciaa = {0};
 
                                     obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
                                     contadorBytesArch(rutaDIFICULTAD);
@@ -509,12 +525,17 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
                                     HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
                                     HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
-
+                                    SELECT(rutaDIFICULTAD, &vacia, sizeof(DIFICULTAD), 1, 5);
+                                    SELECT(rutaTIPO, &vaciaa, sizeof(TIPO), 1, 3);
+                                    printf("%i, %s\n", vacia.ID_dificultad, vacia.dificultad);
+                                    printf("%i, %s\n", vaciaa.ID_tipo, vaciaa.tipo);
                                             //SUPER INSERT TIPO
-                                            /*
+                                    /*
                                     SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip3.ID_tipo, rutaTIPO, &tip3, sizeof(TIPO), 1);
+                                     */
+                                    /*
                                     //SUPERO INSERT HABITO
                                     SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
                                     SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
@@ -565,12 +586,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
                                     */
 /*
-                                    //SUPERINSERT DIFICULTAD
-                                    SUPER_INSERT(&dif1.ID_dificultad, rutaDIFICULTAD, &dif1, sizeof(DIFICULTAD), 1);
-                                    SUPER_INSERT(&dif2.ID_dificultad, rutaDIFICULTAD, &dif2, sizeof(DIFICULTAD), 1);
-                                    SUPER_INSERT(&dif3.ID_dificultad, rutaDIFICULTAD, &dif3, sizeof(DIFICULTAD), 1);
-                                    SUPER_INSERT(&dif4.ID_dificultad, rutaDIFICULTAD, &dif4, sizeof(DIFICULTAD), 1);
-                                    SUPER_INSERT(&dif5.ID_dificultad, rutaDIFICULTAD, &dif5, sizeof(DIFICULTAD), 1);
+
                                     //SUPER INSERT USUARIO
                                     SUPER_INSERT(&usu1.ID_usuario, rutaUSUARIO, &usu1, sizeof(USUARIO), 1);
                                     SUPER_INSERT(&usu2.ID_usuario, rutaUSUARIO, &usu2, sizeof(USUARIO), 1);
@@ -627,10 +643,13 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     }
                     break;
                 case 0:
-                    al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
-                    al_draw_text(lexend_regular[25], texto_black, 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
-                    al_draw_rectangle(280,340,920,380,texto_black,5);
+                    //al_draw_filled_rectangle(0,0,1200,700, fondo_principal_comohuesito);
+                    //al_draw_text(lexend_regular[25], texto_black, 600, 300, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    //al_draw_rectangle(280,340,920,380,texto_black,5);
+                    //las movi a la funcion ventanaActual();
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                        if(estado==0)
+                            estado=1;
                         if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
                             // Añadir el carácter a la cadena de entrada
                             int len = strlen(nombre);
@@ -650,9 +669,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             strcpy(usuario.nombre,nombre);
                             UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
                             printf("%s",usuario.nombre);
-                            momento=4;
+                            momento=1;
                         }
-                        al_draw_text(lexend_regular[30], texto_black, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        //al_draw_text(lexend_regular[30], texto_black, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        //al_flip_display();
                     }
                     break;
                 case 1:
@@ -961,14 +981,6 @@ int main() {
 //      DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
 //      SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
 //        IUSD();
-
-
-
-
-        EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
-        //HABITO habit1 ={1, "HABITO PARA REGISTRO 1 ", "NOTITA 1 WOW", "2", 5, '\0', '\0', 85, '\0', '\0'};
-        //habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
-
 
         //UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
         //DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
