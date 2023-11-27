@@ -18,7 +18,9 @@ typedef struct {
     char repeticion_semanal[7];
     int repeticion;
     TIPO *ptr_fk_tipo;
+    TIPO fk_tipo;       //-----
     DIFICULTAD *ptr_fk_difi;
+    DIFICULTAD fk_dif1; //-----
     int racha;
     time_t tiempo;
     FECHA fecha_ini;
@@ -68,3 +70,20 @@ typedef struct {
     char ejemplo[20];
     int intej;
 } EJEMPLO;
+EJEMPLO ejemplin;
+typedef struct{
+    int origenX;
+    int origenY;
+    //
+    EJEMPLO * estructura;
+} VISUALES;
+VISUALES habitosc = {1,1, &ejemplin};
+
+RECORDATORIOS recordatorio[56];
+
+VISUALES recordatorios = {0,0, &recordatorio[0]};
+/*
+int hola(){
+    habitosc.estructura.
+}*/
+//VISUALES recordatorios_visuales[56];
