@@ -11,19 +11,18 @@
 /*OTRAS COSAS*/
 
 int contadorBytesArch(char *ruta){
-    printf("Ruta: %s\n", ruta);
     FILE *archi = fopen(ruta, "rb");
     int retorno = 0, n_bytes;
     if(archi != NULL){
         fseek(archi, 0, SEEK_END);
         n_bytes = ftell(archi);
-        printf("Numero de bytes del archivo: %i\n", n_bytes);
+        printf("Numero de bytes de %s: %i\n",ruta, n_bytes);
         rewind(archi);
         fclose(archi);
         retorno = n_bytes;
     }
     else{
-        printf("El archivo no fue encontrado (contadosBytesArch)\n");
+        printf("El archivo %s no fue encontrado (contadosBytesArch)\n", ruta);
         retorno = -1; //ERROR
     }
     return retorno;
@@ -67,6 +66,7 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
                 //printf("INT LOL %lli", sizeof(AUTO_INCREMENT));
                 fwrite(&AUTO_INCREMENT, sizeof(int), 1, archi2);
                 printf("DESPUESlectura: %li\n", ftell(archi2));
+                fclose(archi2);
             }
             else{
                 printf("Ocurrio un error en la devolucion, AUTOINCREM: %i: \n", AUTO_INCREMENT);
@@ -138,8 +138,9 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
             fseek(archivo, (id - 1) * ((long)tam_elem), SEEK_CUR);
             //printf("Antes de lectura: %li\t", ftell(archivo));
             fread(registro_en_codigo, tam_elem, num_elem, archivo);
+            fclose(archivo);
         }else
-            printf("La base de datos no existe (SELECT)\n");
+            printf("La base de datos %s no existe (SELECT)\n", ruta);
     }
     return 0;
 }
@@ -170,6 +171,7 @@ int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, 
         fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
         //printf("\tUPDATE: %li\n", ftell(archivo));
         fwrite(&habNULL, tam_elem, num_elem, archivo);
+        fclose(archivo);
     }else{
         printf("La base de datos no existe (DELETE)\n");
     }

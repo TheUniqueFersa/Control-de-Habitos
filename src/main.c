@@ -10,7 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-//#include "../include/structs.c"   
+//#include "../include/structs.c"
 #include "../include/CRUD.c"
 #include "../include/resources.c"
 #include "../tests/depuracion.c"
@@ -58,17 +58,48 @@ struct APP{
     int init;
     int ID_last_user;
 };
-struct APP appp = {0, 1}, app_recibe = {0};
+USUARIO usuario ={1,""},usuarioprueba={0};
+struct APP app_recibe = {0};
+struct APP reseteoAPP = {0,1};
+//ESTRUCTURAS VACIAS (Para DELETE y otros):
 HABITO habNULL={0};
 USUARIO usuNULL={0};
-HORARIO  horNULL={0};
-RECORDATORIOS recNULL={0};
+HORARIO  horarioNULL={0};
+RECORDATORIOS recordNULL={0};
 DIFICULTAD difNULL = {0};
+TIPO tipoNULL = {0};
+REGISTRO_HABITOS reg_habNULL = {0};
+HORA_HORARIO hor_horarioNULL = {0};
+PRODUCTIVIDAD productNULL = {0};
+//ESTRUCTURAS GLOBALES
+//TODOS LOS REGISTROS:
+DIFICULTAD * Dificultades;
+TIPO * Tipos;
+HABITO * Habitos, * habitosNULL;
+REGISTRO_HABITOS * Reg_habitos;
+HORARIO * Horarios;
+HORA_HORARIO * Hora_horarios;
+RECORDATORIOS * Recordatorios;
+PRODUCTIVIDAD * Productividad;
+int n_reg_dificultades;
+int n_reg_tipo;
+int n_reg_habitos;
+int n_reg_reg_hab;
+int n_reg_horario;
+int n_reg_hora_horario;
+int n_reg_recordatorios;
+int n_reg_productividad;
+
 /* ---- termina; ---- */
 
 /* ----> VARIABLES GLOBALES <---- */
 int fin=0;
-int momento=0, estado=0; /*0: Inicio primera vez
+int momento=0, estado=0; /*0: Inicio primera vez*/
+int tamArrPos=6, loc=0;
+int * arrPos, *arrHab;
+ //Nos permiten navegar en el momento 1
+/*
+ *
  * //Estado: 0-> Leer, 1 -> Crear, 2-> Modificar, 3-> Eliminar
  *              1:
  *
@@ -85,7 +116,7 @@ char frag_2rutaTIPO[100] = {"/tipo.dat"};
 char frag_2rutaHABITO[100] = {"/habito.dat"};
 char frag_2rutaREGISTROHABITO[100] = {"/registro_habito.dat"};
 char frag_2rutaHORARIO[100] = {"/horario.dat"};
-char frag_2rutaHORA_HORARIO[100] = {"/horario.dat"};
+char frag_2rutaHORA_HORARIO[100] = {"/hora_horario.dat"};
 char frag_2rutaRECORDATORIO[100] = {"/recordatorio.dat"};
 char frag_2rutaPRODUCTIVIDAD[100] = {"/productividad.dat"};
 
@@ -135,15 +166,21 @@ void Pendientes(){
     al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
     al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
 }
-void calendario(int dia_semana, int mes,int primero){
+void calendario(int dia_semana, int mes,int primero,int anio){
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
     int tipomes=mes%2;
     int dias_en_mes;
     int primerafila=0;
+    int bisiesto=anio%4;
     if(mes==2){
-        dias_en_mes=28;
+        if(bisiesto!=0){
+            dias_en_mes=28;
+        }else{
+            dias_en_mes=29;
+            printf("dias en mes: %d",dias_en_mes);
+        }
     }else if(tipomes==0){
         dias_en_mes=31;
     }else if(tipomes==1){
@@ -156,7 +193,7 @@ void calendario(int dia_semana, int mes,int primero){
                 columna=primero;
                 primerafila=1;
             }
-            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_semana-primero;
+            int dia_calendario = fila * COLUMNAS + columna + 1 - primero;
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
             if(dia_calendario%4==0)transparencia=0;
             else if(dia_calendario%4==1)transparencia=255/2;
@@ -205,7 +242,7 @@ void ObtenerHora(){
     sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
     Pendientes();
     Dia(dia_semana);
-    calendario(dia_semana,mes,(primero));
+    calendario(dia_semana,mes,primero,anio);
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
@@ -231,10 +268,18 @@ void ventanaActual(){
             al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
+
+            al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+            creacionEstructuras();
+
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
+
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -263,8 +308,20 @@ void ventanaActual(){
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+
+            al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+            al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+            al_draw_rectangle(300,340,800,365,texto_black,5);
+            al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+            //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+            //al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
+
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
+
             break;
         default:
 
@@ -278,7 +335,7 @@ void ventanaActual(){
 void actualizar_display(){
     //FIGURAS PRIMITAVAS
 
-    al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
+    //al_draw_filled_rectangle(0, 0, 100, 700, al_map_rgb(255, 0, 0));
 
     al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 175, 0, 0,100, 175, 0);
     al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 175, 0, 175,100, 175, 0);
@@ -322,7 +379,7 @@ void actualizar_display(){
     al_draw_text(lexend_regular[10],texto_black,475,290,ALLEGRO_ALIGN_CENTER,"(N)");*/
 
     //interfaz de dificultad
-    al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
+   al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
    al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
    //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
@@ -389,31 +446,36 @@ void actualizar_display(){
     al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 475, ALLEGRO_ALIGN_CENTER,"(Esc)");
     ObtenerHora();
     ventanaActual();
+    //IMPRIME NOMBRE USUARIO:
+    al_draw_text(lexend_regular[10],fondo_gris1,1100,645,ALLEGRO_ALIGN_CENTER,"USUARIO");
+    al_draw_text(lexend_regular[14],texto_black,1100,655,ALLEGRO_ALIGN_CENTER,usuario.nombre);
+
+
     al_flip_display();
 }
-void inicializar_rutas_usuario(char * usuario){
-    strcat(rutaDIFICULTAD, usuario);
+void inicializar_rutas_usuario(char * id_string_usuario){
+    strcat(rutaDIFICULTAD, id_string_usuario);
     strcat(rutaDIFICULTAD, frag_2rutaDIFICULTAD);
 
-    strcat(rutaTIPO, usuario);
+    strcat(rutaTIPO, id_string_usuario);
     strcat(rutaTIPO, frag_2rutaTIPO);
 
-    strcat(rutaHABITO, usuario);
+    strcat(rutaHABITO, id_string_usuario);
     strcat(rutaHABITO, frag_2rutaHABITO);
 
-    strcat(rutaREGISTROHABITO, usuario);
+    strcat(rutaREGISTROHABITO, id_string_usuario);
     strcat(rutaREGISTROHABITO, frag_2rutaREGISTROHABITO);
 
-    strcat(rutaHORARIO, usuario);
+    strcat(rutaHORARIO, id_string_usuario);
     strcat(rutaHORARIO, frag_2rutaHORARIO);
 
-    strcat(rutaHORA_HORARIO, usuario);
+    strcat(rutaHORA_HORARIO, id_string_usuario);
     strcat(rutaHORA_HORARIO, frag_2rutaHORA_HORARIO);
 
-    strcat(rutaRECORDATORIO, usuario);
+    strcat(rutaRECORDATORIO, id_string_usuario);
     strcat(rutaRECORDATORIO, frag_2rutaRECORDATORIO);
 
-    strcat(rutaPRODUCTIVIDAD, usuario);
+    strcat(rutaPRODUCTIVIDAD, id_string_usuario);
     strcat(rutaPRODUCTIVIDAD, frag_2rutaPRODUCTIVIDAD);
 }
 typedef struct {
@@ -461,6 +523,11 @@ typedef struct {
     int coord_x_ecomple;
     int coord_y_ecomple;
 }RECORDATORIO_VISUAL;
+void CONTAR_REGISTROS(){
+
+}
+
+
 int obtenerNumeroRegistros(char * ruta, size_t tamanio){
     long int entero = sizeof(int);
     int bytesSoloRegistro = contadorBytesArch(ruta) - entero, registros=0;
@@ -469,6 +536,7 @@ int obtenerNumeroRegistros(char * ruta, size_t tamanio){
 void *crearArreglo(size_t tamanioElemento, int cantidadElementos) {
     int retorno=0;
     void *arreglo = malloc(tamanioElemento * cantidadElementos);
+    printf("Direccion asignada en malloc: %p\n", malloc(tamanioElemento * cantidadElementos));
     if (arreglo == NULL) {
         printf("Error: No se pudo asignar memoria para el arreglo.\n");
         retorno = 1;
@@ -485,24 +553,80 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     }
     return temp;
 }
-DIFICULTAD * dificultades;
 void CARGAR_TODOS_LOS_REGISTROS(){
-    int retorno = 0, n_reg_dificultades=0, i=0;
+    int retorno = 0, i=0;
     n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
     printf("Registros: %i\n", n_reg_dificultades);
-    dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), n_reg_dificultades);
+    Dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), n_reg_dificultades);
     for(i = 0; i<n_reg_dificultades; i++){
-        SELECT(rutaDIFICULTAD, &dificultades[i], sizeof(DIFICULTAD), 1, i+1);
-        printf("IDDDD: %i, dificultad: %s\n", dificultades[i].ID_dificultad, dificultades[i].dificultad);
+        SELECT(rutaDIFICULTAD, &Dificultades[i], sizeof(DIFICULTAD), 1, i+1);
+        printf("IDDDD: %i, dificultad: %s\n", Dificultades[i].ID_dificultad, Dificultades[i].dificultad);
     }
-    int n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
+    n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
     printf("Registros: %i\n", n_reg_tipo);
-    TIPO * tipos = (DIFICULTAD *) crearArreglo(sizeof(TIPO), n_reg_tipo);
+    Tipos = (TIPO *) crearArreglo(sizeof(TIPO), n_reg_tipo);
     for(i = 0; i<n_reg_tipo; i++){
-        SELECT(rutaTIPO, &tipos[i], sizeof(TIPO), 1, i+1);
-        printf("IDDDD: %i, tipo: %s\n", tipos[i].ID_tipo, tipos[i].tipo);
+        SELECT(rutaTIPO, &Tipos[i], sizeof(TIPO), 1, i+1);
+        printf("IDDDD: %i, tipo: %s\n", Tipos[i].ID_tipo, Tipos[i].tipo);
     }
-
+    //printf("LOLIN.COM: %lli\n", sizeof(Tipos));
+    //printf("IDDDD malo: %i, tipo: %s\n", Tipos[2].ID_tipo, Tipos[2].tipo);
+    //printf("IDDDD malo: %i, tipo: %s\n", Tipos[6].ID_tipo, Tipos[6].tipo);
+    n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
+    printf("Registros: %i\n", n_reg_habitos);
+    Habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
+    for(i = 0; i<n_reg_habitos; i++){
+        SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
+        printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+        Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+    }
+    n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
+    printf("Registros: %i\n", n_reg_reg_hab);
+    Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
+    for(i = 0; i<n_reg_reg_hab; i++){
+        SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
+        printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
+               Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado);
+    }
+    n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
+    printf("Registros: %i\n", n_reg_horario);
+    Horarios = (HORARIO *) crearArreglo(sizeof(HORARIO), n_reg_horario);
+    for(i = 0; i<n_reg_horario; i++){
+        SELECT(rutaHORARIO, &Horarios[i], sizeof(HORARIO), 1, i+1);
+        printf("HORARIO: %i, %s, %s, %p, %i, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
+               Horarios[i].ID_horario, Horarios[i].nombre, Horarios[i].repeticion_semanal, Horarios[i].ptr_fk_tipo,
+               Horarios[i].fk_tipo.ID_tipo, Horarios[i].fk_tipo.tipo, Horarios[i].fecha_ini.tm_mday, Horarios[i].fecha_ini.tm_mon, Horarios[i].fecha_ini.tm_year,
+               Horarios[i].fecha_final.tm_mday, Horarios[i].fecha_final.tm_mon, Horarios[i].fecha_final.tm_year,
+               Horarios[i].alerta.tm_mday, Horarios[i].alerta.tm_mon, Horarios[i].alerta.tm_year);
+    }
+    n_reg_hora_horario = obtenerNumeroRegistros(rutaHORA_HORARIO, sizeof(HORA_HORARIO));
+    printf("Registros: %i\n", n_reg_hora_horario);
+    Hora_horarios = (HORA_HORARIO *) crearArreglo(sizeof(HORA_HORARIO), n_reg_hora_horario);
+    for(i = 0; i<n_reg_hora_horario; i++){
+        SELECT(rutaHORA_HORARIO, &Hora_horarios[i], sizeof(HORA_HORARIO), 1, i+1);
+        printf("HH: %i, %p, %i, %s, %lli, %d/%d/%d, %d/%d/%d\n", Hora_horarios[i].ID_HH, Hora_horarios[i].ptr_fk_horario, Hora_horarios[i].fk_horario.ID_horario,
+               Hora_horarios[i].fk_horario.nombre, Hora_horarios[i].tiempo,
+               Hora_horarios[i].dia_h_ini.tm_mday, Hora_horarios[i].dia_h_ini.tm_mon, Hora_horarios[i].dia_h_ini.tm_year,
+               Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
+    }
+    n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
+    printf("Registros: %i\n", n_reg_recordatorios);
+    Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
+    for(i = 0; i<n_reg_recordatorios; i++){
+        SELECT(rutaRECORDATORIO, &Recordatorios[i], sizeof(RECORDATORIOS), 1, i+1);
+        printf("Record: %i, %s, %p, %i, %s, %lli, %d/%d/%d, %i\n", Recordatorios[i].ID_recordatorio, Recordatorios[i].recordatorio, Recordatorios[i].ptr_fk_tipo,
+               Recordatorios[i].fk_tipo.ID_tipo, Recordatorios[i].fk_tipo.tipo, Recordatorios[i].tiempo,
+               Recordatorios[i].fecha.tm_mday, Recordatorios[i].fecha.tm_mon, Recordatorios[i].fecha.tm_year, Recordatorios[i].estado_comp);
+    }
+    n_reg_productividad = obtenerNumeroRegistros(rutaPRODUCTIVIDAD, sizeof(PRODUCTIVIDAD));
+    printf("Registros: %i\n", n_reg_productividad);
+    Productividad = (PRODUCTIVIDAD *) crearArreglo(sizeof(PRODUCTIVIDAD), n_reg_productividad);
+    for(i = 0; i<n_reg_productividad; i++){
+        SELECT(rutaPRODUCTIVIDAD, &Productividad[i], sizeof(PRODUCTIVIDAD), 1, i+1);
+        printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", Productividad[i].ID_product, Productividad[i].tiempo,
+               Productividad[i].fecha.tm_mday, Productividad[i].fecha.tm_mon, Productividad[i].fecha.tm_year, Productividad[i].habit, Productividad[i].racord);
+    }
 }
 //DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
 
@@ -521,30 +645,85 @@ void convertirFecha(const char *fecha, struct tm *tiempo) {
     sscanf(fecha, "%d/%d/%d", &tiempo->tm_mday, &tiempo->tm_mon, &tiempo->tm_year);
 
     // Ajustar los valores para que coincidan con la estructura tm
+    /*
     tiempo->tm_mon -= 1; // Restar 1 al mes porque en la estructura tm, enero es 0, febrero es 1, etc.
     tiempo->tm_year -= 1900; // Restar 1900 al año, ya que en la estructura tm se cuentan los años desde 1900
+     */
 }
+void convertirAFechaYHora(const char *cadenaFecha, struct tm *tiempo) {
+    char copiaFecha[strlen(cadenaFecha) + 1];
+    strcpy(copiaFecha, cadenaFecha);
 
-    //char fecha[] = "30/11/2023";
-    //struct tm tiempo = {0};
+    // Usar sscanf para extraer los componentes de la fecha y hora y asignarlos a la estructura tm
+    sscanf(copiaFecha, "%d/%d/%d %d:%d:%d", &tiempo->tm_mday, &tiempo->tm_mon, &tiempo->tm_year,
+           &tiempo->tm_hour, &tiempo->tm_min, &tiempo->tm_sec);
 
-    //convertirFecha(fecha, &tiempo);
+    // Ajustar los valores para que coincidan con la estructura tm
+
+    tiempo->tm_mon -= 1; // Restar 1 al mes porque en la estructura tm, enero es 0, febrero es 1, etc.
+    /*
+    tiempo->tm_year += 100; // Sumar 100 al año porque se usa el formato de año de dos dígitos (00-99)
+    tiempo->tm_year += 2000; // Sumar 2000 al año para obtener el año completo (si está en formato YY)
+     */
+}
 
 void reseteatEstadoMomento(int momentoACambiar){
     momento = momentoACambiar;
     estado = 0;
+}
+time_t convertirAtime_t(const char *cadenaFecha) {
+    struct tm tiempo = {0}; // Crear una estructura tm para almacenar la fecha
+    char *token;
+    char copiaFecha[strlen(cadenaFecha) + 1];
+    strcpy(copiaFecha, cadenaFecha);
+
+    // Strtok divide la cadena de texto en tokens utilizando '/'
+    token = strtok(copiaFecha, "/");
+    tiempo.tm_mday = atoi(token); // Obtener y almacenar el día
+
+    token = strtok(NULL, "/");
+    tiempo.tm_mon = atoi(token) - 1; // Obtener y almacenar el mes (restar 1 porque en tm es de 0 a 11)
+
+    token = strtok(NULL, "/");
+    tiempo.tm_year = atoi(token) - 1900; // Obtener y almacenar el año (restar 1900 porque tm_year cuenta desde 1900)
+
+    // Configurar otros valores en la estructura tm
+    tiempo.tm_hour = 0;
+    tiempo.tm_min = 0;
+    tiempo.tm_sec = 0;
+    tiempo.tm_isdst = -1; // Indicar que la información sobre horario de verano es desconocida
+
+    // Convertir la estructura tm a time_t
+    time_t tiempoUnix = mktime(&tiempo);
+
+    return tiempoUnix;
 }
 
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
     momento=verif_iniciador_primera_vez;//Si es 0, es que no se ha iniciado la aplicacion ni una vez
-    printf("Momento: %i, Usuario: %i\n", momento, ultimo_usuario);
+    if(verif_iniciador_primera_vez == 1){
+        SELECT(rutaUSUARIO, &usuario, sizeof(USUARIO), 1, ultimo_usuario);
+        //printf("USERR: %i, %s", usuario.ID_usuario, usuario.nombre);
+    }
+    printf("Init: %i, Usuario: %i\n", momento, ultimo_usuario);
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     //momento=-1;//DEP
-    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
+
+    /*Crear arreglo nimámico Para Fersa*/
+    printf("CREAR ARREGLO ARRPOS\n");
+    arrPos = (int *) crearArreglo(sizeof(int), 6);
+    //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
+    int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), 10);
+    arrPos = nuevoArreglo;
+    //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
+    arrHab = (int *) crearArreglo(sizeof(int), 1);
+
+    /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
+     * no estan vacias del arreglo que almacena estructuras de habitos*/
 
     /**/
     USUARIO usNULL = {0};
@@ -594,6 +773,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     switch (evento.type) {
                         case ALLEGRO_EVENT_KEY_DOWN:
                             switch (evento.keyboard.keycode) {
+                                case ALLEGRO_KEY_BACKSPACE:
+                                    INSERT(rutaAPP, &reseteoAPP, sizeof(struct APP), 1);
+                                    break;
                                 case ALLEGRO_KEY_F:
                                     printf("\n\n----\n");
                                     /*DIFICULTAD*/
@@ -603,17 +785,20 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     DIFICULTAD dif3 = {3, "Intermedio"};
                                     DIFICULTAD dif4 = {4, "Dificil"};
                                     DIFICULTAD dif5 = {5, "Muy dificil"};
-                                    DIFICULTAD vacia = {0};
-                                    TIPO vaciaa = {0};
-
-                                    obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
+                                    SELECT(rutaDIFICULTAD, &difNULL, sizeof(DIFICULTAD), 1, 5);
+                                    //printf("DIF: %i, %s\n", difNULL.ID_dificultad, difNULL.dificultad);
+                                    //obtenerTamanioEstructura(sizeof(DIFICULTAD), "DIFICULTAD");
                                     contadorBytesArch(rutaDIFICULTAD);
 
                                     /*TIPO */
                                     TIPO tip1 = {1, "Personal"};
                                     TIPO tip2 = {2, "Escuela"};
                                     TIPO tip3 = {3, "Salud"};
-                                    /*HABITO*/
+                                    SELECT(rutaTIPO, &tipoNULL, sizeof(TIPO), 1, 2);
+                                    //printf("Tipo: %i, %s\n", tipoNULL.ID_tipo, tipoNULL.tipo);
+                                    contadorBytesArch(rutaTIPO);
+
+                                    /*
                                     time_t tiempo= time(NULL);
                                     struct tm *infoTiempo;
                                     time(&tiempo);
@@ -621,21 +806,44 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     FECHA miFecha = *infoTiempo;
                                     printf("Fecha actual: %d/%d/%d %02d:%02d:%02d\n", miFecha.tm_year + 1900, miFecha.tm_mon + 1, miFecha.tm_mday,
                                            miFecha.tm_hour, miFecha.tm_min, miFecha.tm_sec);
+                                           */
 
-                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3, dif3,  12, tiempo, miFecha};
-                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
-                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
-                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
+                                    char fecha[5][20] = {"30/11/2023", {"02/12/2023"}, {"16/12/2023"}, {"23/12/2023"},
+                                                         {"12/01/2024"}};
 
-                                    //SUPERO INSERT HABITO
-                                    SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab3.ID_habito, rutaHABITO, &hab3, sizeof(HABITO), 1);
-                                    SUPER_INSERT(&hab4.ID_habito, rutaHABITO, &hab4, sizeof(HABITO), 1);
+                                    FECHA tiempo[5] = {0};
+                                    time_t fechaConvertida[5];
+                                    for (int i = 0; i < 5; i++) {
+                                        convertirFecha(fecha[i], &tiempo[i]);
+                                        //printf("%d/%d/%d\n", tiempo[i].tm_mday, tiempo[i].tm_mon, tiempo[i].tm_year);
+                                        fechaConvertida[i] = convertirAtime_t(fecha[i]);
+                                        //printf("Fecha convertida a time_t: %ld\n", (long) fechaConvertida[i]);
+                                    }
+                                    HABITO vacioo = {0};
+                                    HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3,
+                                                   dif3, 12, fechaConvertida[0], tiempo[0]};
+                                    HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1,
+                                                   35, fechaConvertida[1], tiempo[1]};
+                                    HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3,
+                                                   dif3, 2, fechaConvertida[2], tiempo[2]};
+                                    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1,
+                                                   tip1, &dif1, dif1, 100, fechaConvertida[3], tiempo[3]};
+                                    SELECT(rutaHABITO, &vacioo, sizeof(HABITO), 1, 4);
+//Pedir HABITO
+                                    //printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                                           //vacioo.ID_habito, vacioo.nombre, vacioo.nota, vacioo.repeticion_semanal, vacioo.repeticion, vacioo.ptr_fk_tipo,
+                                           //vacioo.fk_tipo.tipo, vacioo.ptr_fk_difi, vacioo.fk_difi.dificultad, vacioo.racha, vacioo.tiempo, vacioo.fecha_ini.tm_mday, vacioo.fecha_ini.tm_mon, vacioo.fecha_ini.tm_year);
+                                    //printf("%d/%d/%d\n", vacioo.fecha_ini.tm_mday, vacioo.fecha_ini.tm_mon, vacioo.fecha_ini.tm_year);
+                                    contadorBytesArch(rutaHABITO);
 
-
-                                    /*REGISTROH-HABITOS*/
-
+                                    REGISTRO_HABITOS reg_hab1 = {1, &hab1, hab1, fechaConvertida[0], tiempo[0], 1, 0};
+                                    REGISTRO_HABITOS reg_hab2 = {2, &hab2, hab2,  fechaConvertida[0], tiempo[0], 4, 1};
+                                    REGISTRO_HABITOS reg_hab3 = {3, &hab3, hab3, fechaConvertida[0], tiempo[0], 1, 0};
+                                    REGISTRO_HABITOS reg_hab4 = {4, &hab4, hab4, fechaConvertida[0], tiempo[0], 5, 0};
+                                    SELECT(rutaREGISTROHABITO, &reg_habNULL, sizeof(REGISTRO_HABITOS), 1, 1);
+                                    //printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", reg_habNULL.ID_RH, reg_habNULL.ptr_fk_habito, reg_habNULL.fk_habito.nombre, reg_habNULL.fecha.tm_mday,
+                                           //reg_habNULL.fecha.tm_mon, reg_habNULL.fecha.tm_year, reg_habNULL.completado, reg_habNULL.no_completado);
+                                    contadorBytesArch(rutaREGISTROHABITO);
                                     /*
                                     time_t tiempo2= time(NULL);
                                     struct tm *infoTiempo2;
@@ -645,50 +853,82 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     printf("Fecha actual: %d/%02d/%02d %02d:%02d:%02d\n",
                                            miFecha2.tm_year + 1900, miFecha2.tm_mon + 1, miFecha2.tm_mday,
                                            miFecha2.tm_hour, miFecha2.tm_min, miFecha2.tm_sec);
-                                    REGISTRO_HABITOS reg_hab1 = {1, &hab1, tiempo2, miFecha2, 1, 0};
-                                    REGISTRO_HABITOS reg_hab2 = {2, &hab2, tiempo2, miFecha2, 4, 1};
-                                    REGISTRO_HABITOS reg_hab3 = {3, &hab3, tiempo2, miFecha2, 1, 0};
-                                    REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
+
                                     */
                                     /*HORARIO*/
-                                    /*
-                                    HORARIO horario1 = {1, "Algebra", "1000100", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
-                                    HORARIO horario2 = {2, "Curso Progra", "1010101", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
-                                    HORARIO horario3 = {3, "Calculo", "0111000", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
-                                    */
-                                    /*HORA_HORARIO*/
-                                    /*
-                                    HORA_HORARIO hor_hor1={1, &horario1, tiempo, miFecha2, miFecha2};
-                                    HORA_HORARIO hor_hor2={2, &horario1, tiempo, miFecha2, miFecha2};
-                                    HORA_HORARIO hor_hor3={3, &horario2, tiempo, miFecha2, miFecha2};
-                                    HORA_HORARIO hor_hor4={4, &horario2, tiempo, miFecha2, miFecha2};
-                                     */
-                                    /*RECORDATORIOS*/
-                                    /*
-                                    RECORDATORIOS recor1 = {1, "EXAMEN FINAL PIÑA", &tip2, tiempo, miFecha2, 0};
-                                    RECORDATORIOS recor2 = {2, "Serie Algebra", &tip2, tiempo, miFecha2, 1};
-                                    RECORDATORIOS recor3 = {3, "Salida con amigos", &tip1, tiempo, miFecha2, 0};
-                                    RECORDATORIOS recor4 = {4, "Cita con Doctor", &tip3, tiempo, miFecha2, 1};
-                                     */
-                                    /*PRODUCTIVIDAD*/
-                                    /*
-                                    PRODUCTIVIDAD product1= {1, tiempo, miFecha2, 7, 6};
-                                    PRODUCTIVIDAD product2= {2, tiempo, miFecha2, 8, 7};
-                                    PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
-                                    */
-/*
-//................................................
-                                    //SUPER INSERT USUARIO
-                                    SUPER_INSERT(&usu1.ID_usuario, rutaUSUARIO, &usu1, sizeof(USUARIO), 1);
-                                    SUPER_INSERT(&usu2.ID_usuario, rutaUSUARIO, &usu2, sizeof(USUARIO), 1);
-                                    SUPER_INSERT(&usu3.ID_usuario, rutaUSUARIO, &usu3, sizeof(USUARIO), 1);
-                                    SUPER_INSERT(&usu4.ID_usuario, rutaUSUARIO, &usu4, sizeof(USUARIO), 1);
-                                    SUPER_INSERT(&usu5.ID_usuario, rutaUSUARIO, &usu5, sizeof(USUARIO), 1);
 
+                                    HORARIO horario1 = {1, "Algebra", "1000100", NULL, tip2, fechaConvertida[1], tiempo[1], tiempo[2], tiempo[2]};
+                                    HORARIO horario2 = {2, "Curso Progra", "1010101", NULL, tip2, fechaConvertida[0], tiempo[0], tiempo[1], tiempo[1]};
+                                    HORARIO horario3 = {3, "Calculo", "0111000", NULL, tip2, fechaConvertida[2], tiempo[2], tiempo[3], tiempo[3]};
+
+                                    //UPDATE(rutaHORARIO, &horario2, sizeof(HORARIO),1, 2);
+                                    /*
+                                    SELECT(rutaHORARIO, &horarioNULL, sizeof(HORARIO), 1, 2);
+                                    printf("HORARIO: %i, %s, %s, %p, %i, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
+                                           horarioNULL.ID_horario, horarioNULL.nombre, horarioNULL.repeticion_semanal, horarioNULL.ptr_fk_tipo,
+                                    horarioNULL.fk_tipo.ID_tipo, horarioNULL.fk_tipo.tipo, horarioNULL.fecha_ini.tm_mday, horarioNULL.fecha_ini.tm_mon, horarioNULL.fecha_ini.tm_year,
+                                    horarioNULL.fecha_final.tm_mday, horarioNULL.fecha_final.tm_mon, horarioNULL.fecha_final.tm_year,
+                                    horarioNULL.alerta.tm_mday, horarioNULL.alerta.tm_mon, horarioNULL.alerta.tm_year);*/
+                                    contadorBytesArch(rutaHORARIO);
+
+
+                                    /*HORA_HORARIO*/
+                                    char fecha2[5][30] = {{"29/11/23 09:30:00"}, {"30/11/23 11:15:00"},{"03/12/24 08:45:00"}, {"17/12/23 10:00:00"}, {"08/02/24 09:00:00"}};
+                                    struct tm fechaNull[5];
+                                    for (int i = 0; i < 5; i++) {
+                                        //printf("Entré al for \n");
+                                        convertirAFechaYHora(fecha2[i], &fechaNull[i]);
+                                        //printf("Fecha y hora convertida: %02d/%02d/%d %02d:%02d:%02d\n",
+                                               //fechaNull[i].tm_mday, fechaNull[i].tm_mon + 1, fechaNull[i].tm_year,
+                                               //fechaNull[i].tm_hour, fechaNull[i].tm_min, fechaNull[i].tm_sec);
+                                        //fechaConvertida[i] = convertirAtime_t(fecha2[i]);
+                                        //printf("Fecha convertida a time_t: %ld\n", (long) fechaConvertida[i]);
+                                    }
+
+                                    HORA_HORARIO hor_hor1={1, &horario1, horario1, time(NULL), fechaNull[0], fechaNull[1]};
+                                    HORA_HORARIO hor_hor2={2, &horario1, horario1, time(NULL), fechaNull[1], fechaNull[2]};
+                                    HORA_HORARIO hor_hor3={3, &horario2, horario2, time(NULL), fechaNull[2], fechaNull[3]};
+                                    HORA_HORARIO hor_hor4={4, &horario2, horario2, time(NULL), fechaNull[3], fechaNull[4]};
+                                    SELECT(rutaHORA_HORARIO, &hor_horarioNULL, sizeof(HORA_HORARIO), 1, 3);
+                                    //printf("HH: %i, %p, %i, %s, %lli, %d/%d/%d, %d/%d/%d\n", hor_horarioNULL.ID_HH, hor_horarioNULL.ptr_fk_horario, hor_horarioNULL.fk_horario.ID_horario,
+                                           //hor_horarioNULL.fk_horario.nombre, hor_horarioNULL.tiempo,
+                                           //hor_horarioNULL.dia_h_ini.tm_mday, hor_horarioNULL.dia_h_ini.tm_mon, hor_horarioNULL.dia_h_ini.tm_year,
+                                           //hor_horarioNULL.h_final.tm_mday, hor_horarioNULL.h_final.tm_mon, hor_horarioNULL.h_final.tm_year);
+                                    contadorBytesArch(rutaHORA_HORARIO);
+
+                                    /*RECORDATORIOS*/
+
+                                    RECORDATORIOS recor1 = {1, "EXAMEN FINAL PIÑA", &tip2, tip2, time(NULL), fechaNull[2], 0};
+                                    RECORDATORIOS recor2 = {2, "Serie Algebra", &tip2, tip3, time(NULL), fechaNull[3], 1};
+                                    RECORDATORIOS recor3 = {3, "Salida con amigos", &tip1, tip1, time(NULL), fechaNull[4], 0};
+                                    RECORDATORIOS recor4 = {4, "Cita con Doctor", &tip3, tip3, time(NULL), fechaNull[1], 1};
+                                    SELECT(rutaRECORDATORIO, &recordNULL, sizeof(RECORDATORIOS), 1, 2);
+                                    //printf("Record: %i, %s, %p, %i, %s, %lli, %d/%d/%d, %i\n", recordNULL.ID_recordatorio, recordNULL.recordatorio, recordNULL.ptr_fk_tipo,
+                                           //recordNULL.fk_tipo.ID_tipo, recordNULL.fk_tipo.tipo, recordNULL.tiempo,
+                                           //recordNULL.fecha.tm_mday, recordNULL.fecha.tm_mon, recordNULL.fecha.tm_year, recordNULL.estado_comp);
+                                    /*PRODUCTIVIDAD*/
+
+                                    PRODUCTIVIDAD product1= {1, time(NULL), fechaNull[0],  7, 6};
+                                    PRODUCTIVIDAD product2= {2, time(NULL), fechaNull[2], 8, 7};
+                                    PRODUCTIVIDAD product3= {3, time(NULL), fechaNull[4], 12, 10};
+                                    SELECT(rutaPRODUCTIVIDAD, &productNULL, sizeof(PRODUCTIVIDAD), 1, 1);
+                                    //printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", productNULL.ID_product, productNULL.tiempo,
+                                           //productNULL.fecha.tm_mday, productNULL.fecha.tm_mon, productNULL.fecha.tm_year, productNULL.habit, productNULL.racord);
+                                    //UPDATE(rutaHORARIO, &horario1, sizeof(HORARIO), 1, 1);
+//................................................
+/*
                                     //SUPER INSERT TIPO
+
                                     SUPER_INSERT(&tip1.ID_tipo, rutaTIPO, &tip1, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip2.ID_tipo, rutaTIPO, &tip2, sizeof(TIPO), 1);
                                     SUPER_INSERT(&tip3.ID_tipo, rutaTIPO, &tip3, sizeof(TIPO), 1);
+
+                                    //SUPER INSERT DIFICULTAD
+                                    SUPER_INSERT(&dif1.ID_dificultad, rutaDIFICULTAD, &dif1, sizeof(DIFICULTAD), 1);
+                                    SUPER_INSERT(&dif2.ID_dificultad, rutaDIFICULTAD, &dif2, sizeof(DIFICULTAD), 1);
+                                    SUPER_INSERT(&dif3.ID_dificultad, rutaDIFICULTAD, &dif3, sizeof(DIFICULTAD), 1);
+                                    SUPER_INSERT(&dif4.ID_dificultad, rutaDIFICULTAD, &dif4, sizeof(DIFICULTAD), 1);
+                                    SUPER_INSERT(&dif5.ID_dificultad, rutaDIFICULTAD, &dif5, sizeof(DIFICULTAD), 1);
                                     //SUPERO INSERT HABITO
                                     SUPER_INSERT(&hab1.ID_habito, rutaHABITO, &hab1, sizeof(HABITO), 1);
                                     SUPER_INSERT(&hab2.ID_habito, rutaHABITO, &hab2, sizeof(HABITO), 1);
@@ -718,11 +958,6 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     SUPER_INSERT(&product2.ID_product, rutaPRODUCTIVIDAD, &product2, sizeof(PRODUCTIVIDAD), 1);
                                     SUPER_INSERT(&product3.ID_product, rutaPRODUCTIVIDAD, &product3, sizeof(PRODUCTIVIDAD), 1);
 */
-
-
-
-
-                                    
 //                                    obtenerTamanioEstructura(sizeof(RECORDATORIOS), "RECORDATORIOS");
 //                                    contadorBytesArch(rutaRECORDATORIO);
                                     break;
@@ -757,9 +992,16 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             //UPDATE
-                            strcpy(usuario.nombre,nombre);
-                            UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);
-                            printf("%s",usuario.nombre);
+                            strcpy(usuario.nombre,nombre);//Ponerle el nuevo nombre "" -> "nuevo"
+                            if(verificarExistenciaDeArchivo(rutaUSUARIO)==0){
+                                SUPER_INSERT(&usuario.ID_usuario, rutaUSUARIO, &usuario, sizeof(USUARIO), 1);
+                            } else {
+                                UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);//Por el programa que estamos desarrollando de solo 1 usuario;
+                            }
+                            //printf("%s",usuario.nombre);
+                            //Actualiza archivo de ingresado por primera vez:
+                            struct APP appActualizado = {1, usuario.ID_usuario};
+                            INSERT(rutaAPP, &appActualizado, sizeof(struct APP), 1);
 
                             reseteatEstadoMomento(1);
                         }
@@ -767,20 +1009,254 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         //al_flip_display();
                     }
                     break;
-                case 1:
-                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                case 1: /*Habitos*/
+
+//<<<<<<< Updated upstream --Fersa es tubho áqui 28/11/2023
+/*
                     creacionEstructuras();
-                    al_flip_display();
+                    al_flip_display(); */
+                    /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
+                     * almacenarla en la variable ____*/
+
+                    CONTAR_REGISTROS();
+//=======
+//>>>>>>> Stashed changes
+                    //al_flip_display();
+                    /*Flechitas arriba y abajo para cambiar de habito*/
+                    if(estado==0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_A:
+                                        estado = 1;
+                                        break;
+                                    case ALLEGRO_KEY_E:
+                                        estado = 2;
+                                        break;
+                                    case ALLEGRO_KEY_B:
+                                        estado = 3;
+                                        break;
+                                    case ALLEGRO_KEY_2:
+                                        reseteatEstadoMomento(2);
+                                        break;
+                                    case ALLEGRO_KEY_3:
+                                        reseteatEstadoMomento(3);
+                                        break;
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    }
+                    printf("Tamaño:%i\tLocalización:%i\n", tamArrPos, loc);
                     break;
                 case 2:
+                    if(estado == 0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_1:
+                                        reseteatEstadoMomento(1);
+                                        break;
+                                    case ALLEGRO_KEY_3:
+                                        reseteatEstadoMomento(3);
+                                        break;
+
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }  else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    }
                     break;
                 case 3:
-                    break;
+                    if(estado == 0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_1:
+                                        reseteatEstadoMomento(1);
+                                        break;
+                                    case ALLEGRO_KEY_2:
+                                        reseteatEstadoMomento(2);
+                                        break;
+
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }  else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    }
                 case 4:
                     
-                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
-                    al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
-                    al_draw_rectangle(300,340,800,365,texto_black,5);
+                    //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                    //al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    //al_draw_rectangle(300,340,800,365,texto_black,5);
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
                             // Añadir el carácter a la cadena de entrada
@@ -796,7 +1272,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 nombre[len - 1] = '\0';
                             }
                         }
-                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             strcpy(usuario.nombre,nombre);
@@ -807,8 +1283,16 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
 
-                            momento=1;
-                            estado=0;
+                            reseteatEstadoMomento(1);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_1){
+                            reseteatEstadoMomento(1);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_2){
+                            reseteatEstadoMomento(2);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_3){
+                            reseteatEstadoMomento(3);
                         }
                     }
                     break;
@@ -1016,34 +1500,38 @@ void creacionEstructuras(){
     //REGISTRO_HABITOS reg_hab4 = {4, &hab4, tiempo2, miFecha2, 5, 0};
 
     /*HORARIO*/
+    /*
     HORARIO horario1 = {1, "Algebra", "1000100", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
     HORARIO horario2 = {2, "Curso Progra", "1010101", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
     HORARIO horario3 = {3, "Calculo", "0111000", &tip2, tiempo, miFecha2, miFecha2, miFecha2};
-
+*/
     /*HORA_HORARIO*/
+    /*
     HORA_HORARIO hor_hor1={1, &horario1, tiempo, miFecha2, miFecha2};
     HORA_HORARIO hor_hor2={2, &horario1, tiempo, miFecha2, miFecha2};
     HORA_HORARIO hor_hor3={3, &horario2, tiempo, miFecha2, miFecha2};
     HORA_HORARIO hor_hor4={4, &horario2, tiempo, miFecha2, miFecha2};
-
+*/
     /*RECORDATORIOS*/
+    /*
     RECORDATORIOS recor1 = {1, "EXAMEN FINAL PIÑA", &tip2, tiempo, miFecha2, 0};
     RECORDATORIOS recor2 = {2, "Serie Algebra", &tip2, tiempo, miFecha2, 1};
     RECORDATORIOS recor3 = {3, "Salida con amigos", &tip1, tiempo, miFecha2, 0};
     RECORDATORIOS recor4 = {4, "Cita con Doctor", &tip3, tiempo, miFecha2, 1};
-
+*/
     /*PRODUCTIVIDAD*/
+
     PRODUCTIVIDAD product1= {1, tiempo, miFecha2, 7, 6};
     PRODUCTIVIDAD product2= {2, tiempo, miFecha2, 8, 7};
     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
 
 
-    al_draw_textf(lexend_bold[40], texto_black, 500, 10, ALLEGRO_ALIGN_CENTER, "Hábito 1: %s", hab1.nombre);
-    al_draw_textf(lexend_regular[15], texto_black, 110, 80, 0, "Notas: %s", hab1.nota);
+    al_draw_textf(lexend_bold[40], texto_black, 500, 10, ALLEGRO_ALIGN_CENTER, "Hábito 1: %s", hab2.nombre);
+    al_draw_textf(lexend_regular[15], texto_black, 110, 80, 0, "Notas: %s", hab2.nota);
     int x = 650, y = 80;
     for (int i = 0; i < 4; ++i) {
         char cadena[7]={0};
-        strcpy(cadena,hab1.repeticion_semanal);
+        strcpy(cadena,hab2 .repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
             printf("%d\n",valor);
@@ -1054,9 +1542,7 @@ void creacionEstructuras(){
 }
 int main() {
     int acceso;
-
     if(inicializar_allegro()){
-
         disp = al_create_display(1200, 700);
         AFK = al_create_timer(30);
         al_set_window_title(disp, "Hábitus");
@@ -1068,25 +1554,11 @@ int main() {
         al_register_event_source(cola_eventos, al_get_keyboard_event_source());// FUENTE: eventos del teclado
         al_start_timer(AFK);
 
-        //Prueba función UPDATE
-        HABITO habit1 ={1, "HABITO 4 NUEVO OWO", "NOTA PARA 4", "2", 4, '\0', '\0', 44, '\0', '\0'};
-        //habit1.ID_habito = manejarAUTOINCREMENT("./data/usuarios/1/habito.dat");
-//        UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
-//      DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-//      SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 4);
-//        IUSD();
-
-        //UPDATE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-        //DELETE("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 1);
-        //SELECT("./data/usuarios/1/habito.dat", &habit1, sizeof(HABITO), 1, 2);
-        //EJEMPLO ej1 ={"AQUI EJEMPLO", 208};
-//        UPDATE("./data/usuarios/1/ejemplo.dat", &ej1, sizeof(EJEMPLO), 1);
-
         /*CREACIÓN DE ESTRUCTURAS*/
         //creacionEstructuras();
-
-
-
+        if(!verificarExistenciaDeArchivo(rutaAPP)){
+            INSERT(rutaAPP, &reseteoAPP, sizeof(struct APP), 1);
+        }
         SELECT(rutaAPP, &app_recibe, sizeof(struct APP), 1, 1);
         //printf("main.c: %i, %i\n", app_recibe.init, app_recibe.ID_last_user);
         main_habitus(app_recibe.init, app_recibe.ID_last_user);

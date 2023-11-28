@@ -1,3 +1,4 @@
+#include <time.h>
 typedef struct tm FECHA;
 typedef struct {
         int ID_dificultad;
@@ -20,7 +21,7 @@ typedef struct {
     TIPO *ptr_fk_tipo;
     TIPO fk_tipo;       //-----
     DIFICULTAD *ptr_fk_difi;
-    DIFICULTAD fk_dif1; //-----
+    DIFICULTAD fk_difi; //-----
     int racha;
     time_t tiempo;
     FECHA fecha_ini;
@@ -28,6 +29,7 @@ typedef struct {
 typedef struct {
     int ID_RH;
     HABITO *ptr_fk_habito;
+    HABITO fk_habito; //------
     time_t tiempo;
     FECHA fecha;
     int completado;
@@ -38,6 +40,7 @@ typedef struct {
     char nombre[40];
     char repeticion_semanal[7];
     TIPO *ptr_fk_tipo;
+    TIPO fk_tipo; //-----
     time_t tiempo;
     FECHA fecha_ini;
     FECHA fecha_final;
@@ -46,6 +49,7 @@ typedef struct {
 typedef struct {
     int ID_HH;
     HORARIO *ptr_fk_horario;
+    HORARIO fk_horario; //-------
     time_t tiempo;
     FECHA dia_h_ini;
     FECHA h_final;
@@ -54,6 +58,7 @@ typedef struct {
     int ID_recordatorio;
     char recordatorio[180];
     TIPO *ptr_fk_tipo;
+    TIPO fk_tipo; //-------
     time_t tiempo;
     FECHA fecha;
     short int estado_comp;
