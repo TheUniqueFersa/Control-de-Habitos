@@ -166,15 +166,21 @@ void Pendientes(){
     al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
     al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
 }
-void calendario(int dia_semana, int mes,int primero){
+void calendario(int dia_semana, int mes,int primero,int anio){
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
     int tipomes=mes%2;
     int dias_en_mes;
     int primerafila=0;
+    int bisiesto=anio%4;
     if(mes==2){
-        dias_en_mes=28;
+        if(bisiesto!=0){
+            dias_en_mes=28;
+        }else{
+            dias_en_mes=29;
+            printf("dias en mes: %d",dias_en_mes);
+        }
     }else if(tipomes==0){
         dias_en_mes=31;
     }else if(tipomes==1){
@@ -187,7 +193,7 @@ void calendario(int dia_semana, int mes,int primero){
                 columna=primero;
                 primerafila=1;
             }
-            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_semana-primero;
+            int dia_calendario = fila * COLUMNAS + columna + 1 - primero;
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
             if(dia_calendario%4==0)transparencia=0;
             else if(dia_calendario%4==1)transparencia=255/2;
@@ -236,7 +242,7 @@ void ObtenerHora(){
     sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
     Pendientes();
     Dia(dia_semana);
-    calendario(dia_semana,mes,(primero));
+    calendario(dia_semana,mes,primero,anio);
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
@@ -326,7 +332,7 @@ void actualizar_display(){
     al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 175, 0, 350,100, 175, 0);
     al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 175, 0, 525,100, 175, 0);
     //al_draw_text(lexend_regular[10],al_map_rgba(255, 255, 255, 10),199,500,ALLEGRO_ALIGN_CENTER,"1");
-    /*al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
     al_draw_filled_rectangle(101, 0, 1000, 720, al_map_rgb(47, 50, 58));
     al_draw_filled_rectangle(300, 90, 500, 120, al_map_rgb(214, 164, 226));
     al_draw_filled_rectangle(600, 90, 800, 120, al_map_rgb(214, 164, 226));
@@ -350,8 +356,18 @@ void actualizar_display(){
     al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
     al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
     al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
-    al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);*/
+    al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
 
+    //texto para los recuadros
+    al_draw_text(lexend_regular[30],texto_black,400,85,ALLEGRO_ALIGN_CENTER,"Hoy");
+    al_draw_text(lexend_regular[30],texto_black,700,85,ALLEGRO_ALIGN_CENTER,"Todos");
+    al_draw_text(lexend_regular[40],texto_black,540,185,ALLEGRO_ALIGN_CENTER,"Habitos");
+
+    al_draw_text(lexend_regular[10],texto_black,255,280,ALLEGRO_ALIGN_CENTER,"Completado");
+    al_draw_text(lexend_regular[10],texto_black,255,290,ALLEGRO_ALIGN_CENTER,"(C)");
+    al_draw_text(lexend_regular[9],texto_black,475,280,ALLEGRO_ALIGN_CENTER,"No completado");
+    al_draw_text(lexend_regular[10],texto_black,475,290,ALLEGRO_ALIGN_CENTER,"(N)");
+/*
     //interfaz de dificultad
    al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
@@ -393,7 +409,7 @@ void actualizar_display(){
    al_draw_text(lexend_regular[45],texto_black,565,185,ALLEGRO_ALIGN_CENTER,"Dificultad");
     al_draw_filled_rounded_rectangle(890, 496, 1110, 700, 25, 25, al_map_rgb(255, 255, 255));//222, 186, 192, 1
     al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
-    //al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
+    //al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);*/
 
 
 
@@ -1497,7 +1513,7 @@ int main() {
     int acceso;
     if(inicializar_allegro()){
         disp = al_create_display(1200, 700);
-        AFK= al_create_timer(30);
+        AFK = al_create_timer(30);
         al_set_window_title(disp, "Hábitus");
         //al_set_display_icon(disp, n); // --TODO
         cola_eventos = al_create_event_queue();
