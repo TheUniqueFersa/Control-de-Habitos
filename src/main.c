@@ -276,15 +276,19 @@ void ventanaActual(){
 
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
-
             al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+
             al_draw_filled_rectangle(100, 0, 1000, 700, fondo_principal_oscuro);
             creacionEstructuras();
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
             /*Interfaz integrada para cada estado*/
+
             if(estado==1){
+                al_draw_filled_rectangle(200,0,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
+                al_draw_filled_rectangle(270,180,820,250, texto_white);
                 
+
             }
 
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
