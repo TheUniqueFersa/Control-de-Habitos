@@ -96,7 +96,8 @@ int n_reg_productividad;
 int fin=0;
 int momento=0, estado=0; /*0: Inicio primera vez*/
 int tamArrPos=6, loc=0;
-int * arrPos, *arrHab;
+int * arrPos, * arrHab;
+int registrosInicializados = 0;
  //Nos permiten navegar en el momento 1
 /*
  *
@@ -553,80 +554,102 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     }
     return temp;
 }
+int * arrIndicesRegistrosNoVacios;
+void cargar_registros_no_vacios(){
+    int n_cantidad_registros_disponibles=0;
+    for(int i=0; i<n_reg_habitos; i++){
+        if(Habitos->ID_habito == 0){
+            n_cantidad_registros_disponibles++;
+        }
+        printf("------------------>Habitos: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+               Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+               Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+    }
+}
+
+
 void CARGAR_TODOS_LOS_REGISTROS(){
     int retorno = 0, i=0;
-    n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
-    printf("Registros: %i\n", n_reg_dificultades);
-    Dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), n_reg_dificultades);
-    for(i = 0; i<n_reg_dificultades; i++){
-        SELECT(rutaDIFICULTAD, &Dificultades[i], sizeof(DIFICULTAD), 1, i+1);
-        printf("IDDDD: %i, dificultad: %s\n", Dificultades[i].ID_dificultad, Dificultades[i].dificultad);
+    if(registrosInicializados==0){
+        //inicializa arreglos necesarios
+        n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
+        printf("Registros: %i\n", n_reg_dificultades);
+        Dificultades = (DIFICULTAD *) crearArreglo(sizeof(DIFICULTAD), n_reg_dificultades);
+        for(i = 0; i<n_reg_dificultades; i++){
+            SELECT(rutaDIFICULTAD, &Dificultades[i], sizeof(DIFICULTAD), 1, i+1);
+            printf("IDDDD: %i, dificultad: %s\n", Dificultades[i].ID_dificultad, Dificultades[i].dificultad);
+        }
+        n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
+        printf("Registros: %i\n", n_reg_tipo);
+        Tipos = (TIPO *) crearArreglo(sizeof(TIPO), n_reg_tipo);
+        for(i = 0; i<n_reg_tipo; i++){
+            SELECT(rutaTIPO, &Tipos[i], sizeof(TIPO), 1, i+1);
+            printf("IDDDD: %i, tipo: %s\n", Tipos[i].ID_tipo, Tipos[i].tipo);
+        }
+        //printf("LOLIN.COM: %lli\n", sizeof(Tipos));
+        //printf("IDDDD malo: %i, tipo: %s\n", Tipos[2].ID_tipo, Tipos[2].tipo);
+        //printf("IDDDD malo: %i, tipo: %s\n", Tipos[6].ID_tipo, Tipos[6].tipo);
+        n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
+        printf("Registros: %i\n", n_reg_habitos);
+        Habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
+        for(i = 0; i<n_reg_habitos; i++){
+            SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
+            printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                   Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                   Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+        }
+        n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
+        printf("Registros: %i\n", n_reg_reg_hab);
+        Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
+        for(i = 0; i<n_reg_reg_hab; i++){
+            SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
+            printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
+                   Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado);
+        }
+        n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
+        printf("Registros: %i\n", n_reg_horario);
+        Horarios = (HORARIO *) crearArreglo(sizeof(HORARIO), n_reg_horario);
+        for(i = 0; i<n_reg_horario; i++){
+            SELECT(rutaHORARIO, &Horarios[i], sizeof(HORARIO), 1, i+1);
+            printf("HORARIO: %i, %s, %s, %p, %i, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
+                   Horarios[i].ID_horario, Horarios[i].nombre, Horarios[i].repeticion_semanal, Horarios[i].ptr_fk_tipo,
+                   Horarios[i].fk_tipo.ID_tipo, Horarios[i].fk_tipo.tipo, Horarios[i].fecha_ini.tm_mday, Horarios[i].fecha_ini.tm_mon, Horarios[i].fecha_ini.tm_year,
+                   Horarios[i].fecha_final.tm_mday, Horarios[i].fecha_final.tm_mon, Horarios[i].fecha_final.tm_year,
+                   Horarios[i].alerta.tm_mday, Horarios[i].alerta.tm_mon, Horarios[i].alerta.tm_year);
+        }
+        n_reg_hora_horario = obtenerNumeroRegistros(rutaHORA_HORARIO, sizeof(HORA_HORARIO));
+        printf("Registros: %i\n", n_reg_hora_horario);
+        Hora_horarios = (HORA_HORARIO *) crearArreglo(sizeof(HORA_HORARIO), n_reg_hora_horario);
+        for(i = 0; i<n_reg_hora_horario; i++){
+            SELECT(rutaHORA_HORARIO, &Hora_horarios[i], sizeof(HORA_HORARIO), 1, i+1);
+            printf("HH: %i, %p, %i, %s, %lli, %d/%d/%d, %d/%d/%d\n", Hora_horarios[i].ID_HH, Hora_horarios[i].ptr_fk_horario, Hora_horarios[i].fk_horario.ID_horario,
+                   Hora_horarios[i].fk_horario.nombre, Hora_horarios[i].tiempo,
+                   Hora_horarios[i].dia_h_ini.tm_mday, Hora_horarios[i].dia_h_ini.tm_mon, Hora_horarios[i].dia_h_ini.tm_year,
+                   Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
+        }
+        n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
+        printf("Registros: %i\n", n_reg_recordatorios);
+        Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
+        for(i = 0; i<n_reg_recordatorios; i++){
+            SELECT(rutaRECORDATORIO, &Recordatorios[i], sizeof(RECORDATORIOS), 1, i+1);
+            printf("Record: %i, %s, %p, %i, %s, %lli, %d/%d/%d, %i\n", Recordatorios[i].ID_recordatorio, Recordatorios[i].recordatorio, Recordatorios[i].ptr_fk_tipo,
+                   Recordatorios[i].fk_tipo.ID_tipo, Recordatorios[i].fk_tipo.tipo, Recordatorios[i].tiempo,
+                   Recordatorios[i].fecha.tm_mday, Recordatorios[i].fecha.tm_mon, Recordatorios[i].fecha.tm_year, Recordatorios[i].estado_comp);
+        }
+        n_reg_productividad = obtenerNumeroRegistros(rutaPRODUCTIVIDAD, sizeof(PRODUCTIVIDAD));
+        printf("Registros: %i\n", n_reg_productividad);
+        Productividad = (PRODUCTIVIDAD *) crearArreglo(sizeof(PRODUCTIVIDAD), n_reg_productividad);
+        for(i = 0; i<n_reg_productividad; i++){
+            SELECT(rutaPRODUCTIVIDAD, &Productividad[i], sizeof(PRODUCTIVIDAD), 1, i+1);
+            printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", Productividad[i].ID_product, Productividad[i].tiempo,
+                   Productividad[i].fecha.tm_mday, Productividad[i].fecha.tm_mon, Productividad[i].fecha.tm_year, Productividad[i].habit, Productividad[i].racord);
+        }
+
+    }else{
+
     }
-    n_reg_tipo = obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO));
-    printf("Registros: %i\n", n_reg_tipo);
-    Tipos = (TIPO *) crearArreglo(sizeof(TIPO), n_reg_tipo);
-    for(i = 0; i<n_reg_tipo; i++){
-        SELECT(rutaTIPO, &Tipos[i], sizeof(TIPO), 1, i+1);
-        printf("IDDDD: %i, tipo: %s\n", Tipos[i].ID_tipo, Tipos[i].tipo);
-    }
-    //printf("LOLIN.COM: %lli\n", sizeof(Tipos));
-    //printf("IDDDD malo: %i, tipo: %s\n", Tipos[2].ID_tipo, Tipos[2].tipo);
-    //printf("IDDDD malo: %i, tipo: %s\n", Tipos[6].ID_tipo, Tipos[6].tipo);
-    n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
-    printf("Registros: %i\n", n_reg_habitos);
-    Habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
-    for(i = 0; i<n_reg_habitos; i++){
-        SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
-        printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
-        Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
-                Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
-    }
-    n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
-    printf("Registros: %i\n", n_reg_reg_hab);
-    Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
-    for(i = 0; i<n_reg_reg_hab; i++){
-        SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
-        printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
-               Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado);
-    }
-    n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
-    printf("Registros: %i\n", n_reg_horario);
-    Horarios = (HORARIO *) crearArreglo(sizeof(HORARIO), n_reg_horario);
-    for(i = 0; i<n_reg_horario; i++){
-        SELECT(rutaHORARIO, &Horarios[i], sizeof(HORARIO), 1, i+1);
-        printf("HORARIO: %i, %s, %s, %p, %i, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",
-               Horarios[i].ID_horario, Horarios[i].nombre, Horarios[i].repeticion_semanal, Horarios[i].ptr_fk_tipo,
-               Horarios[i].fk_tipo.ID_tipo, Horarios[i].fk_tipo.tipo, Horarios[i].fecha_ini.tm_mday, Horarios[i].fecha_ini.tm_mon, Horarios[i].fecha_ini.tm_year,
-               Horarios[i].fecha_final.tm_mday, Horarios[i].fecha_final.tm_mon, Horarios[i].fecha_final.tm_year,
-               Horarios[i].alerta.tm_mday, Horarios[i].alerta.tm_mon, Horarios[i].alerta.tm_year);
-    }
-    n_reg_hora_horario = obtenerNumeroRegistros(rutaHORA_HORARIO, sizeof(HORA_HORARIO));
-    printf("Registros: %i\n", n_reg_hora_horario);
-    Hora_horarios = (HORA_HORARIO *) crearArreglo(sizeof(HORA_HORARIO), n_reg_hora_horario);
-    for(i = 0; i<n_reg_hora_horario; i++){
-        SELECT(rutaHORA_HORARIO, &Hora_horarios[i], sizeof(HORA_HORARIO), 1, i+1);
-        printf("HH: %i, %p, %i, %s, %lli, %d/%d/%d, %d/%d/%d\n", Hora_horarios[i].ID_HH, Hora_horarios[i].ptr_fk_horario, Hora_horarios[i].fk_horario.ID_horario,
-               Hora_horarios[i].fk_horario.nombre, Hora_horarios[i].tiempo,
-               Hora_horarios[i].dia_h_ini.tm_mday, Hora_horarios[i].dia_h_ini.tm_mon, Hora_horarios[i].dia_h_ini.tm_year,
-               Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
-    }
-    n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
-    printf("Registros: %i\n", n_reg_recordatorios);
-    Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
-    for(i = 0; i<n_reg_recordatorios; i++){
-        SELECT(rutaRECORDATORIO, &Recordatorios[i], sizeof(RECORDATORIOS), 1, i+1);
-        printf("Record: %i, %s, %p, %i, %s, %lli, %d/%d/%d, %i\n", Recordatorios[i].ID_recordatorio, Recordatorios[i].recordatorio, Recordatorios[i].ptr_fk_tipo,
-               Recordatorios[i].fk_tipo.ID_tipo, Recordatorios[i].fk_tipo.tipo, Recordatorios[i].tiempo,
-               Recordatorios[i].fecha.tm_mday, Recordatorios[i].fecha.tm_mon, Recordatorios[i].fecha.tm_year, Recordatorios[i].estado_comp);
-    }
-    n_reg_productividad = obtenerNumeroRegistros(rutaPRODUCTIVIDAD, sizeof(PRODUCTIVIDAD));
-    printf("Registros: %i\n", n_reg_productividad);
-    Productividad = (PRODUCTIVIDAD *) crearArreglo(sizeof(PRODUCTIVIDAD), n_reg_productividad);
-    for(i = 0; i<n_reg_productividad; i++){
-        SELECT(rutaPRODUCTIVIDAD, &Productividad[i], sizeof(PRODUCTIVIDAD), 1, i+1);
-        printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", Productividad[i].ID_product, Productividad[i].tiempo,
-               Productividad[i].fecha.tm_mday, Productividad[i].fecha.tm_mon, Productividad[i].fecha.tm_year, Productividad[i].habit, Productividad[i].racord);
-    }
+
+    cargar_registros_no_vacios();
 }
 //DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
 
@@ -698,7 +721,15 @@ time_t convertirAtime_t(const char *cadenaFecha) {
 
     return tiempoUnix;
 }
+//int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), 10);
+//arrPos = nuevoArreglo;
+void invocarNoVacios(){
 
+    arrPos = (int *) crearArreglo(sizeof(int), n_reg_habitos);
+    //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
+    //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
+    arrHab = (int *) crearArreglo(sizeof(int), n_reg_habitos);
+}
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -713,21 +744,15 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
     //momento=-1;//DEP
 
-    /*Crear arreglo nimámico Para Fersa*/
-    printf("CREAR ARREGLO ARRPOS\n");
-    arrPos = (int *) crearArreglo(sizeof(int), 6);
-    //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
-    int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), 10);
-    arrPos = nuevoArreglo;
-    //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
-    arrHab = (int *) crearArreglo(sizeof(int), 1);
+
+
+
 
     /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
      * no estan vacias del arreglo que almacena estructuras de habitos*/
 
     /**/
     USUARIO usNULL = {0};
-    HABITO haNULL = {0};
     RECORDATORIOS reNULL= {0};
     DIFICULTAD diNULL ={0};
     TIPO tNULL = {0};
@@ -739,7 +764,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 //    printf("Tipo:%s\nID:%i\n", tNULL.tipo, tNULL.ID_tipo);
     //printf("N registross: %i\n",obtenerNumeroRegistros(rutaTIPO, sizeof(TIPO)));
     //printf("N registross: %i\n",obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD)));
+
+    //RECARGAR(1-2-3-);
     CARGAR_TODOS_LOS_REGISTROS();
+
     while(fin!=1){
         if(al_event_queue_is_empty(cola_eventos) && pantalla_requiere_actualizacion){
             //pantalla_requiere_actualizacion=0;
@@ -915,6 +943,11 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     //printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", productNULL.ID_product, productNULL.tiempo,
                                            //productNULL.fecha.tm_mday, productNULL.fecha.tm_mon, productNULL.fecha.tm_year, productNULL.habit, productNULL.racord);
                                     //UPDATE(rutaHORARIO, &horario1, sizeof(HORARIO), 1, 1);
+                                    //SUPER_INSERT(&habNULL.ID_habito, rutaHABITO, &habNULL, sizeof(HABITO), 4);
+                                    HABITO jijija = {10, "Apoco si tilin", "Lolololol"};
+                                    //UPDATE(rutaHABITO, &jijija, sizeof(HABITO), 1, 10);
+                                    contadorBytesArch(rutaHABITO);
+                                    printf("AAAAA %i",obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO)));
 //................................................
 /*
                                     //SUPER INSERT TIPO
