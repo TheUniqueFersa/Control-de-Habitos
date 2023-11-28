@@ -299,6 +299,13 @@ void ventanaActual(){
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+
+            al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+            al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+            al_draw_rectangle(300,340,800,365,texto_black,5);
+            al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+            //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+            //al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
             break;
         default:
 
@@ -957,7 +964,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     break;
                 case 1: /*Habitos*/
 
-//<<<<<<< Updated upstream
+//<<<<<<< Updated upstream --Fersa es tubho áqui 28/11/2023
 /*
                     creacionEstructuras();
                     al_flip_display(); */
@@ -965,46 +972,244 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                      * almacenarla en la variable ____*/
 
                     CONTAR_REGISTROS();
-
 //=======
 //>>>>>>> Stashed changes
                     //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
+                    if(estado==0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_A:
+                                        estado = 1;
+                                        break;
+                                    case ALLEGRO_KEY_E:
+                                        estado = 2;
+                                        break;
+                                    case ALLEGRO_KEY_B:
+                                        estado = 3;
+                                        break;
+                                    case ALLEGRO_KEY_2:
+                                        reseteatEstadoMomento(2);
+                                        break;
+                                    case ALLEGRO_KEY_3:
+                                        reseteatEstadoMomento(3);
+                                        break;
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
 
-                    switch(evento.type){
-                        case ALLEGRO_EVENT_KEY_DOWN:
-                            switch(evento.keyboard.keycode){
-                                case ALLEGRO_KEY_DOWN:
-                                    if(loc<tamArrPos && loc>=0){
-                                        printf("ENTRA ABAJO\n");
-                                        loc++;
-                                    }
-                                    break;
-                                case ALLEGRO_KEY_UP:
-                                    if(loc>0 && loc<=tamArrPos){
-                                        printf("ENTRA ARRIBA\n");
-                                        loc--;
-                                    }
-                                    break;
-                                case ALLEGRO_KEY_4:
-                                    reseteatEstadoMomento(4);
-                                    break;
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
                             }
-                            break;
-                        default:
-                            break;
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
                     }
                     printf("Tamaño:%i\tLocalización:%i\n", tamArrPos, loc);
                     break;
                 case 2:
+                    if(estado == 0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_1:
+                                        reseteatEstadoMomento(1);
+                                        break;
+                                    case ALLEGRO_KEY_3:
+                                        reseteatEstadoMomento(3);
+                                        break;
+
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }  else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    }
                     break;
                 case 3:
-                    break;
+                    if(estado == 0){
+                        switch(evento.type){
+                            case ALLEGRO_EVENT_KEY_DOWN:
+                                switch(evento.keyboard.keycode){
+                                    //ESTADO 0 -> lectura
+                                    case ALLEGRO_KEY_DOWN:
+                                        if(loc<tamArrPos && loc>=0){
+                                            printf("ENTRA ABAJO\n");
+                                            loc++;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_UP:
+                                        if(loc>0 && loc<=tamArrPos){
+                                            printf("ENTRA ARRIBA\n");
+                                            loc--;
+                                        }
+                                        break;
+                                    case ALLEGRO_KEY_1:
+                                        reseteatEstadoMomento(1);
+                                        break;
+                                    case ALLEGRO_KEY_2:
+                                        reseteatEstadoMomento(2);
+                                        break;
+
+                                    case ALLEGRO_KEY_4:
+                                        reseteatEstadoMomento(4);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }  else if (estado == 1){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 2){
+                        if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+
+                            }
+                            //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    } else if (estado == 3){
+                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+
+                            }
+                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                estado = 0;
+                            }
+                        }
+                    }
                 case 4:
                     
-                    al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
-                    al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
-                    al_draw_rectangle(300,340,800,365,texto_black,5);
+                    //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
+                    //al_draw_text(lexend_regular[15], texto_black, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
+                    //al_draw_rectangle(300,340,800,365,texto_black,5);
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
                             // Añadir el carácter a la cadena de entrada
@@ -1020,7 +1225,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 nombre[len - 1] = '\0';
                             }
                         }
-                        al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
+                        //al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
                             //Aqui se ingresa el nombre del usuario
                             strcpy(usuario.nombre,nombre);
@@ -1035,6 +1240,12 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         }
                         if(evento.keyboard.keycode==ALLEGRO_KEY_1){
                             reseteatEstadoMomento(1);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_2){
+                            reseteatEstadoMomento(2);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_3){
+                            reseteatEstadoMomento(3);
                         }
                     }
                     break;
