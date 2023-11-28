@@ -272,9 +272,14 @@ void ventanaActual(){
             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
             creacionEstructuras();
+
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
+
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -283,8 +288,8 @@ void ventanaActual(){
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
             break;
         case 3:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -293,8 +298,8 @@ void ventanaActual(){
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
             break;
         case 4:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -303,6 +308,7 @@ void ventanaActual(){
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
 
@@ -312,6 +318,10 @@ void ventanaActual(){
             al_draw_text(lexend_regular[20], texto_black, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
             //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
             //al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
+
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
+
             break;
         default:
 
@@ -337,7 +347,7 @@ void actualizar_display(){
     al_draw_filled_rectangle(300, 90, 500, 120, al_map_rgb(214, 164, 226));
     al_draw_filled_rectangle(600, 90, 800, 120, al_map_rgb(214, 164, 226));
     //l_draw_filled_rectangle(150, 150, 950, 600, al_map_rgb(119, 86, 122));
-    al_draw_filled_rectangle(175, 175, 925, 400, al_map_rgb(74, 63, 75));
+    /*al_draw_filled_rectangle(175, 175, 925, 400, al_map_rgb(74, 63, 75));
     al_draw_filled_rectangle(190, 190, 910, 235, al_map_rgb(227, 158, 193));//227, 158, 193, 1
     al_draw_filled_rectangle(190, 250, 540, 370, al_map_rgb(227, 158, 193)); //(225, 0, 129));
     al_draw_filled_rectangle(550, 250, 910, 370, al_map_rgb(227, 158, 193));
@@ -366,8 +376,8 @@ void actualizar_display(){
     al_draw_text(lexend_regular[10],texto_black,255,280,ALLEGRO_ALIGN_CENTER,"Completado");
     al_draw_text(lexend_regular[10],texto_black,255,290,ALLEGRO_ALIGN_CENTER,"(C)");
     al_draw_text(lexend_regular[9],texto_black,475,280,ALLEGRO_ALIGN_CENTER,"No completado");
-    al_draw_text(lexend_regular[10],texto_black,475,290,ALLEGRO_ALIGN_CENTER,"(N)");
-/*
+    al_draw_text(lexend_regular[10],texto_black,475,290,ALLEGRO_ALIGN_CENTER,"(N)");*/
+
     //interfaz de dificultad
    al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
    al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
@@ -411,8 +421,29 @@ void actualizar_display(){
     al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
     //al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);*/
 
+    //recuadro con transparencia y mensaje deseas eliminar yes or no
+    /*al_draw_filled_rounded_rectangle(225, 100, 890, 675, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"¿Estás seguro que");//deseas eliminar este elemento?
+    al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560,340,ALLEGRO_ALIGN_CENTER,"deseas eliminar este elemento?");
 
+    al_draw_filled_rounded_rectangle(425, 425, 525, 525, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_filled_rounded_rectangle(625, 425, 725, 525, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),475, 450, ALLEGRO_ALIGN_CENTER,"Sí");
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),475, 475, ALLEGRO_ALIGN_CENTER,"(Enter)");
 
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 450, ALLEGRO_ALIGN_CENTER,"No");
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 475, ALLEGRO_ALIGN_CENTER,"(Esc)");*/
+//confirma la acción
+    al_draw_filled_rounded_rectangle(225, 100, 890, 675, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"¿Quieres confirmar la acción?");//deseas eliminar este elemento?
+
+    al_draw_filled_rounded_rectangle(425, 425, 525, 525, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_filled_rounded_rectangle(625, 425, 725, 525, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),475, 450, ALLEGRO_ALIGN_CENTER,"Sí");
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),475, 475, ALLEGRO_ALIGN_CENTER,"(Enter)");
+
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 450, ALLEGRO_ALIGN_CENTER,"No");
+    al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 475, ALLEGRO_ALIGN_CENTER,"(Esc)");
     ObtenerHora();
     ventanaActual();
     //IMPRIME NOMBRE USUARIO:
