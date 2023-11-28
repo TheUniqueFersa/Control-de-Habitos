@@ -4,9 +4,10 @@ ALLEGRO_COLOR secundario_pastel_magenta;
 ALLEGRO_COLOR neutro1_tinta_de_pulpo;
 ALLEGRO_COLOR neutro2_african_violet;
 ALLEGRO_COLOR neutro3_french_lilac;
+ALLEGRO_COLOR texto_white;
 ALLEGRO_COLOR texto_black;
 ALLEGRO_COLOR fondo_gris1;
-ALLEGRO_COLOR fondo_principal_comohuesito;
+ALLEGRO_COLOR fondo_principal_oscuro;
 
 ALLEGRO_FONT * lexend_regular[60];
 ALLEGRO_FONT * lexend_bold[60];
@@ -30,10 +31,11 @@ ALLEGRO_BITMAP *LOGO;
 ALLEGRO_BITMAP *EDITARHABITO;
 ALLEGRO_BITMAP *BORRARHABITO;
 ALLEGRO_BITMAP *NUEVOHABITO;
+ALLEGRO_BITMAP *FLECHAS;
 int init_resources(){
     int inicializado_correctamente=1;
 
-    fondo_principal_comohuesito= al_map_rgb(235, 234, 211);
+    fondo_principal_oscuro= al_map_rgb(47, 50, 58);
     fondo_gris1 = al_map_rgb(143,143,143);
     principal_pale_chestnut = al_map_rgb(222, 186, 192);
     secundario_pastel_magenta = al_map_rgb(227,158,193);
@@ -42,7 +44,9 @@ int init_resources(){
 
     neutro3_french_lilac = al_map_rgb(222, 186, 192);
     //neutro3_french_lilac = al_map_rgb(56, 38, 56);
+    texto_white = al_map_rgb(255,255,255);
     texto_black = al_map_rgb(0,0,0);
+
     for(int i=0; i<60; i++) {
         lexend_regular[i] = al_load_font("./media/fuentes/lexend/Lexend-Regular.ttf", i, 0);
         lexend_bold[i] = al_load_font("./media/fuentes/lexend/Lexend-Bold.ttf", i, 0);
@@ -74,18 +78,21 @@ int init_resources(){
     HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
     AJUSTESROSA = al_load_bitmap("./media/img/ajustes_rosa.jpg");
     HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
-
+    //HABITOSROSA = al_load_bitmap("./media/img/habitosrosa.jpg");
     LOGO = al_load_bitmap("./media/img/logo.png");
 
     EDITARHABITO = al_load_bitmap("./media/img/editar.jpg");
     BORRARHABITO = al_load_bitmap("./media/img/borrar.jpg");
     NUEVOHABITO = al_load_bitmap("./media/img/nuevo.png");
+    FLECHAS = al_load_bitmap("./media/img/flechas2.png");
 
 
-    if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO){
+
+    if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO || !FLECHAS){
         inicializado_correctamente = 0;
         printf("ERROR: %i\n", al_get_errno());
         printf("ERROR: Hubo un problema al cargar las imagenes de img\n");
+        printf("\n");
     }
     return inicializado_correctamente;
 }

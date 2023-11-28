@@ -11,19 +11,18 @@
 /*OTRAS COSAS*/
 
 int contadorBytesArch(char *ruta){
-    printf("Ruta: %s\n", ruta);
     FILE *archi = fopen(ruta, "rb");
     int retorno = 0, n_bytes;
     if(archi != NULL){
         fseek(archi, 0, SEEK_END);
         n_bytes = ftell(archi);
-        printf("Numero de bytes del archivo: %i\n", n_bytes);
+        printf("Numero de bytes de %s: %i\n",ruta, n_bytes);
         rewind(archi);
         fclose(archi);
         retorno = n_bytes;
     }
     else{
-        printf("El archivo no fue encontrado (contadosBytesArch)\n");
+        printf("El archivo %s no fue encontrado (contadosBytesArch)\n", ruta);
         retorno = -1; //ERROR
     }
     return retorno;
@@ -32,9 +31,9 @@ int desplazarAUTOINCREMENT(FILE *arch){ //requiere de la apertura en el modo: rb
     int variableDestino=0, retorno;
     //printf("AAlectura: %li\n", ftell(arch));
     fseek(arch, 0, SEEK_SET);
-    printf("DDlectura: %li\n", ftell(arch));
+    //printf("DDlectura: %li\n", ftell(arch));
     fread(&variableDestino, sizeof(int), 1, arch);
-    printf("DaDlectura: %li\n", ftell(arch));
+    //printf("DaDlectura: %li\n", ftell(arch));
     printf("-- AUTO_INCREMENT leido: %i --\n", variableDestino);
     retorno = (variableDestino > 0)? variableDestino: -1;
     return retorno;
@@ -67,6 +66,7 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
                 //printf("INT LOL %lli", sizeof(AUTO_INCREMENT));
                 fwrite(&AUTO_INCREMENT, sizeof(int), 1, archi2);
                 printf("DESPUESlectura: %li\n", ftell(archi2));
+                fclose(archi2);
             }
             else{
                 printf("Ocurrio un error en la devolucion, AUTOINCREM: %i: \n", AUTO_INCREMENT);
@@ -117,7 +117,7 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     return retorno;
 }
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
-    printf("\nFuncionSELECT\n");
+    printf("FuncionSELECT\n");
     if(strcmp("./data/app.dat", ruta)==0){
         printf("ENTRE A APP.DAt");
         FILE *arch = fopen(ruta, "rb");
@@ -125,6 +125,7 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
             rewind(arch);
             //printf("Antes de lectura: %li\t", ftell(archivo));
             fread(registro_en_codigo, tam_elem, num_elem, arch);
+
             fclose(arch);
         }else{
             printf("ERROR al abrir archivo wb app.dat\n");
@@ -137,8 +138,9 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
             fseek(archivo, (id - 1) * ((long)tam_elem), SEEK_CUR);
             //printf("Antes de lectura: %li\t", ftell(archivo));
             fread(registro_en_codigo, tam_elem, num_elem, archivo);
+            fclose(archivo);
         }else
-            printf("La base de datos no existe (SELECT)\n");
+            printf("La base de datos %s no existe (SELECT)\n", ruta);
     }
     return 0;
 }
@@ -169,6 +171,7 @@ int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, 
         fseek(archivo, (id-1)*((long)tam_elem), SEEK_CUR);
         //printf("\tUPDATE: %li\n", ftell(archivo));
         fwrite(&habNULL, tam_elem, num_elem, archivo);
+        fclose(archivo);
     }else{
         printf("La base de datos no existe (DELETE)\n");
     }

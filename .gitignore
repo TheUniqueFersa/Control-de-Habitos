@@ -3,4 +3,5 @@
 *.exe
 .idea/
 tests/p-test*
-data/usuarios/1/**.dat
+#data/usuarios/1/**.dat
+#data/usuario.dat
