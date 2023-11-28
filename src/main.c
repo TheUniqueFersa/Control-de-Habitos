@@ -166,15 +166,21 @@ void Pendientes(){
     al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
     al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
 }
-void calendario(int dia_semana, int mes,int primero){
+void calendario(int dia_semana, int mes,int primero,int anio){
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
     int tipomes=mes%2;
     int dias_en_mes;
     int primerafila=0;
+    int bisiesto=anio%4;
     if(mes==2){
-        dias_en_mes=28;
+        if(bisiesto!=0){
+            dias_en_mes=28;
+        }else{
+            dias_en_mes=29;
+            printf("dias en mes: %d",dias_en_mes);
+        }
     }else if(tipomes==0){
         dias_en_mes=31;
     }else if(tipomes==1){
@@ -187,7 +193,7 @@ void calendario(int dia_semana, int mes,int primero){
                 columna=primero;
                 primerafila=1;
             }
-            int dia_calendario = fila * COLUMNAS + columna + 1 - dia_semana-primero;
+            int dia_calendario = fila * COLUMNAS + columna + 1 - primero;
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
             if(dia_calendario%4==0)transparencia=0;
             else if(dia_calendario%4==1)transparencia=255/2;
@@ -236,7 +242,7 @@ void ObtenerHora(){
     sprintf(dia_formateado,"%02d/%02d/%d",dia,mes,anio);
     Pendientes();
     Dia(dia_semana);
-    calendario(dia_semana,mes,(primero));
+    calendario(dia_semana,mes,primero,anio);
     al_draw_text(lexend_regular[59], texto_black, 1100, 310, ALLEGRO_ALIGN_CENTER, hora_formateada);
     al_draw_text(lexend_regular[20], texto_black, 1100, 420, ALLEGRO_ALIGN_CENTER, dia_formateado);
 }
