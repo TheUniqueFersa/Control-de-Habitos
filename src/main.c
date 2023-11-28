@@ -243,6 +243,7 @@ void ventanaActual(){
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
+            creacionEstructuras();
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -826,13 +827,17 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     break;
                 case 1: /*Habitos*/
 
+//<<<<<<< Updated upstream
+/*
                     creacionEstructuras();
-                    al_flip_display();
+                    al_flip_display(); */
                     /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
                      * almacenarla en la variable ____*/
 
                     CONTAR_REGISTROS();
 
+//=======
+//>>>>>>> Stashed changes
                     //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
 
@@ -851,8 +856,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                         loc--;
                                     }
                                     break;
-                                case ALLEGRO_KEY_E:
-
+                                case ALLEGRO_KEY_4:
+                                    reseteatEstadoMomento(4);
                                     break;
                             }
                             break;
@@ -896,8 +901,10 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_comohuesito);
                             al_draw_text(lexend_regular[20],texto_black,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
 
-                            momento=1;
-                            estado=0;
+                            reseteatEstadoMomento(1);
+                        }
+                        if(evento.keyboard.keycode==ALLEGRO_KEY_1){
+                            reseteatEstadoMomento(1);
                         }
                     }
                     break;
@@ -1127,12 +1134,12 @@ void creacionEstructuras(){
     PRODUCTIVIDAD product3= {3, tiempo, miFecha2, 12, 10};
 
 
-    al_draw_textf(lexend_bold[40], texto_black, 500, 10, ALLEGRO_ALIGN_CENTER, "Hábito 1: %s", hab1.nombre);
-    al_draw_textf(lexend_regular[15], texto_black, 110, 80, 0, "Notas: %s", hab1.nota);
+    al_draw_textf(lexend_bold[40], texto_black, 500, 10, ALLEGRO_ALIGN_CENTER, "Hábito 1: %s", hab2.nombre);
+    al_draw_textf(lexend_regular[15], texto_black, 110, 80, 0, "Notas: %s", hab2.nota);
     int x = 650, y = 80;
     for (int i = 0; i < 4; ++i) {
         char cadena[7]={0};
-        strcpy(cadena,hab1.repeticion_semanal);
+        strcpy(cadena,hab2 .repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
             printf("%d\n",valor);
