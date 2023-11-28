@@ -456,6 +456,7 @@ int obtenerNumeroRegistros(char * ruta, size_t tamanio){
 void *crearArreglo(size_t tamanioElemento, int cantidadElementos) {
     int retorno=0;
     void *arreglo = malloc(tamanioElemento * cantidadElementos);
+    printf("WTFFF: %p\n", malloc(tamanioElemento * cantidadElementos));
     if (arreglo == NULL) {
         printf("Error: No se pudo asignar memoria para el arreglo.\n");
         retorno = 1;
@@ -492,6 +493,9 @@ void CARGAR_TODOS_LOS_REGISTROS(){
         SELECT(rutaTIPO, &tipos[i], sizeof(TIPO), 1, i+1);
         printf("IDDDD: %i, tipo: %s\n", tipos[i].ID_tipo, tipos[i].tipo);
     }
+    printf("LOLIN.COM: %lli\n", sizeof(tipos));
+    printf("IDDDD malo: %i, tipo: %s\n", tipos[2].ID_tipo, tipos[2].tipo);
+    printf("IDDDD malo: %i, tipo: %s\n", tipos[6].ID_tipo, tipos[6].tipo);
     int n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
     printf("Registros: %i\n", n_reg_habitos);
     habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
@@ -568,17 +572,19 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     itoa(ultimo_usuario, usuarioString, 10);
     inicializar_rutas_usuario(usuarioString);
     //printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n", rutaDIFICULTAD, rutaTIPO, rutaHABITO, rutaREGISTROHABITO, rutaHORARIO, rutaHORA_HORARIO, rutaRECORDATORIO, rutaPRODUCTIVIDAD);
-    //momento=-1;//DEP
+    momento=-1;//DEP
 
     /*Crear arreglo nimámico Para Fersa*/
     printf("CREAR ARREGLO ARRPOS\n");
     arrPos = (int *) crearArreglo(sizeof(int), 6);
+    //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
+    int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), 10);
+    arrPos = nuevoArreglo;
+    //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
     arrHab = (int *) crearArreglo(sizeof(int), 1);
+
     /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
      * no estan vacias del arreglo que almacena estructuras de habitos*/
-
-
-    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
 
     /**/
     USUARIO usNULL = {0};
@@ -824,8 +830,6 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     al_flip_display();
                     /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
                      * almacenarla en la variable ____*/
-
-                    printf("HABITONOMBRE_ 1:%s", &habitos[3].nota);
 
                     CONTAR_REGISTROS();
 
