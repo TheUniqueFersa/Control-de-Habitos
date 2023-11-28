@@ -370,7 +370,7 @@ void actualizar_display(){
     al_draw_text(lexend_regular[10],fondo_gris1,1100,645,ALLEGRO_ALIGN_CENTER,"USUARIO");
     al_draw_text(lexend_regular[14],texto_black,1100,655,ALLEGRO_ALIGN_CENTER,usuario.nombre);
 
-    
+
     al_flip_display();
 }
 void inicializar_rutas_usuario(char * id_string_usuario){
@@ -443,6 +443,11 @@ typedef struct {
     int coord_x_ecomple;
     int coord_y_ecomple;
 }RECORDATORIO_VISUAL;
+void CONTAR_REGISTROS(){
+
+}
+
+
 int obtenerNumeroRegistros(char * ruta, size_t tamanio){
     long int entero = sizeof(int);
     int bytesSoloRegistro = contadorBytesArch(ruta) - entero, registros=0;
@@ -469,7 +474,8 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
 }
 DIFICULTAD * dificultades;
 TIPO * tipos;
-HABITO * habitos;
+HABITO * habitos, * habitosNULL;
+
 void CARGAR_TODOS_LOS_REGISTROS(){
     int retorno = 0, n_reg_dificultades=0, i=0;
     n_reg_dificultades = obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD));
@@ -570,6 +576,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     arrHab = (int *) crearArreglo(sizeof(int), 1);
     /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
      * no estan vacias del arreglo que almacena estructuras de habitos*/
+
+
+    USUARIO usuario ={1,"Alcantara"},usuarioprueba={0};
 
     /**/
     USUARIO usNULL = {0};
@@ -812,6 +821,14 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                 case 1: /*Habitos*/
 
                     creacionEstructuras();
+                    al_flip_display();
+                    /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
+                     * almacenarla en la variable ____*/
+
+                    printf("HABITONOMBRE_ 1:%s", &habitos[3].nota);
+
+                    CONTAR_REGISTROS();
+
                     //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
 
