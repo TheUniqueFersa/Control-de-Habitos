@@ -106,6 +106,7 @@ int tamArrPos=6, loc=0;
 int * arrPos, * arrHab;
 int registrosInicializados = 0;
 int altura_Y_registros=180;
+int mensajeAdvertencia=0;
  //Nos permiten navegar en el momento 1
 /*
  *
@@ -169,7 +170,7 @@ int obtenerHabitosHoy(){
     int n_habitos_hoy = 0;
     cantiHabitosHoy=0;
     for(int i = 0; i<n_reg_habitos; i++){
-        if(Habitos[i].ID_habito != 0 && Habitos[i].repeticion_semanal[diaDeLaSemana] == '1'){
+        if(Habitos[i].ID_habito != 0 && Habitos[i].repeticion_semanal[diaDeLaSemana] == '1' && Habitos[i].racha == 0){
             cantiHabitosHoy++;
         }
     }
@@ -204,7 +205,12 @@ void Pendientes(){
     //printf("\nHabitos hoy: %d\n",CantHabHoy);
     al_draw_line(1000,25,1000,675,fondo_gris1,2);
     //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
-    al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI*2/CantHabHoy,principal_pale_chestnut,15.0);
+    float theta=0;
+    if(CantHabHoy==0)
+        theta = -ALLEGRO_PI*2.0;
+    else
+        theta = -ALLEGRO_PI*2/(CantHabHoy+1);
+    al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,theta,principal_pale_chestnut,15.0);
     al_draw_textf(lexend_regular[30],texto_black,1100,155,ALLEGRO_ALIGN_CENTER, "%i", cantiHabitosHoy);
 }
 /*Crear registro en registro habitos con el dia de hoy
@@ -347,21 +353,32 @@ void ventanaActual(){
                 al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 450, ALLEGRO_ALIGN_CENTER,"No");
                 al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 475, ALLEGRO_ALIGN_CENTER,"(Esc)");
             }
-
+            if(mensajeAdvertencia==1){
+                al_draw_filled_rounded_rectangle(225, 100, 890, 675, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+                al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"¡Has hecho todos los hábitos de hoy!");//deseas eliminar este elemento?
+                al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),560,340,ALLEGRO_ALIGN_CENTER,"Presiona ESP para salir");
+            } else if(mensajeAdvertencia == 2){
+                al_draw_filled_rounded_rectangle(225, 100, 890, 675, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
+                al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"No tienes que hacer este hábito hoy");//deseas eliminar este elemento?
+                al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),560,340,ALLEGRO_ALIGN_CENTER,"Presiona ESP para salir");
+            }
 
 
 
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4"); ---VERIFICAR
 
+
             al_draw_filled_rectangle(100, 0, 1000, 150, fondo_principal_oscuro);
-            al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 488, 0,125, 125, 0);
+            al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 488, 16,125, 125, 0);
+            /*
             al_draw_filled_rectangle(300, 90, 500, 120, al_map_rgb(214, 164, 226));//Cuadro Hoy
             al_draw_filled_rectangle(600, 90, 800, 120, al_map_rgb(214, 164, 226));//Cuadro Todos
             al_draw_text(lexend_regular[28],texto_black,390,85,ALLEGRO_ALIGN_CENTER,"Hoy");
             al_draw_text(lexend_regular[20],texto_black,440,90,ALLEGRO_ALIGN_CENTER,"(H)");
             al_draw_text(lexend_regular[28],texto_black,690,85,ALLEGRO_ALIGN_CENTER,"Todos");
             al_draw_text(lexend_regular[20],texto_black,750,90,ALLEGRO_ALIGN_CENTER,"(T)");
+             */
 
             //mensaje Haz completado el hábito
             //al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"Haz completado las acciones del día");//deseas eliminar este elemento?
@@ -1177,20 +1194,29 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                         break;
                                     case ALLEGRO_KEY_C:
                                         printf("\nArrHab: %d, %i\n", Habitos[arrHab[loc]].racha, arrHab[loc]);
-                                        Habitos[arrHab[loc]].racha = 1;
-                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
-                                        UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITO), 1, arrHab[loc]+1);
-                                        resetearSoloEstadoMomento(1);
-                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
-                                        CARGAR_TODOS_LOS_REGISTROS();
-                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                        if(Habitos[arrHab[loc]].repeticion_semanal[diaDeLaSemana] == '1'){
+                                            Habitos[arrHab[loc]].racha = 1;
+                                            printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                            UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITO), 1, arrHab[loc]+1);
+                                            resetearSoloEstadoMomento(1);
+                                            printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                            CARGAR_TODOS_LOS_REGISTROS();
+                                            printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                        } else {
+                                            mensajeAdvertencia = 2;
+                                        }
                                         break;
                                     case ALLEGRO_KEY_N:
-                                        Habitos[arrHab[loc]].racha = 0;
-                                        UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITO), 1, arrHab[loc]+1);
-                                        resetearSoloEstadoMomento(1);
-                                        CARGAR_TODOS_LOS_REGISTROS();
-                                        printf("Racha actual: %d", Habitos[arrHab[loc]].racha);
+                                        if(Habitos[arrHab[loc]].repeticion_semanal[diaDeLaSemana] == '1'){
+                                            Habitos[arrHab[loc]].racha = 0;
+                                            UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITO), 1, arrHab[loc]+1);
+                                            resetearSoloEstadoMomento(1);
+                                            CARGAR_TODOS_LOS_REGISTROS();
+                                            printf("Racha actual: %d", Habitos[arrHab[loc]].racha);
+                                        } else {
+                                            mensajeAdvertencia = 2;
+                                        }
+
                                         break;
                                     case ALLEGRO_KEY_B:
                                         printf("\nTECLA B\n");
@@ -1204,6 +1230,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                         break;
                                     case ALLEGRO_KEY_4:
                                         reseteatEstadoMomento(4);
+                                        break;
+                                    case ALLEGRO_KEY_ESCAPE:
+                                        mensajeAdvertencia = 0;
                                         break;
                                 }
                                 break;
@@ -1912,7 +1941,7 @@ int main() {
         disp = al_create_display(1200, 700);
         AFK = al_create_timer(30);
         al_set_window_title(disp, "Hábitus");
-        //al_set_display_icon(disp, n); // --TODO
+        al_set_display_icon(disp, LOGO);
         cola_eventos = al_create_event_queue();
 
         al_register_event_source(cola_eventos,al_get_timer_event_source(AFK)); // FUENTE: eventos de tipo temporizador
