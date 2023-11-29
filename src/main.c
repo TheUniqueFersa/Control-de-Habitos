@@ -276,10 +276,20 @@ void ventanaActual(){
 
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,320,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,490,ALLEGRO_ALIGN_CENTER,"4");
-
             al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
+
             al_draw_filled_rectangle(100, 0, 1000, 700, fondo_principal_oscuro);
             creacionEstructuras();
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
+            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
+            /*Interfaz integrada para cada estado*/
+
+            if(estado==1){
+                al_draw_filled_rectangle(200,0,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
+                al_draw_filled_rectangle(270,180,820,250, texto_white);
+                
+
+            }
 
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4"); ---VERIFICAR
@@ -366,7 +376,7 @@ void ventanaActual(){
             //al_draw_text(lexend_regular[20],texto_white,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
             break;
         default:
-
+            break;
     }
     if(momento!=0){
         al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
@@ -1043,10 +1053,11 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
 //                                    contadorBytesArch(rutaRECORDATORIO);
                                     break;
                                 default:
+                                    break;
                             }
                             break;
                         default:
-
+                            break;
                     }
                     break;
                 case 0:
@@ -1120,12 +1131,15 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                         }
                                         break;
                                     case ALLEGRO_KEY_A:
+                                        printf("\nTECLA A\n");
                                         estado = 1;
                                         break;
                                     case ALLEGRO_KEY_E:
+                                        printf("\nTECLA E\n");
                                         estado = 2;
                                         break;
                                     case ALLEGRO_KEY_B:
+                                        printf("\nTECLA B\n");
                                         estado = 3;
                                         break;
                                     case ALLEGRO_KEY_2:
@@ -1143,6 +1157,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 break;
                         }
                     } else if (estado == 1){
+                        printf("\nESTADO 1 habitos \n");
                         if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                             if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
 
@@ -1158,6 +1173,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             }
                         }
                     } else if (estado == 2){
+                        printf("\nESTADO 2 habitos\n");
                         if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                             if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
 
@@ -1172,6 +1188,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             }
                         }
                     } else if (estado == 3){
+                        printf("\nESTADO 3 habitos\n");
                         if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
                             if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
 
@@ -1183,7 +1200,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     }
                     printf("Tamaño:%i\tLocalización:%i\n", tamArrPos, loc);
                     break;
-                case 2:
+                case 2:  /*Horario*/
                     if(estado == 0){
                         switch(evento.type){
                             case ALLEGRO_EVENT_KEY_DOWN:
