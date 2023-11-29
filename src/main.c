@@ -575,9 +575,8 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     }
     return temp;
 }
-int * arrIndicesRegistrosNoVacios;
-void cargar_registros_no_vacios(){
-    int n_cantidad_registros_disponibles=0;
+int n_cantidad_registros_disponibles=0;
+void cargar_registros_no_vacios(){//tipo
     for(int i=0; i<n_reg_habitos; i++){
         if(Habitos[i].ID_habito == 0){
             n_cantidad_registros_disponibles++;
@@ -592,11 +591,18 @@ void cargar_registros_no_vacios(){
         //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
         //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
         arrHab = (int *) crearArreglo(sizeof(int), n_cantidad_registros_disponibles);
+        registrosInicializados = 1;
     } else {
         int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), n_cantidad_registros_disponibles);
         arrPos = nuevoArreglo;
         int *nuevoArreglo2 = (int *)aumentarArreglo(arrPos, sizeof(int), n_cantidad_registros_disponibles);
         arrHab = nuevoArreglo2;
+    }
+    for(int i=0, indice2=0; i<n_reg_habitos; i++){
+        if(Habitos[i].ID_habito == 0){
+            arrHab[indice2] = i;
+            indice2++;
+        }
     }
 }
 void CARGAR_TODOS_LOS_REGISTROS(){
@@ -834,8 +840,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
         }
 
         //EVENTOS SUCEDIENDO:
-        printf("Momento: %i", momento);
-        printf("Nombre: %s", nombre);
+        //printf("Momento: %i ", momento);
+        //printf("Nombre: %s\n", nombre);
         al_wait_for_event(cola_eventos, &evento);
 
         if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
@@ -1113,19 +1119,26 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
                     if(estado==0){
+                        printf("===LOCCCOCK:%i, %i, %s \n", arrHab[loc], loc, Habitos[arrHab[loc]].nombre);
+                        /*
+                        printf("------------------>Habitos: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                               Habitos[indice2].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                               Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+
+                               */
                         switch(evento.type){
                             case ALLEGRO_EVENT_KEY_DOWN:
                                 switch(evento.keyboard.keycode){
                                     //ESTADO 0 -> lectura
                                     case ALLEGRO_KEY_DOWN:
-                                        if(loc<n_reg_habitos && loc>=0){
+                                        if(loc<(n_cantidad_registros_disponibles-1) && loc>=0){
                                             printf("ENTRA ABAJO\n");
                                             
                                             loc++;
                                         }
                                         break;
                                     case ALLEGRO_KEY_UP:
-                                        if(loc>0 && loc<=n_reg_habitos){
+                                        if(loc>0 && loc<=n_cantidad_registros_disponibles){
                                             printf("ENTRA ARRIBA\n");
                                             loc--;
                                         }
@@ -1141,6 +1154,16 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     case ALLEGRO_KEY_B:
                                         printf("\nTECLA B\n");
                                         estado = 3;
+
+                                        printf("Numero de HABITOS: %i", obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO)));
+                                        HABITO lolin = {0, "Lolencio"};
+                                        HABITO lolin2 = {0, "Trollencio"};
+                                        HABITO lolin3 = {0, "y su familia"};
+                                        HABITO lolin4 = {0, "los trolls"};
+                                        UPDATE(rutaHABITO, &lolin, sizeof(HABITO), 1, 5);
+                                        UPDATE(rutaHABITO, &lolin2, sizeof(HABITO), 1, 6);
+                                        UPDATE(rutaHABITO, &lolin3, sizeof(HABITO), 1, 7);
+                                        UPDATE(rutaHABITO, &lolin4, sizeof(HABITO), 1, 8);
                                         break;
                                     case ALLEGRO_KEY_2:
                                         reseteatEstadoMomento(2);
