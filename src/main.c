@@ -156,6 +156,26 @@ char notas[30] = {0};
 char semana[7]="0000000";
 int y=400,y2=400,x3=475,y3=305;
 int dificultadHabito = 1;
+int diaDeLaSemana = 0;
+int cantiHabitosHoy = 0;
+void cargarDiaDeLaSemana() {
+    time_t t;
+    struct tm *fechaa;
+    time(&t);
+    fechaa = localtime(&t);
+    diaDeLaSemana = fechaa->tm_wday;
+}
+int obtenerHabitosHoy(){
+    int n_habitos_hoy = 0;
+    cantiHabitosHoy=0;
+    for(int i = 0; i<n_reg_habitos; i++){
+        if(Habitos[i].ID_habito != 0 && Habitos[i].repeticion_semanal[diaDeLaSemana] == '1'){
+            cantiHabitosHoy++;
+        }
+    }
+    printf("LOLOLOL: %i\n", cantiHabitosHoy);
+    return n_habitos_hoy;
+}
 void colorearDia(int x, int y, int valor) {
     if(valor==1){
         al_draw_filled_rectangle(x,y,x+20,y+20,principal_pale_chestnut);
@@ -174,16 +194,18 @@ void Dia(int dia){
     }
 }
 char CantHabitosHoy[2]="1"; //GLOBAL para que se imprima bien
+
 void Pendientes(){
-    int CantHabHoy= atoi(CantHabitosHoy)+1;
+    //int CantHabHoy= atoi(CantHabitosHoy)+1;
+    int CantHabHoy = cantiHabitosHoy;
     //-ALLEGRO_PI/2.0 SE UTILIZA PARA INICIAR EN LA PARTE SUPERIOR DE LA CIRCUNFERENCIA
     //theta se trabaja en radianes
     //PasoHabitos=(-2*ALLEGRO_PI)/CantHabitosHoy
-    printf("\nHabitos hoy: %d\n",CantHabHoy);
+    //printf("\nHabitos hoy: %d\n",CantHabHoy);
     al_draw_line(1000,25,1000,675,fondo_gris1,2);
     //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
     al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI*2/CantHabHoy,principal_pale_chestnut,15.0);
-    al_draw_text(lexend_regular[30],texto_black,1100,155,ALLEGRO_ALIGN_CENTER,CantHabitosHoy);
+    al_draw_textf(lexend_regular[30],texto_black,1100,155,ALLEGRO_ALIGN_CENTER, "%i", cantiHabitosHoy);
 }
 /*Crear registro en registro habitos con el dia de hoy
  * Para racha checar con la fecha inicial
@@ -887,6 +909,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
     }
 
     cargar_registros_no_vacios();
+    obtenerHabitosHoy();
 }
 void verificarREGISTROS(){
     int contadorHabito=3, i=3, difDias, habInd=3, diaCONREGISTRO=0;
@@ -1026,7 +1049,6 @@ void analizar_fecha_habitos(){
 //    SELECT(rutaHABITO, );
     verificarREGISTROS();
 }
-
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -1064,7 +1086,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     //RECARGAR(1-2-3-);
 
 
-
+    cargarDiaDeLaSemana();
     CARGAR_TODOS_LOS_REGISTROS();
     analizar_fecha_habitos();
     printf("===cock:%i\n", n_cantidad_registros_disponibles);
