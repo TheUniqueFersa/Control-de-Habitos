@@ -173,20 +173,23 @@ void Dia(int dia){
         }
     }
 }
-char CantHabitosHoy[2]="10"; //GLOBAL para que se imprima bien
+char CantHabitosHoy[2]="1"; //GLOBAL para que se imprima bien
 void Pendientes(){
+    int CantHabHoy= atoi(CantHabitosHoy)+1;
     //-ALLEGRO_PI/2.0 SE UTILIZA PARA INICIAR EN LA PARTE SUPERIOR DE LA CIRCUNFERENCIA
     //theta se trabaja en radianes
     //PasoHabitos=(-2*ALLEGRO_PI)/CantHabitosHoy
-
+    printf("\nHabitos hoy: %d\n",CantHabHoy);
     al_draw_line(1000,25,1000,675,fondo_gris1,2);
     //PasoRecordatorios=(-2*ALLEGRO_PI)/CantRecordatoriosHoy
-    al_draw_arc(1100,75, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,principal_pale_chestnut,15.0);
-    al_draw_text(lexend_regular[30],texto_black,1100,55,ALLEGRO_ALIGN_CENTER,CantHabitosHoy);
-    al_draw_arc(1100,225, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI,neutro1_tinta_de_pulpo,15.0);
-    al_draw_text(lexend_regular[30], texto_black, 1100, 205, ALLEGRO_ALIGN_CENTER, CantHabitosHoy);
+    al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,-ALLEGRO_PI*2/CantHabHoy,principal_pale_chestnut,15.0);
+    al_draw_text(lexend_regular[30],texto_black,1100,155,ALLEGRO_ALIGN_CENTER,CantHabitosHoy);
 }
+/*Crear registro en registro habitos con el dia de hoy
+ * Para racha checar con la fecha inicial
+ * */
 void calendario(int dia_semana, int mes,int primero,int anio){
+    srand(time(NULL));
     int FILAS = 6;
     int COLUMNAS = 7;
     int CELDA=25;
@@ -194,6 +197,7 @@ void calendario(int dia_semana, int mes,int primero,int anio){
     int dias_en_mes;
     int primerafila=0;
     int bisiesto=anio%4;
+
     if(mes==2){
         if(bisiesto!=0){
             dias_en_mes=28;
@@ -215,11 +219,11 @@ void calendario(int dia_semana, int mes,int primero,int anio){
             }
             int dia_calendario = fila * COLUMNAS + columna + 1 - primero;
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
-            if(dia_calendario%4==0)transparencia=0;
-            else if(dia_calendario%4==1)transparencia=255/2;
-            else if(dia_calendario%4==2)transparencia=255*3/4;
-            else if(dia_calendario%4==3)transparencia=255*4/5;
             if (dia_calendario >= 1 && dia_calendario <= dias_en_mes) {
+                transparencia=((rand())%25)*10;
+                if(transparencia<(255/3)){
+                    transparencia=0;
+                }
                 // Dibujar calendario
                     al_draw_filled_rectangle(1012 + columna * CELDA+3, 500 + 3 + fila * CELDA,
                                              1012 + (columna + 1) * CELDA, 500 + (fila + 1) * CELDA,
@@ -1907,7 +1911,7 @@ void creacionEstructuras(){ //VISUALES
      */
 }
 int main() {
-    int acceso;
+    //int acceso;
     if(inicializar_allegro()){
         disp = al_create_display(1200, 700);
         AFK = al_create_timer(30);
