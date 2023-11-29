@@ -1812,11 +1812,9 @@ void creacionEstructuras(){ //VISUALES
     //HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, &dif3, 12, tiempo, miFecha};
     //HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, &dif1, 35,  tiempo, miFecha};
     //HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, &dif3, 2,  tiempo, miFecha};
-    //HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, &dif1, 100,  tiempo, miFecha};
     HABITO hab1 = {1, "Ir al Gym", "Llevar toalla", "0010110", 1, &tip3, tip3, &dif3, dif3,  12, tiempo, miFecha};
     HABITO hab2 = {1, "Krunkear", "Un ratito", "1010010", 5, &tip1, tip1, &dif1, dif1, 35,  tiempo, miFecha};
     HABITO hab3 = {1, "Hacer la tarea", "Pa mañana", "0000001", 7, &tip2, tip2, &dif3, dif3, 2,  tiempo, miFecha};
-    HABITO hab4 = {1, "Una paja a la crema", "Es una buena paja", "1111111", 5, &tip1, tip1, &dif1, dif1, 100,  tiempo, miFecha};
 
     /*REGISTROH-HABITOS*/
     time_t tiempo2= time(NULL);
