@@ -143,7 +143,17 @@ char rutaPRODUCTIVIDAD[100] = {"./data/usuarios/1/productividad.dat"};
 /* ---- termina; ---- */
 
 char nombre[30] = {0};
-
+char Titulo[30] = {0};
+char notas[30] = {0};
+char semana[7]="0000000";
+int y=400,y2=400,x3=475,y3=305;
+void colorearDia(int x, int y, char valor) {
+    if(valor==1){
+        al_draw_filled_rectangle(x,y,x+20,y+20,principal_pale_chestnut);
+    }else{
+        al_draw_filled_rectangle(x,y,x+20,y+20,neutro1_tinta_de_pulpo);
+    }
+}
 void Dia(int dia){
     al_draw_text(lexend_regular[15], texto_black, 1015, 375, ALLEGRO_ALIGN_LEFT, "Do Lu  Ma Mi  Ju  Vi  Sa");
     for (int i = 0; i < 7; ++i) {
@@ -202,7 +212,6 @@ void calendario(int dia_semana, int mes,int primero,int anio){
             else if(dia_calendario%4==3)transparencia=255*4/5;
             if (dia_calendario >= 1 && dia_calendario <= dias_en_mes) {
                 // Dibujar calendario
-
                     al_draw_filled_rectangle(1012 + columna * CELDA+3, 500 + 3 + fila * CELDA,
                                              1012 + (columna + 1) * CELDA, 500 + (fila + 1) * CELDA,
                                              fondo_gris1);
@@ -284,12 +293,7 @@ void ventanaActual(){
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4");
             /*Interfaz integrada para cada estado*/
 
-            if(estado==1){
-                al_draw_filled_rectangle(200,0,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
-                al_draw_filled_rectangle(270,180,820,250, texto_white);
-                
 
-            }
 
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4"); ---VERIFICAR
@@ -312,6 +316,99 @@ void ventanaActual(){
             al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
             al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
             al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
+            if(estado==1){
+                al_draw_filled_rectangle(100,0,1000,700, al_map_rgba(47,50,58,200));
+                al_draw_filled_rectangle(200,100,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
+                al_draw_text(lexend_regular[20], texto_white, 550, 120, ALLEGRO_ALIGN_CENTER, "Escribe el nombre de tu habito");
+                al_draw_filled_rectangle(250,150,850,200, texto_white);
+                al_draw_text(lexend_regular[30], texto_black, 550, 160, ALLEGRO_ALIGN_CENTER, Titulo);
+                al_draw_text(lexend_regular[20], texto_white, 550, 220, ALLEGRO_ALIGN_CENTER, "Escribe una nota para tu habito(Puedes dejarlo en blanco)");
+                al_draw_filled_rectangle(250,250,850,300, texto_white);
+                al_draw_text(lexend_regular[18], texto_white, 550, 320, ALLEGRO_ALIGN_CENTER, "1      2      3      4       5       6      7");
+                al_draw_text(lexend_regular[20], texto_white, 550, 340, ALLEGRO_ALIGN_CENTER, "Do  Lu  Ma  Mi   Ju   Vi   Sa");
+                int CalX=422,CalY=365;
+                for (int i = 0; i < 4; ++i) {
+                    for(int j=0;i<7;i++){
+                        int valor=semana[i]-48;
+                        colorearDia(CalX,CalY,valor);
+                        CalX+=40;
+                    }
+                }
+            }else if(estado==2){
+                al_draw_filled_rectangle(100,0,1000,700, al_map_rgba(47,50,58,200));
+                al_draw_filled_rectangle(200,100,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
+                al_draw_text(lexend_regular[20], texto_white, 550, 120, ALLEGRO_ALIGN_CENTER, "Escribe el nombre de tu habito");
+                al_draw_filled_rectangle(250,150,850,200, texto_white);
+                al_draw_text(lexend_regular[30], texto_black, 550, 160, ALLEGRO_ALIGN_CENTER, Titulo);
+                al_draw_text(lexend_regular[20], texto_white, 550, 220, ALLEGRO_ALIGN_CENTER, "Escribe una nota para tu habito(Puedes dejarlo en blanco)");
+                al_draw_filled_rectangle(250,250,850,300, texto_white);
+                al_draw_text(lexend_regular[30],texto_black,550,260,ALLEGRO_ALIGN_CENTER,notas);
+                al_draw_text(lexend_regular[18], texto_white, 550, 320, ALLEGRO_ALIGN_CENTER, "1      2      3      4       5       6      7");
+                al_draw_text(lexend_regular[20], texto_white, 550, 340, ALLEGRO_ALIGN_CENTER, "Do  Lu  Ma  Mi   Ju   Vi   Sa");
+                int CalX=422,CalY=365;
+                for (int i = 0; i < 4; ++i) {
+                    for(int j=0;i<7;i++){
+                        int valor=semana[i]-48;
+                        colorearDia(CalX,CalY,valor);
+                        CalX+=40;
+                    }
+                }
+            }else if(estado==3){
+                al_draw_filled_rectangle(100,0,1000,700, al_map_rgba(47,50,58,200));
+                al_draw_filled_rectangle(200,100,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
+                al_draw_text(lexend_regular[20], texto_white, 550, 120, ALLEGRO_ALIGN_CENTER, "Escribe el nombre de tu habito");
+                al_draw_filled_rectangle(250,150,850,200, texto_white);
+                al_draw_text(lexend_regular[30], texto_black, 550, 160, ALLEGRO_ALIGN_CENTER, Titulo);
+                al_draw_text(lexend_regular[20], texto_white, 550, 220, ALLEGRO_ALIGN_CENTER, "Escribe una nota para tu habito(Puedes dejarlo en blanco)");
+                al_draw_filled_rectangle(250,250,850,300, texto_white);
+                al_draw_text(lexend_regular[30],texto_black,550,260,ALLEGRO_ALIGN_CENTER,notas);
+                al_draw_text(lexend_regular[18], texto_white, 550, 320, ALLEGRO_ALIGN_CENTER, "1      2      3      4       5       6      7");
+                al_draw_text(lexend_regular[20], texto_white, 550, 340, ALLEGRO_ALIGN_CENTER, "Do  Lu  Ma  Mi   Ju   Vi   Sa");
+                int CalX=422,CalY=365;
+                for (int i = 0; i < 4; ++i) {
+                    for(int j=0;i<7;i++){
+                        int valor=semana[i]-48;
+                        colorearDia(CalX,CalY,valor);
+                        CalX+=40;
+                    }
+                }
+            }else if(estado==4) {
+
+                //interfaz de dificultad
+                al_draw_filled_rectangle(100, 0, 1000, 1200, al_map_rgba(47, 50, 58,200)); //rectangulo que tapa lo de Arias
+                al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
+                al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
+                //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
+                al_draw_pieslice(475, 400, 120, 2.9, 3.6, al_map_rgb(255, 255, 255), 4);
+
+                //texto de los bitmaps nuevo, editar, borrar
+
+                al_draw_arc(475, 400, 120, 2.95, 0.55, al_map_rgba(22, 82, 1, 244), 20);//22,82,1
+                al_draw_arc(475, 400, 120, 3.6, 0.6, al_map_rgba(69, 183, 30, 244), 20);//255, 134, 0, 1
+                al_draw_arc(475, 400, 120, 4.3, 0.8, al_map_rgba(255, 255, 0, 244), 20);
+                al_draw_arc(475, 400, 120, 5.2, 0.7, al_map_rgba(255, 134, 0, 244), 20);//69,183,30
+                al_draw_arc(475, 400, 120, 5.95, 0.5, al_map_rgba(255, 0, 0, 244), 20);//255,0,0
+                al_draw_filled_circle(475, 400, 15, al_map_rgb(0, 0, 0));//255, 134, 0, 1
+                al_draw_filled_triangle(470, y, 480, y2, x3, y3, al_map_rgb(0, 0, 0));
+                //muy facil:yvar:405,x3:400,y3:385,facil:x3:400,y3:315,normal:x3:475,y3:300,dificil:x3:550,y:315,muy dificil:yvar:405,x3:550,y3:385
+                al_draw_filled_rounded_rectangle(450, 175, 675, 250, 25, 25,
+                                                 al_map_rgb(222, 186, 201));//222, 186, 192, 1
+                al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 360, 175, 80, 80, 0);
+                al_draw_filled_rounded_rectangle(625, 270, 780, 635, 25, 25,
+                                                 al_map_rgb(222, 186, 201));//222, 186, 192, 1
+                al_draw_filled_rounded_rectangle(650, 290, 755, 330, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+                al_draw_filled_rounded_rectangle(650, 335, 755, 403, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+                al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+                al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+                al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
+                // texto de los rectángulos de dificultad
+                al_draw_text(lexend_regular[15], texto_white, 700, 300, ALLEGRO_ALIGN_CENTER, "1. Muy facil");
+                al_draw_text(lexend_regular[20], texto_white, 700, 350, ALLEGRO_ALIGN_CENTER, "2. Facil");
+                al_draw_text(lexend_regular[16], texto_white, 703, 423, ALLEGRO_ALIGN_CENTER, "3. Intermedio");
+                al_draw_text(lexend_regular[20], texto_white, 700, 500, ALLEGRO_ALIGN_CENTER, "4. Difícil");
+                al_draw_text(lexend_regular[16], texto_white, 700, 574, ALLEGRO_ALIGN_CENTER, "5. Muy difícil");
+                al_draw_text(lexend_regular[45], texto_white, 565, 185, ALLEGRO_ALIGN_CENTER, "Dificultad");
+            }
             break;
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -372,8 +469,6 @@ void ventanaActual(){
             al_draw_text(lexend_regular[15], texto_white, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
             al_draw_rectangle(300,340,800,365,texto_white,5);
             al_draw_text(lexend_regular[20], texto_white, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
-            //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
-            //al_draw_text(lexend_regular[20],texto_white,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
             break;
         default:
             break;
@@ -399,49 +494,7 @@ void actualizar_display(){
     //al_draw_filled_rectangle(550, 250, 910, 290, al_map_rgb(225, 0, 129));
 
     //texto para los recuadros
-/*
-    //interfaz de dificultad
-   al_draw_filled_rectangle(0, 0, 1000 , 1200, al_map_rgb(47, 50, 58)); //rectangulo que tapa lo de Arias
-   al_draw_filled_rounded_rectangle(325, 150, 800, 720, 100, 100, al_map_rgb(227, 218, 201));
-   al_draw_filled_circle(562, 400, 238, al_map_rgb(227, 218, 201));//255, 134, 0, 1
-   //al_draw_filled_pieslice(0,0,40, al_map_rgb(74, 63, 75));
-   al_draw_pieslice(475, 400, 120,2.9, 3.6, al_map_rgb(255, 255, 255), 4);
 
-   al_draw_filled_rounded_rectangle(100, 496, 225, 700, 25, 25, al_map_rgb(255, 255, 255));//222, 186, 192, 1
-   //texto de los bitmaps nuevo, editar, borrar
-   al_draw_text(lexend_regular[30],texto_white,195,508,ALLEGRO_ALIGN_CENTER,"A");
-   al_draw_text(lexend_regular[30],texto_white,195,574,ALLEGRO_ALIGN_CENTER,"E");
-   al_draw_text(lexend_regular[30],texto_white,195,642,ALLEGRO_ALIGN_CENTER,"B");
-   al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 496,75, 68, 0);
-   al_draw_scaled_bitmap(EDITARHABITO, 0, 0, 740, 744, 100, 564,75, 68, 0);
-   al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
-   //al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,75, 68, 0);
-
-   al_draw_arc(475, 400, 120, 2.95, 0.55, al_map_rgba(255, 0, 0, 244), 20);
-   al_draw_arc(475, 400, 120, 3.6, 0.6, al_map_rgba(255, 134, 0, 244), 20);//255, 134, 0, 1
-   al_draw_arc(475, 400, 120, 4.3, 0.8, al_map_rgba(255, 255, 0, 244), 20);
-   al_draw_arc(475, 400, 120, 5.2, 0.7, al_map_rgba(69, 183, 30, 244), 20);
-   al_draw_arc(475, 400, 120, 5.95, 0.5, al_map_rgba(22, 82, 1, 244), 20);//22, 82, 1, 1
-   al_draw_filled_circle(475, 400, 15, al_map_rgb(0, 0, 0));//255, 134, 0, 1
-   al_draw_filled_triangle(470, 400, 480, 400, 475, 300, al_map_rgb(0, 0, 0));
-   al_draw_filled_rounded_rectangle(450, 175, 675, 250, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
-   al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 360, 175,80, 80, 0);
-   al_draw_filled_rounded_rectangle(625, 270, 780, 635, 25, 25, al_map_rgb(222, 186, 201));//222, 186, 192, 1
-   al_draw_filled_rounded_rectangle(650, 290, 755, 330, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
-   al_draw_filled_rounded_rectangle(650, 335, 755, 403, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
-   al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
-   al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
-   al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));//146, 98, 107, 1
-   // texto de los rectángulos de dificultad
-   al_draw_text(lexend_regular[15],texto_white,700,300,ALLEGRO_ALIGN_CENTER,"1. Muy facil");
-   al_draw_text(lexend_regular[20],texto_white,700,350,ALLEGRO_ALIGN_CENTER,"2. Facil");
-   al_draw_text(lexend_regular[16],texto_white,703,423,ALLEGRO_ALIGN_CENTER,"3. Intermedio");
-   al_draw_text(lexend_regular[20],texto_white,700,500,ALLEGRO_ALIGN_CENTER,"4. Difícil");
-   al_draw_text(lexend_regular[16],texto_white,700,574,ALLEGRO_ALIGN_CENTER,"5. Muy difícil");
-   al_draw_text(lexend_regular[45],texto_white,565,185,ALLEGRO_ALIGN_CENTER,"Dificultad");
-    al_draw_filled_rounded_rectangle(890, 496, 1110, 700, 25, 25, al_map_rgb(255, 255, 255));//222, 186, 192, 1
-    al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);
-    //al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 850, 496,210, 210, 0);*/
 
     //recuadro con transparencia y mensaje deseas eliminar yes or no
     /*al_draw_filled_rounded_rectangle(225, 100, 890, 675, 25, 25, al_map_rgba(0, 0,0, 160));//222, 186, 192, 1
@@ -674,15 +727,6 @@ void CARGAR_TODOS_LOS_REGISTROS(){
 }
 //DIFICULTAD Dificultad[obtenerNumeroRegistros(rutaDIFICULTAD, sizeof(DIFICULTAD))];
 
-void colorearDia(int x, int y, char valor) {
-    if(valor==1){
-        al_draw_filled_rectangle(x,y,x+20,y+20,principal_pale_chestnut);
-    }else{
-        al_draw_filled_rectangle(x,y,x+20,y+20,neutro1_tinta_de_pulpo);
-    }
-}
-#include <stdio.h>
-#include <time.h>
 
 void convertirFecha(const char *fecha, struct tm *tiempo) {
     // Parsear la fecha
@@ -766,7 +810,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     //momento=-1;//DEP
 
 
-    int resetearNombre=0;
+    int resetearCadena=0;
 
     /*La cantidad de elementos se tiene que ocupar una función para contar las estructuras que
      * no estan vacias del arreglo que almacena estructuras de habitos*/
@@ -1031,34 +1075,36 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if(estado==0)
                             estado=1;
-                        if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
-                            // Añadir el carácter a la cadena de entrada
-                            int len = strlen(nombre);
-                            if (len < sizeof(nombre) - 1) {
-                                nombre[len] = evento.keyboard.unichar;
-                                nombre[len + 1] = '\0';
+                        if(estado==1){
+                            if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
+                                // Añadir el carácter a la cadena de entrada
+                                int len = strlen(nombre);
+                                if (len < sizeof(nombre) - 1) {
+                                    nombre[len] = evento.keyboard.unichar;
+                                    nombre[len + 1] = '\0';
+                                }
+                            } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+                                // Borrar el último carácter de la `cadena` de entrada
+                                int len = strlen(nombre);
+                                if (len > 0) {
+                                    nombre[len - 1] = '\0';
+                                }
+                            }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                                //Aqui se ingresa el nombre del usuario
+                                //UPDATE
+                                strcpy(usuario.nombre,nombre);//Ponerle el nuevo nombre "" -> "nuevo"
+                                if(verificarExistenciaDeArchivo(rutaUSUARIO)==0){
+                                    SUPER_INSERT(&usuario.ID_usuario, rutaUSUARIO, &usuario, sizeof(USUARIO), 1);
+                                } else {
+                                    UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);//Por el programa que estamos desarrollando de solo 1 usuario;
+                                }
+                                //printf("%s",usuario.nombre);
+                                //Actualiza archivo de ingresado por primera vez:
+                                struct APP appActualizado = {1, usuario.ID_usuario};
+                                INSERT(rutaAPP, &appActualizado, sizeof(struct APP), 1);
+                                resetearCadena=0;
+                                reseteatEstadoMomento(1);
                             }
-                        } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
-                            // Borrar el último carácter de la cadena de entrada
-                            int len = strlen(nombre);
-                            if (len > 0) {
-                                nombre[len - 1] = '\0';
-                            }
-                        }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
-                            //Aqui se ingresa el nombre del usuario
-                            //UPDATE
-                            strcpy(usuario.nombre,nombre);//Ponerle el nuevo nombre "" -> "nuevo"
-                            if(verificarExistenciaDeArchivo(rutaUSUARIO)==0){
-                                SUPER_INSERT(&usuario.ID_usuario, rutaUSUARIO, &usuario, sizeof(USUARIO), 1);
-                            } else {
-                                UPDATE(rutaUSUARIO,&usuario,sizeof (USUARIO),1,1);//Por el programa que estamos desarrollando de solo 1 usuario;
-                            }
-                            //printf("%s",usuario.nombre);
-                            //Actualiza archivo de ingresado por primera vez:
-                            struct APP appActualizado = {1, usuario.ID_usuario};
-                            INSERT(rutaAPP, &appActualizado, sizeof(struct APP), 1);
-                            resetearNombre=0;
-                            reseteatEstadoMomento(1);
                         }
                         //al_draw_text(lexend_regular[30], texto_white, 600, 340, ALLEGRO_ALIGN_CENTER, nombre);
                         //al_flip_display();
@@ -1123,43 +1169,121 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         }
                     } else if (estado == 1){
                         printf("\nESTADO 1 habitos \n");
+                        if(resetearCadena==0){
+                            strcpy(Titulo,"");
+                            resetearCadena=1;
+                        }
                         if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                             if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
-
+                                int len = strlen(Titulo);
+                                if (len < sizeof(Titulo) - 1) {
+                                    Titulo[len] = evento.keyboard.unichar;
+                                    Titulo[len + 1] = '\0';
+                                }
                             } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
-
-                            }
-                            //al_draw_text(lexend_regular[20], texto_white, 550, 340, ALLEGRO_ALIGN_CENTER, nombre);
-                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
-
-                            }
-                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                int len = strlen(Titulo);
+                                if (len > 0) {
+                                    Titulo[len - 1] = '\0';
+                                }
+                            }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                                resetearCadena=0;
+                                estado=2;
+                            }else if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
                                 estado = 0;
                             }
                         }
-                    } else if (estado == 2){
+                    }else if (estado == 2){
                         printf("\nESTADO 2 habitos\n");
+                        if(resetearCadena==0){
+                            strcpy(notas,"");
+                            resetearCadena=1;
+                        }
                         if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                             if (evento.keyboard.unichar >= 32 && evento.keyboard.unichar <= 126) {
-
+                                int len = strlen(notas);
+                                if (len < sizeof(notas) - 1) {
+                                    notas[len] = evento.keyboard.unichar;
+                                    notas[len + 1] = '\0';
+                                }
                             } else if (evento.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
-
-                            }
-                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
-
-                            }
-                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                int len = strlen(notas);
+                                if (len > 0) {
+                                    notas[len - 1] = '\0';
+                                }
+                            }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                                resetearCadena=0;
+                                estado=3;
+                            }else if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
                                 estado = 0;
+                                resetearCadena=0;
                             }
                         }
-                    } else if (estado == 3){
-                        printf("\nESTADO 3 habitos\n");
-                        if (evento.type == ALLEGRO_EVENT_KEY_DOWN) {
-                            if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
-
+                    }else if(estado==3){
+                        if(evento.type==ALLEGRO_EVENT_KEY_CHAR){
+                            if(resetearCadena==0){
+                                strcpy(semana,"0000000");
+                                resetearCadena=1;
                             }
-                            if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                            if(evento.keyboard.keycode==ALLEGRO_KEY_1){
+                                if(semana[0]=='0') semana[0]='1';
+                                else semana[0]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_2){
+                                if(semana[1]=='0')semana[1]='1';
+                                else semana[1]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_3){
+                                if(semana[2]=='0')semana[2]='1';
+                                else semana[2]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_4){
+                                if(semana[3]=='0')semana[3]='1';
+                                else semana[3]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_5){
+                                if(semana[4]=='0')semana[4]='1';
+                                else semana[4]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_6){
+                                if(semana[5]=='0')semana[5]='1';
+                                else semana[5]='0';
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_7){
+                                if(semana[6]=='0')semana[6]='1';
+                                else semana[6]='0';
+                            }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                                resetearCadena=0;
+                                estado=4;
+                            }else if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                                 estado = 0;
+                                resetearCadena = 0;
+                                strcpy(semana,"0000000");
+                            }
+                        }
+                    }else if(estado==4){
+                        if(evento.type==ALLEGRO_EVENT_KEY_CHAR){
+                            if(resetearCadena==0){
+                                y=400,y2=400,x3=475,y3=305,resetearCadena=1;
+                            }
+                            if(evento.keyboard.keycode==ALLEGRO_KEY_1){
+                                y=405,y2=400,x3=400,y3=385;
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_2){
+                                y=400,y2=400,x3=410,y3=335;
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_3){
+                                y=400,y2=400,x3=475,y3=305;
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_4){
+                                y=400,y2=400,x3=540,y3=335;
+                            }else if(evento.keyboard.keycode==ALLEGRO_KEY_5){
+                                y=400,y2=405,x3=550,y3=385;
+                            }else if(evento.keyboard.keycode== ALLEGRO_KEY_ENTER){
+                                resetearCadena=0;
+                                y=400;
+                                y2=400;
+                                x3=400;
+                                y3=300;
+                                estado=4;
+                            }else if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                                estado = 0;
+                                y=400;
+                                y2=400;
+                                x3=400;
+                                y3=300;
+                                resetearCadena = 0;
+                                strcpy(semana,"0000000");
                             }
                         }
                     }
@@ -1314,9 +1438,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                         }
                     }
                 case 4:
-                    if(resetearNombre==0){
+                    if(resetearCadena==0){
                         strcpy(nombre,usuario.nombre);
-                        resetearNombre=1;
+                        resetearCadena=1;
                     }
                     //al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
                     //al_draw_text(lexend_regular[15], texto_white, 550, 310, ALLEGRO_ALIGN_CENTER, "Ingresa tu nombre:");
@@ -1324,7 +1448,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     if (evento.type == ALLEGRO_EVENT_KEY_CHAR) {
                         if(evento.keyboard.keycode==ALLEGRO_KEY_4){
                             reseteatEstadoMomento(4);
-                            resetearNombre=0;
+                            resetearCadena=0;
                         }else if(evento.keyboard.keycode==ALLEGRO_KEY_1){
                             reseteatEstadoMomento(1);
                         }
@@ -1358,7 +1482,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
                             al_draw_text(lexend_regular[20],texto_white,550,340,ALLEGRO_ALIGN_CENTER,"Se han guardado los cambios");
                             strcpy(nombre,"");
-                            resetearNombre=0;
+                            resetearCadena=0;
                             reseteatEstadoMomento(1);
                         }
 
@@ -1619,7 +1743,6 @@ void creacionEstructuras(){
         strcpy(cadena,hab1.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
-            printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
@@ -1651,7 +1774,6 @@ void creacionEstructuras(){
         strcpy(cadena,hab4.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
-            printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
@@ -1722,4 +1844,5 @@ int inicializar_allegro() {
         verif_todo_ok = 0;
     }
     return verif_todo_ok;
-}
+
+    }
