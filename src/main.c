@@ -627,6 +627,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
             printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
                    Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado);
         }
+        /*
         n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
         printf("Registros: %i\n", n_reg_horario);
         Horarios = (HORARIO *) crearArreglo(sizeof(HORARIO), n_reg_horario);
@@ -648,6 +649,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
                    Hora_horarios[i].dia_h_ini.tm_mday, Hora_horarios[i].dia_h_ini.tm_mon, Hora_horarios[i].dia_h_ini.tm_year,
                    Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
         }
+        */
         n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
         printf("Registros: %i\n", n_reg_recordatorios);
         Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
@@ -717,9 +719,6 @@ void colorearDia(int x, int y, int valor) {
         al_draw_filled_rectangle(x,y,x+20,y+20,neutro1_tinta_de_pulpo);
     }
 }
-#include <stdio.h>
-#include <time.h>
-
 void convertirFecha(const char *fecha, struct tm *tiempo) {
     // Parsear la fecha
     sscanf(fecha, "%d/%d/%d", &tiempo->tm_mday, &tiempo->tm_mon, &tiempo->tm_year);
@@ -1094,13 +1093,9 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     break;
                 case 1: /*Habitos*/
 
-//<<<<<<< Updated upstream --Fersa es tubho áqui 28/11/2023
+//<<<<<<< Updated upstream --Fersa estuvo áqui 28/11/2023
 /*
                     creacionEstructuras();
-                    al_flip_display(); */
-                    /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
-                     * almacenarla en la variable ____*/
-
                     CONTAR_REGISTROS();
 //=======
 //>>>>>>> Stashed changes
@@ -1112,13 +1107,14 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 switch(evento.keyboard.keycode){
                                     //ESTADO 0 -> lectura
                                     case ALLEGRO_KEY_DOWN:
-                                        if(loc<tamArrPos && loc>=0){
+                                        if(loc<n_reg_habitos && loc>=0){
                                             printf("ENTRA ABAJO\n");
+                                            
                                             loc++;
                                         }
                                         break;
                                     case ALLEGRO_KEY_UP:
-                                        if(loc>0 && loc<=tamArrPos){
+                                        if(loc>0 && loc<=n_reg_habitos){
                                             printf("ENTRA ARRIBA\n");
                                             loc--;
                                         }
@@ -1641,7 +1637,7 @@ void creacionEstructuras(){
         strcpy(cadena,hab1.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
-            printf("%d\n",valor);
+            //printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
@@ -1673,7 +1669,7 @@ void creacionEstructuras(){
         strcpy(cadena,hab4.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
-            printf("%d\n",valor);
+            //printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
