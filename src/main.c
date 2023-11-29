@@ -188,6 +188,7 @@ void Pendientes(){
 /*Crear registro en registro habitos con el dia de hoy
  * Para racha checar con la fecha inicial
  * */
+void CARGAR_TODOS_LOS_REGISTROS();
 void calendario(int dia_semana, int mes,int primero,int anio){
     srand(time(NULL));
     int FILAS = 6;
@@ -305,7 +306,6 @@ void ventanaActual(){
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
             /*Interfaz integrada para cada estado*/
-
             if(estado==1){
                 al_draw_filled_rectangle(200,0,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
                 al_draw_filled_rectangle(360,170,730,215, texto_white);
@@ -708,8 +708,6 @@ typedef struct {
 void CONTAR_REGISTROS(){
 
 }
-
-
 int obtenerNumeroRegistros(char * ruta, size_t tamanio){
     long int entero = sizeof(int);
     int bytesSoloRegistro = contadorBytesArch(ruta) - entero, registros=0;
@@ -1027,6 +1025,8 @@ void analizar_fecha_habitos(){
     verificarREGISTROS();
 }
 
+
+HABITO updated={0};
 void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
     int pantalla_requiere_actualizacion=1;
     char usuarioString[100], frag_1RutaUsuario;
@@ -1201,10 +1201,22 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                         printf("\nTECLA A\n");
                                         estado = 1;
                                         break;
-                                    case ALLEGRO_KEY_E:
-                                        printf("\nTECLA E\n");
-                                        //estado = 2;
+                                    case ALLEGRO_KEY_C:
+                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                        Habitos[arrHab[loc]].racha = 1;
+                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                        UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITOS), 1, arrHab[loc]+1);
+                                        reseteatEstadoMomento(1);
+                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
+                                        CARGAR_TODOS_LOS_REGISTROS();
+                                        printf("\nArrHab: %d\n", Habitos[arrHab[loc]].racha);
                                         break;
+                                    case ALLEGRO_KEY_N:
+                                        Habitos[arrHab[loc]].racha = 0;
+                                        UPDATE(rutaHABITO, &Habitos[arrHab[loc]], sizeof(HABITOS), 1, arrHab[loc]+1);
+                                        reseteatEstadoMomento(1);
+                                        CARGAR_TODOS_LOS_REGISTROS();
+                                        printf("Racha actual: %d", Habitos[arrHab[loc]].racha);
                                     case ALLEGRO_KEY_B:
                                         printf("\nTECLA B\n");
                                         estado = 5;
@@ -1258,6 +1270,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                 resetearCadena=0;
                                 estado=2;
                             }else if(evento.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
+                                resetearCadena=0;
                                 estado = 0;
                             }
                         }
@@ -1847,10 +1860,19 @@ void creacionEstructuras(){ //VISUALES
         al_draw_filled_rectangle(x+450, (altura_Y_registros+separacionEntreRegistro)+70, x+810, (altura_Y_registros+separacionEntreRegistro)+190, al_map_rgb(227, 158, 193));//Cuadro contenedor principal notas y semana
 
         al_draw_filled_rectangle(x+450, (altura_Y_registros+separacionEntreRegistro)+150, x+810, (altura_Y_registros+separacionEntreRegistro)+190, al_map_rgb(225, 0, 129));//Cuadro contenedor semana
-        al_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(225, 0, 129));//Boton completado
-        al_draw_filled_rectangle(x+340, (altura_Y_registros+separacionEntreRegistro)+90, x+410, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(225, 0, 129));//Boton No completado
-        al_draw_filled_rectangle(x+240, (altura_Y_registros+separacionEntreRegistro)+105, x+290, (altura_Y_registros+separacionEntreRegistro)+150, al_map_rgb(225, 0, 129));//Cuadro pendientes
+        al_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(119, 221, 119));//Boton completado
+        al_draw_filled_rectangle(x+340, (altura_Y_registros+separacionEntreRegistro)+90, x+410, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(255, 105, 97));//Boton No completado
 
+        if(Habitos[n_habito].racha == 0) {
+            al_draw_filled_rectangle(x + 240, (altura_Y_registros + separacionEntreRegistro) + 105, x + 290,
+                                     (altura_Y_registros + separacionEntreRegistro) + 150,
+                                     neutro1_tinta_de_pulpo);//Cuadro pendientes
+            al_draw_text(lexend_regular[10],texto_black,x+260,(altura_Y_registros + separacionEntreRegistro) + 90,ALLEGRO_ALIGN_CENTER,"No completado");
+        }else{
+            al_draw_filled_rectangle(x+240, (altura_Y_registros+separacionEntreRegistro)+105, x+290, (altura_Y_registros+separacionEntreRegistro)+150, neutro3_french_lilac);
+
+            al_draw_text(lexend_regular[10],texto_black,x+260,(altura_Y_registros + separacionEntreRegistro) + 90,ALLEGRO_ALIGN_CENTER,"Completado");
+        }
         al_draw_text(lexend_regular[10],texto_black,x+155,(altura_Y_registros+separacionEntreRegistro)+115,ALLEGRO_ALIGN_CENTER,"Completado");
         al_draw_text(lexend_regular[10],texto_black,x+155,(altura_Y_registros+separacionEntreRegistro)+125,ALLEGRO_ALIGN_CENTER,"(C)");
         al_draw_text(lexend_regular[9],texto_black,x+375,(altura_Y_registros+separacionEntreRegistro)+115,ALLEGRO_ALIGN_CENTER,"No completado");
