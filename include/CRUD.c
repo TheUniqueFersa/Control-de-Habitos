@@ -108,7 +108,9 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
             fseek(arch, 0, SEEK_END);//Se posiciona al final de to_do registro
             //printf("POSICICON %li\t", ftell(arch));
             fwrite(registro, tam_elem, num_elem, arch);
-            fclose(arch);
+            if(fclose(arch) != 0){
+                printf("Hubo un problema cerrando %s\n", ruta);
+            }
         }
         else{
             printf("La base de datos no existe (INSERT)\n");
