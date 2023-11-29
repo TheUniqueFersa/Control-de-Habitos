@@ -660,9 +660,7 @@ void actualizar_display(){
     al_draw_text(lexend_regular[20],al_map_rgb(255, 255, 255),675, 475, ALLEGRO_ALIGN_CENTER,"(Esc)");*/
 
     //mensaje "Parece que no tienes hábitos activos"
-    //al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),575, 400, ALLEGRO_ALIGN_CENTER,"Parece que no tienes hábitos activos");
-    //mensaje "Parece que no tienes recordatorios activos"
-    //al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),575, 450, ALLEGRO_ALIGN_CENTER,"Parece que no tienes recordatorios activos");
+
 
 
     ObtenerHora();
@@ -706,11 +704,14 @@ int obtenerNumeroRegistros(char * ruta, size_t tamanio){
 }
 void *crearArreglo(size_t tamanioElemento, int cantidadElementos) {
     int retorno=0;
-    void *arreglo = malloc(tamanioElemento * cantidadElementos);
-    printf("Direccion asignada en malloc: %p\n", malloc(tamanioElemento * cantidadElementos));
-    if (arreglo == NULL) {
-        printf("Error: No se pudo asignar memoria para el arreglo.\n");
-        retorno = 1;
+    void *arreglo = NULL;
+    if(cantidadElementos!=0){
+        arreglo = malloc(tamanioElemento * cantidadElementos);
+        printf("Direccion asignada en malloc: %p\n", malloc(tamanioElemento * cantidadElementos));
+        if (arreglo == NULL) {
+            printf("Error: No se pudo asignar memoria para el arreglo.\n");
+            retorno = 1;
+        }
     }
     return arreglo;
 }
@@ -776,22 +777,26 @@ void CARGAR_TODOS_LOS_REGISTROS(){
         //printf("LOLIN.COM: %lli\n", sizeof(Tipos));
         //printf("IDDDD malo: %i, tipo: %s\n", Tipos[2].ID_tipo, Tipos[2].tipo);
         //printf("IDDDD malo: %i, tipo: %s\n", Tipos[6].ID_tipo, Tipos[6].tipo);
-        n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
-        printf("Registros: %i\n", n_reg_habitos);
-        Habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
-        for(i = 0; i<n_reg_habitos; i++){
-            SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
-            printf("HAB: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
-                   Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
-                   Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+        if(verificarExistenciaDeArchivo(rutaHABITO)){
+            n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
+            printf("Registros: %i\n", n_reg_habitos);
+            Habitos = (HABITO *) crearArreglo(sizeof(HABITO), n_reg_habitos);
+            for(i = 0; i<n_reg_habitos; i++){
+                SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
+                printf("HAB: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                       Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                       Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+            }
         }
-        n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
-        printf("Registros: %i\n", n_reg_reg_hab);
-        Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
-        for(i = 0; i<n_reg_reg_hab; i++){
-            SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
-            printf("RH: %i, %p, %s, %d, %d, %d, %i, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
-                   Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado, Reg_habitos[i].fk_habito.ID_habito);
+        if(verificarExistenciaDeArchivo(rutaREGISTROHABITO)){
+            n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
+            printf("Registros: %i\n", n_reg_reg_hab);
+            Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
+            for(i = 0; i<n_reg_reg_hab; i++){
+                SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
+                printf("RH: %i, %p, %s, %d, %d, %d, %i, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
+                       Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado, Reg_habitos[i].fk_habito.ID_habito);
+            }
         }
         /*
         n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
@@ -816,6 +821,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
                    Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
         }
         */
+        /*
         n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
         printf("Registros: %i\n", n_reg_recordatorios);
         Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
@@ -832,7 +838,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
             SELECT(rutaPRODUCTIVIDAD, &Productividad[i], sizeof(PRODUCTIVIDAD), 1, i+1);
             printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", Productividad[i].ID_product, Productividad[i].tiempo,
                    Productividad[i].fecha.tm_mday, Productividad[i].fecha.tm_mon, Productividad[i].fecha.tm_year, Productividad[i].habit, Productividad[i].racord);
-        }
+        }*/
 
     }else{
         //Reinicializar arreglos necesarios
@@ -1857,6 +1863,11 @@ void creacionEstructuras(){ //VISUALES
     int x=100;
     int separacionEntreRegistro=0;
     printf("KKKKKK: %i\n", n_cantidad_registros_disponibles);
+    if(n_cantidad_registros_disponibles == 0){
+        al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),575, 200, ALLEGRO_ALIGN_CENTER,"Parece que no tienes hábitos activos");
+        //mensaje "Parece que no tienes recordatorios activos"
+        al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),575, 300, ALLEGRO_ALIGN_CENTER,"Parece que no tienes recordatorios activos");
+    }
     for(int n_habito = 0; n_habito < n_cantidad_registros_disponibles; n_habito++ ){
         al_draw_filled_rectangle(x+75, (altura_Y_registros+separacionEntreRegistro)-5, x+825, (altura_Y_registros+separacionEntreRegistro)+220, al_map_rgb(74, 63, 75));//Cuadro principal habito
         al_draw_filled_rectangle(x+90, (altura_Y_registros+separacionEntreRegistro)+10, x+810, (altura_Y_registros+separacionEntreRegistro)+55, al_map_rgb(227, 158, 193));//Cuadro de titulo habito
