@@ -153,7 +153,7 @@ char Titulo[30] = {0};
 char notas[30] = {0};
 char semana[7]="0000000";
 int y=400,y2=400,x3=475,y3=305;
-void colorearDia(int x, int y, char valor) {
+void colorearDia(int x, int y, int valor) {
     if(valor==1){
         al_draw_filled_rectangle(x,y,x+20,y+20,principal_pale_chestnut);
     }else{
@@ -716,29 +716,41 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     void *temp = realloc(arreglo, tamanioElemento * nuevoTamano);
     if (temp == NULL) {
         printf("Error: No se pudo ajustar el tamaño del arreglo.\n");
-        free(arreglo); // Liberar el arreglo original si realloc falló
+        free(arreglo); // Se libera el arreglo original si realloc falló
         retorno = 1;
     }
     return temp;
 }
-int * arrIndicesRegistrosNoVacios;
-void cargar_registros_no_vacios(){
-    int n_cantidad_registros_disponibles=0;
-
-
-    cantidadREGISTROS_HABITOS = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof (REGISTRO_HABITOS));
-    printf("\nREGISTRO HABITOS TAMAniO:%i\n", cantidadREGISTROS_HABITOS);
+int n_cantidad_registros_disponibles=0;
+void cargar_registros_no_vacios(){//tipo
     for(int i=0; i<n_reg_habitos; i++){
-        if(Habitos->ID_habito == 0){
+        if(Habitos[i].ID_habito == 0){
             n_cantidad_registros_disponibles++;
         }
         printf("------------------>Habitos: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
                Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
                Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
     }
+    printf("----_---_- %i\n", n_cantidad_registros_disponibles);
+    if(registrosInicializados == 0){
+        arrPos = (int *) crearArreglo(sizeof(int), n_cantidad_registros_disponibles);
+        //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
+        //printf("Tamaño del arreglo de posicion 2: %lli\n", sizeof(*nuevoArreglo));// dEVUELVE el valor del primer indice del arreglo, pues el nombre es [0] y se esta desreferenciando ese valor
+        arrHab = (int *) crearArreglo(sizeof(int), n_cantidad_registros_disponibles);
+        registrosInicializados = 1;
+    } else {
+        int *nuevoArreglo = (int *)aumentarArreglo(arrPos, sizeof(int), n_cantidad_registros_disponibles);
+        arrPos = nuevoArreglo;
+        int *nuevoArreglo2 = (int *)aumentarArreglo(arrPos, sizeof(int), n_cantidad_registros_disponibles);
+        arrHab = nuevoArreglo2;
+    }
+    for(int i=0, indice2=0; i<n_reg_habitos; i++){
+        if(Habitos[i].ID_habito == 0){
+            arrHab[indice2] = i;
+            indice2++;
+        }
+    }
 }
-
-
 void CARGAR_TODOS_LOS_REGISTROS(){
     int retorno = 0, i=0;
     if(registrosInicializados==0){
@@ -777,6 +789,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
             printf("RH: %i, %p, %s, %d, %d, %d, %i, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
                    Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado, Reg_habitos[i].fk_habito.ID_habito);
         }
+        /*
         n_reg_horario = obtenerNumeroRegistros(rutaHORARIO, sizeof(HORARIO));
         printf("Registros: %i\n", n_reg_horario);
         Horarios = (HORARIO *) crearArreglo(sizeof(HORARIO), n_reg_horario);
@@ -798,6 +811,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
                    Hora_horarios[i].dia_h_ini.tm_mday, Hora_horarios[i].dia_h_ini.tm_mon, Hora_horarios[i].dia_h_ini.tm_year,
                    Hora_horarios[i].h_final.tm_mday, Hora_horarios[i].h_final.tm_mon, Hora_horarios[i].h_final.tm_year);
         }
+        */
         n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
         printf("Registros: %i\n", n_reg_recordatorios);
         Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
@@ -817,7 +831,43 @@ void CARGAR_TODOS_LOS_REGISTROS(){
         }
 
     }else{
-
+        //Reinicializar arreglos necesarios
+        n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
+        printf("Nuevos Registros: %i\n", n_reg_habitos);
+        HABITO * HabitosTemp = (HABITO *) aumentarArreglo(Habitos, sizeof(HABITO), n_reg_habitos);
+        Habitos = HabitosTemp;
+        for(i = 0; i<n_reg_dificultades; i++){
+            SELECT(rutaDIFICULTAD, &Dificultades[i], sizeof(DIFICULTAD), 1, i+1);
+            printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                   Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                   Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+        }
+        /*
+        n_reg_reg_hab = obtenerNumeroRegistros(rutaREGISTROHABITO, sizeof(REGISTRO_HABITOS));
+        printf("Registros: %i\n", n_reg_reg_hab);
+        Reg_habitos = (REGISTRO_HABITOS *) crearArreglo(sizeof(REGISTRO_HABITOS), n_reg_reg_hab);
+        for(i = 0; i<n_reg_reg_hab; i++){
+            SELECT(rutaREGISTROHABITO, &Reg_habitos[i], sizeof(REGISTRO_HABITOS), 1, i+1);
+            printf("RH: %i, %p, %s, %d, %d, %d, %i, %i\n", Reg_habitos[i].ID_RH, Reg_habitos[i].ptr_fk_habito, Reg_habitos[i].fk_habito.nombre, Reg_habitos[i].fecha.tm_mday,
+                   Reg_habitos[i].fecha.tm_mon, Reg_habitos[i].fecha.tm_year, Reg_habitos[i].completado, Reg_habitos[i].no_completado);
+        }
+        n_reg_recordatorios = obtenerNumeroRegistros(rutaRECORDATORIO, sizeof(RECORDATORIOS));
+        printf("Registros: %i\n", n_reg_recordatorios);
+        Recordatorios = (RECORDATORIOS *) crearArreglo(sizeof(RECORDATORIOS), n_reg_recordatorios);
+        for(i = 0; i<n_reg_recordatorios; i++){
+            SELECT(rutaRECORDATORIO, &Recordatorios[i], sizeof(RECORDATORIOS), 1, i+1);
+            printf("Record: %i, %s, %p, %i, %s, %lli, %d/%d/%d, %i\n", Recordatorios[i].ID_recordatorio, Recordatorios[i].recordatorio, Recordatorios[i].ptr_fk_tipo,
+                   Recordatorios[i].fk_tipo.ID_tipo, Recordatorios[i].fk_tipo.tipo, Recordatorios[i].tiempo,
+                   Recordatorios[i].fecha.tm_mday, Recordatorios[i].fecha.tm_mon, Recordatorios[i].fecha.tm_year, Recordatorios[i].estado_comp);
+        }
+        n_reg_productividad = obtenerNumeroRegistros(rutaPRODUCTIVIDAD, sizeof(PRODUCTIVIDAD));
+        printf("Registros: %i\n", n_reg_productividad);
+        Productividad = (PRODUCTIVIDAD *) crearArreglo(sizeof(PRODUCTIVIDAD), n_reg_productividad);
+        for(i = 0; i<n_reg_productividad; i++){
+            SELECT(rutaPRODUCTIVIDAD, &Productividad[i], sizeof(PRODUCTIVIDAD), 1, i+1);
+            printf("PRODUCT: %i, %lli, %d/%d/%d, %i, %i\n", Productividad[i].ID_product, Productividad[i].tiempo,
+                   Productividad[i].fecha.tm_mday, Productividad[i].fecha.tm_mon, Productividad[i].fecha.tm_year, Productividad[i].habit, Productividad[i].racord);
+        }*/
     }
 
     cargar_registros_no_vacios();
@@ -1010,8 +1060,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
         }
 
         //EVENTOS SUCEDIENDO:
-        printf("Momento: %i", momento);
-        printf("Nombre: %s", nombre);
+        //printf("Momento: %i ", momento);
+        //printf("Nombre: %s\n", nombre);
         al_wait_for_event(cola_eventos, &evento);
 
         if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
@@ -1091,6 +1141,8 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                                    tip1, &dif1, dif1, 100, fechaConvertida[3], tiempo[3]};
                                     SELECT(rutaHABITO, &vacioo, sizeof(HABITO), 1, 4);
 //Pedir HABITO
+
+
                                     //printf("%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
                                            //vacioo.ID_habito, vacioo.nombre, vacioo.nota, vacioo.repeticion_semanal, vacioo.repeticion, vacioo.ptr_fk_tipo,
                                            //vacioo.fk_tipo.tipo, vacioo.ptr_fk_difi, vacioo.fk_difi.dificultad, vacioo.racha, vacioo.tiempo, vacioo.fecha_ini.tm_mday, vacioo.fecha_ini.tm_mon, vacioo.fecha_ini.tm_year);
@@ -1281,31 +1333,35 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                     break;
                 case 1: /*Habitos*/
 
-//<<<<<<< Updated upstream --Fersa es tubho áqui 28/11/2023
+//<<<<<<< Updated upstream --Fersa estuvo áqui 28/11/2023
 /*
                     creacionEstructuras();
-                    al_flip_display(); */
-                    /*Obtener de la variable *habitos en l.464 los registros que no son vacios y
-                     * almacenarla en la variable ____*/
-
                     CONTAR_REGISTROS();
 //=======
 //>>>>>>> Stashed changes
                     //al_flip_display();
                     /*Flechitas arriba y abajo para cambiar de habito*/
                     if(estado==0){
+                        printf("===LOCCCOCK:%i, %i, %s \n", arrHab[loc], loc, Habitos[arrHab[loc]].nombre);
+                        /*
+                        printf("------------------>Habitos: %i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
+                               Habitos[indice2].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
+                               Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+
+                               */
                         switch(evento.type){
                             case ALLEGRO_EVENT_KEY_DOWN:
                                 switch(evento.keyboard.keycode){
                                     //ESTADO 0 -> lectura
                                     case ALLEGRO_KEY_DOWN:
-                                        if(loc<tamArrPos && loc>=0){
+                                        if(loc<(n_cantidad_registros_disponibles-1) && loc>=0){
                                             printf("ENTRA ABAJO\n");
+                                            
                                             loc++;
                                         }
                                         break;
                                     case ALLEGRO_KEY_UP:
-                                        if(loc>0 && loc<=tamArrPos){
+                                        if(loc>0 && loc<=n_cantidad_registros_disponibles){
                                             printf("ENTRA ARRIBA\n");
                                             loc--;
                                         }
@@ -1321,6 +1377,16 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     case ALLEGRO_KEY_B:
                                         printf("\nTECLA B\n");
                                         estado = 3;
+
+                                        printf("Numero de HABITOS: %i", obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO)));
+                                        HABITO lolin = {0, "Lolencio"};
+                                        HABITO lolin2 = {0, "Trollencio"};
+                                        HABITO lolin3 = {0, "y su familia"};
+                                        HABITO lolin4 = {0, "los trolls"};
+                                        UPDATE(rutaHABITO, &lolin, sizeof(HABITO), 1, 5);
+                                        UPDATE(rutaHABITO, &lolin2, sizeof(HABITO), 1, 6);
+                                        UPDATE(rutaHABITO, &lolin3, sizeof(HABITO), 1, 7);
+                                        UPDATE(rutaHABITO, &lolin4, sizeof(HABITO), 1, 8);
                                         break;
                                     case ALLEGRO_KEY_2:
                                         reseteatEstadoMomento(2);
@@ -1913,6 +1979,7 @@ void creacionEstructuras(){
         strcpy(cadena,hab1.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
+            //printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
@@ -1944,6 +2011,7 @@ void creacionEstructuras(){
         strcpy(cadena,hab4.repeticion_semanal);
         for(int j=0;i<7;i++){
             int valor=cadena[i]-48;
+            //printf("%d\n",valor);
             colorearDia(CalX,CalY,valor);
             CalX+=30;
         }
