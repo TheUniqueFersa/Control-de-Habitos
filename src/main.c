@@ -286,8 +286,10 @@ void ventanaActual(){
 
             if(estado==1){
                 al_draw_filled_rectangle(200,0,900,550, al_map_rgba(74, 63, 75 , 220));/*Ventana emergente*/
-                al_draw_filled_rectangle(270,180,820,250, texto_white);
-                
+                al_draw_filled_rectangle(360,170,730,215, texto_white);
+                al_draw_text(lexend_regular[30],texto_black,540,175,ALLEGRO_ALIGN_CENTER,"HABITUS");
+
+
 
             }
 
