@@ -272,15 +272,15 @@ void ventanaActual(){
 
             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
 
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
             al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
 
             al_draw_filled_rectangle(100, 0, 1000, 700, fondo_principal_oscuro);
             creacionEstructuras();
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
             /*Interfaz integrada para cada estado*/
 
@@ -303,8 +303,8 @@ void ventanaActual(){
             al_draw_text(lexend_regular[28],texto_black,690,85,ALLEGRO_ALIGN_CENTER,"Todos");
             al_draw_text(lexend_regular[20],texto_black,750,90,ALLEGRO_ALIGN_CENTER,"(T)");
 
-            /*//mensaje Haz completado el hábito
-            al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"Haz completado las acciones del día");//deseas eliminar este elemento?*/
+            //mensaje Haz completado el hábito
+            //al_draw_text(lexend_regular[40],al_map_rgb(255, 255, 255),560, 300, ALLEGRO_ALIGN_CENTER,"Haz completado las acciones del día");//deseas eliminar este elemento?
 
             /*
             //botones de recordatorios y texto
@@ -320,7 +320,7 @@ void ventanaActual(){
             al_draw_filled_rectangle(100, 525, 165, 700, al_map_rgb(255, 255, 255));//222, 186, 192, 1
             al_draw_filled_rectangle(935, 525, 1110, 700,al_map_rgb(255, 255, 255));//222, 186, 192, 1
 
-            //texto de los bitmaps nuevo, editar, borrar
+            //texto de los bitmaps nuevo, borrar
             al_draw_text(lexend_regular[25],texto_black,157,551,ALLEGRO_ALIGN_CENTER,"A");
             al_draw_text(lexend_regular[25],texto_black,157,640,ALLEGRO_ALIGN_CENTER,"B");
             al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 544,50, 50, 0);
@@ -333,9 +333,10 @@ void ventanaActual(){
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[39],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
+
             break;
         case 3:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -343,15 +344,15 @@ void ventanaActual(){
             al_draw_scaled_bitmap(RECORDSROSA, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,335,ALLEGRO_ALIGN_CENTER,"3");--CONFLICTO
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,503,ALLEGRO_ALIGN_CENTER,"4"); --CONFLICTO
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[39],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
 
             al_draw_filled_rectangle(1000, 0, 1200, 700, al_map_rgb(255, 255, 255));
@@ -368,6 +369,7 @@ void ventanaActual(){
             al_draw_scaled_bitmap(NUEVOHABITO, 0, 0, 738, 740, 100, 544,50, 50, 0);
             al_draw_scaled_bitmap(BORRARHABITO, 0, 0, 744, 740, 100, 632,50, 50, 0);
             al_draw_scaled_bitmap(FLECHAS, 0, 0, 360, 360, 895, 540,150, 150, 0);
+            //al_draw_text(lexend_regular[59],al_map_rgb(255, 255, 255), 580,250,ALLEGRO_ALIGN_CENTER,"Próximamente");
             break;
         case 4:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
@@ -375,9 +377,9 @@ void ventanaActual(){
             al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
 
-            al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
+            //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,345,ALLEGRO_ALIGN_CENTER,"3");
             al_draw_text(lexend_regular[39],al_map_rgba(0, 0, 0, 100),12,513,ALLEGRO_ALIGN_CENTER,"4");
 
             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
@@ -443,6 +445,7 @@ void actualizar_display(){
    al_draw_filled_rounded_rectangle(650, 408, 755, 476, 10, 10, al_map_rgb(146, 98, 107));
    al_draw_filled_rounded_rectangle(650, 481, 755, 549, 10, 10, al_map_rgb(146, 98, 107));
    al_draw_filled_rounded_rectangle(650, 554, 755, 622, 10, 10, al_map_rgb(146, 98, 107));
+    al_draw_text(lexend_regular[39],al_map_rgb(255, 255, 255),12,513,ALLEGRO_ALIGN_CENTER,"Próximamente");
    // texto de los rectángulos de dificultad
     al_draw_scaled_bitmap(LOGO, 0, 0, 516, 484, 488, 0,125, 125, 0);
    al_draw_text(lexend_regular[15],texto_white,700,300,ALLEGRO_ALIGN_CENTER,"1. Muy facil");
@@ -858,6 +861,7 @@ void main_habitus(int verif_iniciador_primera_vez, int ultimo_usuario){
                                     printf("\n\n----\n");
                                     /*DIFICULTAD*/
                                     //--HECHA
+
                                     DIFICULTAD dif1 = {777, "Muy facil"};
                                     DIFICULTAD dif2 = {2, "Facil"};
                                     DIFICULTAD dif3 = {3, "Intermedio"};
