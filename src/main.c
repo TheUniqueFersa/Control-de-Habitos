@@ -706,29 +706,37 @@ void verificarREGISTROS(){
 
     /*Comparar si los nombres coinciden de habito y reg habito*/
 
-    for(int indHabito=0;indHabito<cantidadREGISTROS_HABITOS;indHabito++){
+//    for(int j=0;j<n_reg_habitos;j++) {
+
+        for (int indHabito = 0; indHabito < cantidadREGISTROS_HABITOS; indHabito++) {
 //        difSegundos = difftime(mktime(&fechaActual), mktime(&Habitos[3].fecha_ini));
 //        int diferenciaDias = (int)(difSegundos / (60 * 60 * 24));
 //        printf("\n\nDIFERENCIAS DIAS: %i\n\n", diferenciaDias);
 
-        printf("\nhabitos: %s, registro: %s\n", Habitos[habInd].nombre, Reg_habitos[indHabito].fk_habito.nombre);
-        if(strcmp(Habitos[habInd].nombre, Reg_habitos[indHabito].fk_habito.nombre)==0){
-            int diferenciaDias = fechaActual.tm_mday - Habitos[habInd].fecha_ini.tm_mday;
-            int diasParaRegistro[diferenciaDias];
-            for(int j=0;j<diferenciaDias;j++){/*for para llenar los espacios con numeros consecutivos*/
-                diasParaRegistro[j]=(j+1);
-                printf("VALOR DE J:%i\n\n", j);
-            }
-            printf("Regdia. %i", Reg_habitos[indHabito].fecha.tm_mday);
+            printf("\nhabitos: %s, registro: %s\n", Habitos[habInd].nombre, Reg_habitos[indHabito].fk_habito.nombre);
+            if (strcmp(Habitos[habInd].nombre, Reg_habitos[indHabito].fk_habito.nombre) == 0) {
+                int diferenciaDias = fechaActual.tm_mday - Habitos[habInd].fecha_ini.tm_mday;
+                int diasParaRegistro[diferenciaDias];
+                for (int j = 0; j < diferenciaDias; j++) {/*for para llenar los espacios con numeros consecutivos*/
+                    diasParaRegistro[j] = (j + 1);
+                    printf("VALOR DE J:%i\n\n", j);
+                }
+                /*diferenca de dias entre el registro y la fecha inicial*/
+                printf("DIAS DIFERENCIA reg y fecha ini: %i\n\n", Reg_habitos[indHabito].fecha.tm_mday-Habitos[habInd].fecha_ini.tm_mday);
+//                diasParaRegistro[]
+
+
+                printf("Regdia. %i", Reg_habitos[indHabito].fecha.tm_mday);
 //            difSegundos = difftime(mktime(&fechaActual), mktime(&Habitos[3].fecha_ini.tm_mday));
 //            int diferenciaDias = (int)(difSegundos / (60 * 60 * 24));
 
 
-            printf("\n\nDIFERENCIAS DIAS: %i\n\n", diferenciaDias);
-            printf("\n\nCOINCIDE EL NOMBRE\n\n");
-            rellenarRegistrosHabitos(indHabito);
+                printf("\n\nDIFERENCIAS DIAS: %i\n\n", diferenciaDias);
+                printf("\n\nCOINCIDE EL NOMBRE\n\n");
+                rellenarRegistrosHabitos(indHabito);
+            }
         }
-    }
+//    }
 //    printf("\n**********ID REGISTRO_ HABITO FK i1 %i\n", Reg_habitos[0].fk_habito.ID_habito);
 //    printf("\n**********ID REGISTRO_ HABITO FK i: %i\n", Reg_habitos[1].fk_habito.ID_habito);
 //    printf("\n**********ID REGISTRO_ HABITO FK i: %i\n", Reg_habitos[2].fk_habito.ID_habito);
