@@ -170,7 +170,7 @@ int obtenerHabitosHoy(){
             cantiHabitosHoy++;
         }
     }
-    mensajeAdvertencia = (cantiHabitosHoy==0)? 1:0;
+    mensajeAdvertencia = (cantiHabitosHoy==0 && n_cantidad_registros_disponibles>0)? 1:0;
     printf("Cantidad de Hábitos para hoy: %i\n", cantiHabitosHoy);
     return cantiHabitosHoy;
 }
