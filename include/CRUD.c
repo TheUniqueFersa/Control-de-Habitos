@@ -1,6 +1,4 @@
-/* COMANDOS PARA MANEJAR CRUD EN LOS ARCHIVOS
- *
- * */
+/* COMANDOS PARA MANEJAR CRUD EN LOS ARCHIVOS */
 #include <stdio.h>
 #include <string.h>
 #include <time.h>

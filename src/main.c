@@ -52,9 +52,6 @@ ALLEGRO_TIMER *AFK;
 ALLEGRO_FONT *fuente1;
 
 
-
-
-
 /* ---- termina; ---- */
 /* ----> ESTRUCTURAS GLOBALES <---- */
 struct APP{
@@ -95,7 +92,7 @@ int n_reg_horario;
 int n_reg_hora_horario;
 int n_reg_recordatorios;
 int n_reg_productividad;
-
+int n_cantidad_registros_disponibles=0;
 /* ---- termina; ---- */
 
 /* ----> VARIABLES GLOBALES <---- */
@@ -167,15 +164,15 @@ void cargarDiaDeLaSemana() {
     diaDeLaSemana = fechaa->tm_wday;
 }
 int obtenerHabitosHoy(){
-    int n_habitos_hoy = 0;
     cantiHabitosHoy=0;
     for(int i = 0; i<n_reg_habitos; i++){
         if(Habitos[i].ID_habito != 0 && Habitos[i].repeticion_semanal[diaDeLaSemana] == '1' && Habitos[i].racha == 0){
             cantiHabitosHoy++;
         }
     }
-    printf("LOLOLOL: %i\n", cantiHabitosHoy);
-    return n_habitos_hoy;
+    mensajeAdvertencia = (cantiHabitosHoy==0)? 1:0;
+    printf("Cantidad de Hábitos para hoy: %i\n", cantiHabitosHoy);
+    return cantiHabitosHoy;
 }
 void colorearDia(int x, int y, int valor) {
     if(valor==1){
@@ -210,7 +207,7 @@ void Pendientes(){
         theta = -ALLEGRO_PI*2.0;
     else
         theta = -ALLEGRO_PI*2/(CantHabHoy+1);
-    al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,theta,principal_pale_chestnut,15.0);
+    al_draw_arc(1100,175, 50,-ALLEGRO_PI/2.0,theta,neutro1_tinta_de_pulpo,15.0);
     al_draw_textf(lexend_regular[30],texto_black,1100,155,ALLEGRO_ALIGN_CENTER, "%i", cantiHabitosHoy);
 }
 /*Crear registro en registro habitos con el dia de hoy
@@ -247,10 +244,24 @@ void calendario(int dia_semana, int mes,int primero,int anio){
                 primerafila=1;
             }
             int dia_calendario = fila * COLUMNAS + columna + 1 - primero;
+            //printf("Dia en calendario %i\n", columna);
             //Aqui va la lógica para poder hacer la transparencia en base a la cantidad de actividades que tuvo,solo que ocupo la cantidad
             if (dia_calendario >= 1 && dia_calendario <= dias_en_mes) {
-                transparencia=((rand())%25)*10;
-                if(transparencia<(255/3)){
+                //transparencia=((rand())%25)*10;
+                transparencia = 40;
+
+                if(Habitos != NULL) {
+                    for (int pos = 0; pos < n_cantidad_registros_disponibles; pos++) {
+                        //printf("Depurando ando: %s\n", Habitos[arrHab[pos]].repeticion_semanal);
+                        //printf("Depurando ando: %c\n", Habitos[arrHab[pos]].repeticion_semanal[columna]);
+                        if (Habitos[arrHab[pos]].repeticion_semanal[columna] == '1') {
+                            if(transparencia+15 < 255){
+                                transparencia+=15;
+                            }
+                        }
+                    }
+                }
+                if(transparencia<(255/6)){
                     transparencia=0;
                 }
                 // Dibujar calendario
@@ -317,8 +328,10 @@ void ventanaActual(){
             break;
         case 1:
             al_draw_scaled_bitmap(HABITOSROSA, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
-            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            //al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            al_draw_filled_rectangle(0, 175, 100, 350, texto_white);
+            //al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_filled_rectangle(0, 350, 100, 525, texto_white);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
 
             al_draw_filled_rectangle(100,0,1000,700, fondo_principal_oscuro);
@@ -510,7 +523,7 @@ void ventanaActual(){
         case 2:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
             al_draw_scaled_bitmap(CALENDARIOROSA, 0, 0, 100, 300, 0, 175,100, 300, 0);
-            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            //al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
@@ -520,7 +533,7 @@ void ventanaActual(){
             break;
         case 3:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            //al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
             al_draw_scaled_bitmap(RECORDSROSA, 0, 0, 100, 300, 0, 350,100, 300, 0);
             al_draw_scaled_bitmap(AJUSTES, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
@@ -553,8 +566,11 @@ void ventanaActual(){
             break;
         case 4:
             al_draw_scaled_bitmap(HABITOS, 0, 0, 100, 300, 0, 0,100, 300, 0);
-            al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
-            al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            //al_draw_scaled_bitmap(CALENDARIOBLANCO, 0, 0, 100, 300, 0, 175,100, 300, 0);
+            //al_draw_filled_rectangle(0, 175, 100, 350, texto_white);
+            //al_draw_scaled_bitmap(RECORDS, 0, 0, 100, 300, 0, 350,100, 300, 0);
+            al_draw_filled_rectangle(0, 175, 100, 350, texto_white);
+            al_draw_filled_rectangle(0, 350, 100, 525, texto_white);
             al_draw_scaled_bitmap(AJUSTESROSA, 0, 0, 100, 300, 0, 525,100, 300, 0);
             al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,0,ALLEGRO_ALIGN_CENTER,"1");
             //al_draw_text(lexend_regular[40],al_map_rgba(0, 0, 0, 100),12,175,ALLEGRO_ALIGN_CENTER,"2");
@@ -725,7 +741,6 @@ void *aumentarArreglo(void *arreglo, size_t tamanioElemento, int nuevoTamano) {
     }
     return temp;
 }
-int n_cantidad_registros_disponibles=0;
 void cargar_registros_no_vacios(){//tipo
     n_cantidad_registros_disponibles=0;
     if(verificarExistenciaDeArchivo(rutaHABITO)){
@@ -883,7 +898,7 @@ void CARGAR_TODOS_LOS_REGISTROS(){
         }*/
     }
     cargar_registros_no_vacios();
-    //obtenerHabitosHoy();
+    obtenerHabitosHoy();
 }
 void verificarREGISTROS(){
     int contadorHabito=3, i=3, difDias, habInd=3, diaCONREGISTRO=0;
@@ -1866,28 +1881,29 @@ void creacionEstructuras(){ //VISUALES
         al_draw_text(lexend_regular[30],al_map_rgb(255, 255, 255),575, 300, ALLEGRO_ALIGN_CENTER,"Parece que no tienes recordatorios activos");
     }
     for(int n_habito = 0; n_habito < n_cantidad_registros_disponibles; n_habito++ ){
+        ALLEGRO_COLOR colorContenedorPrincipal = (Habitos[arrHab[n_habito]].racha != 0)? al_map_rgb(119, 221, 119): al_map_rgb(255, 105, 97);
         al_draw_filled_rectangle(x+75, (altura_Y_registros+separacionEntreRegistro)-5, x+825, (altura_Y_registros+separacionEntreRegistro)+220, al_map_rgb(74, 63, 75));//Cuadro principal habito
+
         al_draw_filled_rectangle(x+90, (altura_Y_registros+separacionEntreRegistro)+10, x+810, (altura_Y_registros+separacionEntreRegistro)+55, al_map_rgb(227, 158, 193));//Cuadro de titulo habito
         al_draw_filled_rectangle(x+90, (altura_Y_registros+separacionEntreRegistro)+70, x+440, (altura_Y_registros+separacionEntreRegistro)+190, al_map_rgb(227, 158, 193));//Cuadro contenedor botonera
         al_draw_filled_rectangle(x+450, (altura_Y_registros+separacionEntreRegistro)+70, x+810, (altura_Y_registros+separacionEntreRegistro)+190, al_map_rgb(227, 158, 193));//Cuadro contenedor principal notas y semana
 
         al_draw_filled_rectangle(x+450, (altura_Y_registros+separacionEntreRegistro)+150, x+810, (altura_Y_registros+separacionEntreRegistro)+190, al_map_rgb(225, 0, 129));//Cuadro contenedor semana
-        al_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(119, 221, 119));//Boton completado
-        al_draw_filled_rectangle(x+340, (altura_Y_registros+separacionEntreRegistro)+90, x+410, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(255, 105, 97));//Boton No completado
 
-        if(Habitos[arrHab[n_habito]].racha == 0) {
-            al_draw_filled_rectangle(x + 240, (altura_Y_registros + separacionEntreRegistro) + 105, x + 290,
-                                     (altura_Y_registros + separacionEntreRegistro) + 150,
-                                     neutro1_tinta_de_pulpo);//Cuadro pendientes
-            al_draw_text(lexend_regular[10],texto_black,x+260,(altura_Y_registros + separacionEntreRegistro) + 90,ALLEGRO_ALIGN_CENTER,"No completado");
-        }else{
-            al_draw_filled_rectangle(x+240, (altura_Y_registros+separacionEntreRegistro)+105, x+290, (altura_Y_registros+separacionEntreRegistro)+150, neutro3_french_lilac);
-            al_draw_text(lexend_regular[10],texto_black,x+260,(altura_Y_registros + separacionEntreRegistro) + 90,ALLEGRO_ALIGN_CENTER,"Completado");
-        }
+        //al_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(119, 221, 119));//Boton completado
+        //al_draw_filled_rectangle(x+340, (altura_Y_registros+separacionEntreRegistro)+90, x+410, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(255, 105, 97));//Boton No completadoal_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, al_map_rgb(119, 221, 119));//Boton completado
+        al_draw_filled_rectangle(x+120, (altura_Y_registros+separacionEntreRegistro)+90, x+190, (altura_Y_registros+separacionEntreRegistro)+160, neutro3_french_lilac);//Boton completado
+        al_draw_filled_rectangle(x+340, (altura_Y_registros+separacionEntreRegistro)+90, x+410, (altura_Y_registros+separacionEntreRegistro)+160, neutro1_tinta_de_pulpo);//Boton No completado
+        //Completado / No completado
+        al_draw_filled_rectangle(x + 240, (altura_Y_registros + separacionEntreRegistro) + 105, x + 290,
+                                 (altura_Y_registros + separacionEntreRegistro) + 150,
+                                 colorContenedorPrincipal);//Cuadro pendientes
+        al_draw_text(lexend_regular[10],texto_black,x+260,(altura_Y_registros + separacionEntreRegistro) + 90,ALLEGRO_ALIGN_CENTER,(Habitos[arrHab[n_habito]].racha == 0)? "Completado":"No completado");
+
         al_draw_text(lexend_regular[10],texto_black,x+155,(altura_Y_registros+separacionEntreRegistro)+115,ALLEGRO_ALIGN_CENTER,"Completado");
         al_draw_text(lexend_regular[10],texto_black,x+155,(altura_Y_registros+separacionEntreRegistro)+125,ALLEGRO_ALIGN_CENTER,"(C)");
-        al_draw_text(lexend_regular[9],texto_black,x+375,(altura_Y_registros+separacionEntreRegistro)+115,ALLEGRO_ALIGN_CENTER,"No completado");
-        al_draw_text(lexend_regular[10],texto_black,x+375,(altura_Y_registros+separacionEntreRegistro)+125,ALLEGRO_ALIGN_CENTER,"(N)");
+        al_draw_text(lexend_regular[9],texto_white,x+375,(altura_Y_registros+separacionEntreRegistro)+115,ALLEGRO_ALIGN_CENTER,"No completado");
+        al_draw_text(lexend_regular[10],texto_white,x+375,(altura_Y_registros+separacionEntreRegistro)+125,ALLEGRO_ALIGN_CENTER,"(N)");
         //printf("N habitoooOOoo%i\n\n", n_habito);
         al_draw_textf(lexend_bold[40], texto_black, x+450, (altura_Y_registros+separacionEntreRegistro)+10, ALLEGRO_ALIGN_CENTER, "%s", Habitos[arrHab[n_habito]].nombre);//titulo habito
         al_draw_textf(lexend_regular[15], texto_black, x+630, (altura_Y_registros+separacionEntreRegistro)+80, ALLEGRO_ALIGN_CENTER, "Notas:");
