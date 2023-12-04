@@ -1,10 +1,6 @@
 /* COMANDOS PARA MANEJAR CRUD EN LOS ARCHIVOS */
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
 #include "structs.c"
 /*OTRAS COSAS*/
 
@@ -14,7 +10,7 @@ int contadorBytesArch(char *ruta){
     if(archi != NULL){
         fseek(archi, 0, SEEK_END);
         n_bytes = ftell(archi);
-        printf("Numero de bytes de %s: %i\n",ruta, n_bytes);
+        //printf("Numero de bytes de %s: %i\n",ruta, n_bytes);
         rewind(archi);
         fclose(archi);
         retorno = n_bytes;
@@ -27,12 +23,9 @@ int contadorBytesArch(char *ruta){
 }
 int desplazarAUTOINCREMENT(FILE *arch){ //requiere de la apertura en el modo: rb ||
     int variableDestino=0, retorno;
-    //printf("AAlectura: %li\n", ftell(arch));
     fseek(arch, 0, SEEK_SET);
-    //printf("DDlectura: %li\n", ftell(arch));
     fread(&variableDestino, sizeof(int), 1, arch);
-    //printf("DaDlectura: %li\n", ftell(arch));
-    printf("-- AUTO_INCREMENT leido: %i --\n", variableDestino);
+    //printf("-- AUTO_INCREMENT leido: %i --\n", variableDestino);
     retorno = (variableDestino > 0)? variableDestino: -1;
     return retorno;
 }
@@ -59,11 +52,7 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
             if(AUTO_INCREMENT > 0){
                 AUTO_INCREMENT++;
                 rewind(archi2);
-                //fseek(arch, 0, SEEK_SET);
-                printf("Posicion: %li\n", ftell(archi2));
-                //printf("INT LOL %lli", sizeof(AUTO_INCREMENT));
                 fwrite(&AUTO_INCREMENT, sizeof(int), 1, archi2);
-                printf("DESPUESlectura: %li\n", ftell(archi2));
                 fclose(archi2);
             }
             else{
@@ -75,23 +64,19 @@ int manejarAUTOINCREMENT(char *ruta){//Solamente ejecutable dentro de INSERT,
     else{
         printf("OCurrio un error (manejarAUTOINCREMENT)\n");
     }
-    printf("VALOR QUE REGRESO XD: %i\n", AUTO_INCREMENT);
+    //printf("Nuevo Autoincremento: %i\n", AUTO_INCREMENT);
     return AUTO_INCREMENT;
 }
 int SUPER_INSERT(int * ID, char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     *ID = manejarAUTOINCREMENT(ruta);
     int nuevoID = *ID;
-    //USUARIO *hola = registro;
-    //printf("IDDDDDDDDDDDD: %i\n", hola->ID_usuario);
-    //printf("IDDDDDDDDDDDD: %s\n", hola->nombre);
-    //printf("DDD %lli\n", sizeof(USUARIO));
     INSERT(ruta, registro, tam_elem, num_elem);
     return nuevoID;
 }
 int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     int retorno;
     if(strcmp("./data/app.dat", ruta)==0){
-        printf("ENTRE A APP.DAt");
+        //printf("ENTRE A APP.DAt");
         FILE *arch = fopen(ruta, "wb");
         if(arch!=NULL){
             fwrite(registro, tam_elem, num_elem, arch);
@@ -117,15 +102,14 @@ int INSERT(char *ruta, void *registro, size_t tam_elem, size_t num_elem){
     return retorno;
 }
 int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_elem, int id){
-    printf("FuncionSELECT\n");
+    //printf("FuncionSELECT\n");
     if(strcmp("./data/app.dat", ruta)==0){
-        printf("ENTRE A APP.DAt");
+        //printf("ENTRE A APP.DAt");
         FILE *arch = fopen(ruta, "rb");
         if(arch!=NULL){
             rewind(arch);
             //printf("Antes de lectura: %li\t", ftell(archivo));
             fread(registro_en_codigo, tam_elem, num_elem, arch);
-
             fclose(arch);
         }else{
             printf("ERROR al abrir archivo wb app.dat\n");
@@ -146,7 +130,7 @@ int SELECT(char *ruta, void *registro_en_codigo, size_t tam_elem, size_t num_ele
 }
 
 int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int id){
-    printf("\nFuncion UPDATE\n");
+    //printf("\nFuncion UPDATE\n");
     FILE *archivo = fopen(ruta, "rb+");
     if(archivo!=NULL ){
 //      fseek(ptrCF, 0, SEEK_END);
@@ -161,7 +145,7 @@ int UPDATE(char *ruta, void *registro_act, size_t tam_elem, size_t num_elem, int
     }
 }
 int DELETE(char *ruta, void *registro_a_elim, size_t tam_elem, size_t num_elem, int id){
-    printf("\nFuncionDELETE\n");
+    //printf("\nFuncionDELETE\n");
     FILE *archivo = fopen(ruta, "rb+");
     HABITO hab, habNULL={'\0'};/*SE CREA habNULL PARA SOBRESCRIBIR EL REGISTRO QUE INDIQUE EL id*/
     if(archivo!=NULL ){

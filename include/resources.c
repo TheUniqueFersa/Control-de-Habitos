@@ -86,8 +86,6 @@ int init_resources(){
     NUEVOHABITO = al_load_bitmap("./media/img/nuevo.png");
     FLECHAS = al_load_bitmap("./media/img/flechas2.png");
 
-
-
     if(!RECORDS || !HABITOS || !CALENDARIOBLANCO || !AJUSTES || !CALENDARIOROSA || !RECORDSROSA || !HABITOSROSA || !AJUSTESROSA || !LOGO || !NUEVOHABITO || !BORRARHABITO || !EDITARHABITO || !FLECHAS){
         inicializado_correctamente = 0;
         printf("ERROR: %i\n", al_get_errno());
