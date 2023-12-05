@@ -726,7 +726,7 @@ void cargar_registros_no_vacios(){//tipo
                    Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
                    Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);*/
         }
-        printf("----_---_- %i\n", n_cantidad_registros_disponibles);
+        //printf("----_---_- %i\n", n_cantidad_registros_disponibles);
         if(registrosInicializados == 0){
             arrPos = (int *) crearArreglo(sizeof(int), n_cantidad_registros_disponibles);
             //printf("Tamaño del arreglo de posicion 1: %lli\n", sizeof(arrPos)); //--Esto devuelve no el tamaño del arreglo que se creó, sino al apuntador, por lo que es incorrecto qu e se intente saber el tamaño con sizeof, NO HACER
@@ -834,14 +834,15 @@ void CARGAR_TODOS_LOS_REGISTROS(){
         //Reinicializar arreglos necesarios
         if(verificarExistenciaDeArchivo(rutaHABITO)){
             n_reg_habitos = obtenerNumeroRegistros(rutaHABITO, sizeof(HABITO));
-            printf("Nuevos Registros: %i\n", n_reg_habitos);
+            //printf("Nuevos Registros: %i\n", n_reg_habitos);
             HABITO * HabitosTemp = (HABITO *) aumentarArreglo(Habitos, sizeof(HABITO), n_reg_habitos);
             Habitos = HabitosTemp;
             for(i = 0; i<n_reg_habitos; i++){
                 SELECT(rutaHABITO, &Habitos[i], sizeof(HABITO), 1, i+1);
+                /*
                 printf(">>>>>%i, %s, %s, %s, %i, %p, %s, %p, %s, %i, %lli, %d/%d/%d\n",
                        Habitos[i].ID_habito, Habitos[i].nombre, Habitos[i].nota, Habitos[i].repeticion_semanal, Habitos[i].repeticion, Habitos[i].ptr_fk_tipo,
-                       Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);
+                       Habitos[i].fk_tipo.tipo, Habitos[i].ptr_fk_difi, Habitos[i].fk_difi.dificultad, Habitos[i].racha, Habitos[i].tiempo, Habitos[i].fecha_ini.tm_mday, Habitos[i].fecha_ini.tm_mon, Habitos[i].fecha_ini.tm_year);*/
             }
         }
         /*
