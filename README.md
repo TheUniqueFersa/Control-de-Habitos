@@ -6,7 +6,9 @@
 - López Morales Fernando Samuel
 - Ortega Ortega Genaro Raziel
 ***
+[Presentación Habitus](docs/Presentación Proyecto final_Habitus.pdf)
 PDF Presentación: (https://drive.google.com/file/d/1Nu3O0pyyYZ2L6BwguuGm7WnpZXmj7GaY/view?usp=drive_link)
+
 ***
 ## Descripción del proyecto:
 "Habitus" es un gestionador de hábitos en donde el usuario puede registrarse con su nombre y poder añadir hábitos.
